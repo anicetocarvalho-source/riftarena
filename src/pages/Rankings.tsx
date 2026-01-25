@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
@@ -149,7 +150,10 @@ const Rankings = () => {
                     </div>
 
                     {/* Player */}
-                    <div className="flex-1 flex items-center gap-3 min-w-0">
+                    <Link 
+                      to={`/player/${ranking.user_id}`}
+                      className="flex-1 flex items-center gap-3 min-w-0 hover:opacity-80 transition-opacity"
+                    >
                       <Avatar className="h-10 w-10">
                         <AvatarImage src={ranking.user?.avatar_url || undefined} />
                         <AvatarFallback>
@@ -157,7 +161,7 @@ const Rankings = () => {
                         </AvatarFallback>
                       </Avatar>
                       <div className="min-w-0">
-                        <p className="font-display font-medium truncate">
+                        <p className="font-display font-medium truncate hover:text-primary transition-colors">
                           {ranking.user?.username || "Unknown"}
                         </p>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -169,7 +173,7 @@ const Rankings = () => {
                           )}
                         </div>
                       </div>
-                    </div>
+                    </Link>
 
                     {/* Tier */}
                     <div className="hidden md:flex items-center justify-center w-24">
