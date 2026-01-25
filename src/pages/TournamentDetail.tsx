@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
@@ -6,15 +7,25 @@ import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/comp
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useTournament, useTournamentMatches, useTournamentRegistrations } from "@/hooks/useTournaments";
-import { useUserRegistration, useRegistrationCount, useRegisterForTournament, useCancelRegistration } from "@/hooks/useTournamentRegistration";
+import { 
+  useUserRegistration, 
+  useRegistrationCount, 
+  useRegisterForTournament, 
+  useRegisterTeamForTournament,
+  useCancelRegistration 
+} from "@/hooks/useTournamentRegistration";
+import { useUserTeams } from "@/hooks/useTeams";
 import { useAuth } from "@/contexts/AuthContext";
 import { TournamentStatus } from "@/types/tournament";
 import { 
   ArrowLeft, Trophy, Users, Calendar, DollarSign, 
-  Loader2, Clock, CheckCircle, XCircle, GitBranch, FileText, Settings
+  Loader2, Clock, CheckCircle, XCircle, GitBranch, FileText, UsersRound
 } from "lucide-react";
 import { format } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 const TournamentDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,9 +37,14 @@ const TournamentDetail = () => {
   const { data: matches } = useTournamentMatches(id || "");
   const { data: userRegistration, isLoading: regLoading } = useUserRegistration(id || "");
   const { data: registrationCount } = useRegistrationCount(id || "");
+  const { data: userTeams } = useUserTeams();
   
   const registerMutation = useRegisterForTournament();
+  const registerTeamMutation = useRegisterTeamForTournament();
   const cancelMutation = useCancelRegistration();
+
+  const [showTeamDialog, setShowTeamDialog] = useState(false);
+  const [selectedTeamId, setSelectedTeamId] = useState("");
 
   if (tournamentLoading) {
     return (
@@ -55,6 +71,9 @@ const TournamentDetail = () => {
     );
   }
 
+  const isTeamBased = (tournament as any).is_team_based;
+  const teamSize = (tournament as any).team_size || 5;
+
   const getStatusBadge = (status: TournamentStatus) => {
     const variants: Record<TournamentStatus, "default" | "gold" | "diamond" | "destructive" | "secondary"> = {
       draft: "secondary",
@@ -66,23 +85,52 @@ const TournamentDetail = () => {
     return <Badge variant={variants[status]}>{status.toUpperCase()}</Badge>;
   };
 
+  // Check if user's team is already registered
+  const userTeamRegistrations = registrations?.filter(r => 
+    r.team_id && userTeams?.some(t => t.id === r.team_id)
+  );
+  const hasTeamRegistered = userTeamRegistrations && userTeamRegistrations.length > 0;
+  const teamRegistration = hasTeamRegistered ? userTeamRegistrations[0] : null;
+
+  // Filter teams user can register (captain only, not already registered)
+  const registeredTeamIds = registrations?.map(r => r.team_id).filter(Boolean) || [];
+  const eligibleTeams = userTeams?.filter(t => 
+    t.captain_id === user?.id && !registeredTeamIds.includes(t.id)
+  ) || [];
+
   const canRegister = tournament.status === "registration" && 
-    !userRegistration && 
     user && 
     (registrationCount || 0) < tournament.max_participants;
 
-  const isRegistered = !!userRegistration;
+  const canRegisterSolo = canRegister && !isTeamBased && !userRegistration;
+  const canRegisterTeam = canRegister && isTeamBased && eligibleTeams.length > 0;
+
+  const isRegistered = isTeamBased ? hasTeamRegistered : !!userRegistration;
+  const currentRegistration = isTeamBased ? teamRegistration : userRegistration;
   const isFull = (registrationCount || 0) >= tournament.max_participants;
   const confirmedParticipants = registrations?.filter(r => r.status === "confirmed") || [];
   const rounds = [...new Set(matches?.map(m => m.round) || [])].sort((a, b) => a - b);
 
   const handleRegister = () => {
-    if (id) registerMutation.mutate(id);
+    if (isTeamBased) {
+      setShowTeamDialog(true);
+    } else if (id) {
+      registerMutation.mutate(id);
+    }
+  };
+
+  const handleTeamRegister = () => {
+    if (id && selectedTeamId) {
+      registerTeamMutation.mutate(
+        { tournamentId: id, teamId: selectedTeamId },
+        { onSuccess: () => { setShowTeamDialog(false); setSelectedTeamId(""); } }
+      );
+    }
   };
 
   const handleCancelRegistration = () => {
-    if (userRegistration && id) {
-      cancelMutation.mutate({ registrationId: userRegistration.id, tournamentId: id });
+    if (currentRegistration && id) {
+      cancelMutation.mutate({ registrationId: currentRegistration.id, tournamentId: id });
     }
   };
 
@@ -127,6 +175,12 @@ const TournamentDetail = () => {
                   <Badge variant="secondary" className="capitalize">
                     {tournament.bracket_type.replace("_", " ")}
                   </Badge>
+                  {isTeamBased && (
+                    <Badge variant="gold" className="flex items-center gap-1">
+                      <UsersRound className="h-3 w-3" />
+                      Team ({teamSize}v{teamSize})
+                    </Badge>
+                  )}
                 </div>
                 {tournament.description && (
                   <p className="text-muted-foreground max-w-2xl">
@@ -136,7 +190,7 @@ const TournamentDetail = () => {
               </div>
               
               {/* Registration CTA */}
-              <RiftCard className="lg:min-w-[300px]" glow={canRegister}>
+              <RiftCard className="lg:min-w-[300px]" glow={canRegisterSolo || canRegisterTeam}>
                 <RiftCardContent className="py-6">
                   <div className="text-center mb-4">
                     <p className="text-3xl font-display font-bold text-primary mb-1">
@@ -148,7 +202,7 @@ const TournamentDetail = () => {
                   <div className="flex justify-center gap-6 mb-6 text-sm">
                     <div className="text-center">
                       <p className="font-bold">{registrationCount || 0}/{tournament.max_participants}</p>
-                      <p className="text-muted-foreground">Registered</p>
+                      <p className="text-muted-foreground">{isTeamBased ? "Teams" : "Players"}</p>
                     </div>
                     {tournament.registration_fee > 0 && (
                       <div className="text-center">
@@ -165,12 +219,12 @@ const TournamentDetail = () => {
                   ) : isRegistered ? (
                     <div className="space-y-3">
                       <div className="flex items-center justify-center gap-2 text-sm">
-                        {userRegistration?.status === "confirmed" ? (
+                        {currentRegistration?.status === "confirmed" ? (
                           <>
                             <CheckCircle className="h-4 w-4 text-success" />
                             <span className="text-success">Registration Confirmed</span>
                           </>
-                        ) : userRegistration?.status === "pending" ? (
+                        ) : currentRegistration?.status === "pending" ? (
                           <>
                             <Clock className="h-4 w-4 text-warning" />
                             <span className="text-warning">Awaiting Approval</span>
@@ -182,7 +236,7 @@ const TournamentDetail = () => {
                           </>
                         )}
                       </div>
-                      {userRegistration?.status !== "confirmed" && tournament.status === "registration" && (
+                      {currentRegistration?.status !== "confirmed" && tournament.status === "registration" && (
                         <Button 
                           variant="ghost" 
                           className="w-full" 
@@ -201,6 +255,40 @@ const TournamentDetail = () => {
                       <Button variant="rift-outline" className="w-full" disabled>
                         Tournament Full
                       </Button>
+                    ) : isTeamBased ? (
+                      eligibleTeams.length > 0 ? (
+                        <Button 
+                          variant="rift" 
+                          className="w-full" 
+                          onClick={handleRegister}
+                          disabled={registerTeamMutation.isPending || regLoading}
+                        >
+                          {registerTeamMutation.isPending ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          ) : (
+                            <UsersRound className="mr-2 h-4 w-4" />
+                          )}
+                          Register Team
+                        </Button>
+                      ) : userTeams && userTeams.length > 0 ? (
+                        <div className="text-center space-y-2">
+                          <p className="text-sm text-muted-foreground">
+                            You need to be a team captain to register
+                          </p>
+                          <Button variant="rift-outline" className="w-full" onClick={() => navigate("/teams/create")}>
+                            Create a Team
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="text-center space-y-2">
+                          <p className="text-sm text-muted-foreground">
+                            Create or join a team to register
+                          </p>
+                          <Button variant="rift" className="w-full" onClick={() => navigate("/teams/create")}>
+                            Create a Team
+                          </Button>
+                        </div>
+                      )
                     ) : (
                       <Button 
                         variant="rift" 
@@ -269,7 +357,7 @@ const TournamentDetail = () => {
                   <Users className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Participants</p>
+                  <p className="text-xs text-muted-foreground">{isTeamBased ? "Teams" : "Participants"}</p>
                   <p className="font-medium">{registrationCount || 0} / {tournament.max_participants}</p>
                 </div>
               </RiftCardContent>
@@ -392,13 +480,13 @@ const TournamentDetail = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <Users className="h-5 w-5 text-primary" />
-                    Confirmed Participants ({confirmedParticipants.length})
+                    {isTeamBased ? "Confirmed Teams" : "Confirmed Participants"} ({confirmedParticipants.length})
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
                   {confirmedParticipants.length === 0 ? (
                     <p className="text-center text-muted-foreground py-4">
-                      No confirmed participants yet
+                      No confirmed {isTeamBased ? "teams" : "participants"} yet
                     </p>
                   ) : (
                     <div className="space-y-2 max-h-[400px] overflow-y-auto">
@@ -410,15 +498,26 @@ const TournamentDetail = () => {
                           <span className="text-xs text-muted-foreground w-6">
                             #{index + 1}
                           </span>
-                          <Avatar className="h-8 w-8">
-                            <AvatarImage src={reg.user?.avatar_url || undefined} />
-                            <AvatarFallback>
-                              {reg.user?.username?.charAt(0).toUpperCase() || "?"}
-                            </AvatarFallback>
-                          </Avatar>
-                          <span className="font-medium text-sm truncate">
-                            {reg.user?.username || "Unknown"}
-                          </span>
+                          {isTeamBased && reg.team_id ? (
+                            <div className="flex items-center gap-2">
+                              <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-primary/20 text-xs font-bold">
+                                TM
+                              </div>
+                              <span className="font-medium text-sm">Team</span>
+                            </div>
+                          ) : (
+                            <>
+                              <Avatar className="h-8 w-8">
+                                <AvatarImage src={reg.user?.avatar_url || undefined} />
+                                <AvatarFallback>
+                                  {reg.user?.username?.charAt(0).toUpperCase() || "?"}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span className="font-medium text-sm truncate">
+                                {reg.user?.username || "Unknown"}
+                              </span>
+                            </>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -430,6 +529,52 @@ const TournamentDetail = () => {
         </div>
       </main>
       <Footer />
+
+      {/* Team Selection Dialog */}
+      <Dialog open={showTeamDialog} onOpenChange={setShowTeamDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Select Team to Register</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Your Teams</Label>
+              <Select value={selectedTeamId} onValueChange={setSelectedTeamId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a team" />
+                </SelectTrigger>
+                <SelectContent>
+                  {eligibleTeams.map((team) => (
+                    <SelectItem key={team.id} value={team.id}>
+                      [{team.tag}] {team.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Only teams where you are the captain can be registered.
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setShowTeamDialog(false)}>
+              Cancel
+            </Button>
+            <Button 
+              variant="rift" 
+              onClick={handleTeamRegister}
+              disabled={registerTeamMutation.isPending || !selectedTeamId}
+            >
+              {registerTeamMutation.isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <UsersRound className="mr-2 h-4 w-4" />
+              )}
+              Register Team
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -25,6 +25,26 @@ export const useUserRegistration = (tournamentId: string) => {
   });
 };
 
+export const useTeamRegistration = (tournamentId: string, teamId?: string) => {
+  return useQuery({
+    queryKey: ["team-registration", tournamentId, teamId],
+    queryFn: async () => {
+      if (!teamId) return null;
+      
+      const { data, error } = await supabase
+        .from("tournament_registrations")
+        .select("*")
+        .eq("tournament_id", tournamentId)
+        .eq("team_id", teamId)
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!tournamentId && !!teamId,
+  });
+};
+
 export const useRegistrationCount = (tournamentId: string) => {
   return useQuery({
     queryKey: ["registration-count", tournamentId],
@@ -81,6 +101,42 @@ export const useRegisterForTournament = () => {
   });
 };
 
+export const useRegisterTeamForTournament = () => {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async ({ tournamentId, teamId }: { tournamentId: string; teamId: string }) => {
+      const { data, error } = await supabase
+        .from("tournament_registrations")
+        .insert({
+          tournament_id: tournamentId,
+          team_id: teamId,
+          status: "pending",
+        })
+        .select()
+        .single();
+      
+      if (error) {
+        if (error.code === "23505") {
+          throw new Error("This team is already registered for this tournament");
+        }
+        throw error;
+      }
+      return { registration: data, tournamentId, teamId };
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["team-registration", data.tournamentId] });
+      queryClient.invalidateQueries({ queryKey: ["registration-count", data.tournamentId] });
+      queryClient.invalidateQueries({ queryKey: ["tournament-registrations", data.tournamentId] });
+      toast({ title: "Team registration submitted!", description: "Awaiting organizer approval." });
+    },
+    onError: (error) => {
+      toast({ title: "Team registration failed", description: error.message, variant: "destructive" });
+    },
+  });
+};
+
 export const useCancelRegistration = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -97,6 +153,7 @@ export const useCancelRegistration = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["user-registration", data.tournamentId] });
+      queryClient.invalidateQueries({ queryKey: ["team-registration", data.tournamentId] });
       queryClient.invalidateQueries({ queryKey: ["registration-count", data.tournamentId] });
       queryClient.invalidateQueries({ queryKey: ["tournament-registrations", data.tournamentId] });
       toast({ title: "Registration cancelled" });

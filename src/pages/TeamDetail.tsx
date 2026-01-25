@@ -1,0 +1,312 @@
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useTeam, useTeamMembers, useTeamInvites, useInviteToTeam, useRemoveTeamMember, useLeaveTeam } from "@/hooks/useTeams";
+import { useAuth } from "@/contexts/AuthContext";
+import { 
+  ArrowLeft, Users, Crown, Loader2, UserPlus, 
+  X, Mail, LogOut, Settings
+} from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+
+const TeamDetail = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  
+  const { data: team, isLoading: teamLoading } = useTeam(id || "");
+  const { data: members } = useTeamMembers(id || "");
+  const { data: invites } = useTeamInvites(id || "");
+  
+  const inviteToTeam = useInviteToTeam();
+  const removeMember = useRemoveTeamMember();
+  const leaveTeam = useLeaveTeam();
+
+  const [showInviteDialog, setShowInviteDialog] = useState(false);
+  const [inviteUsername, setInviteUsername] = useState("");
+
+  if (teamLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!team) {
+    return (
+      <div className="min-h-screen bg-background text-foreground">
+        <Navbar />
+        <main className="pt-24 pb-16">
+          <div className="container text-center">
+            <h1 className="text-2xl font-bold mb-4">Team not found</h1>
+            <Button variant="rift" onClick={() => navigate("/teams")}>
+              Browse Teams
+            </Button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const isCaptain = team.captain_id === user?.id;
+  const isMember = members?.some(m => m.user_id === user?.id);
+  const canInvite = isCaptain && (members?.length || 0) < team.max_members;
+
+  const handleInvite = () => {
+    if (!inviteUsername.trim()) return;
+    inviteToTeam.mutate(
+      { teamId: team.id, username: inviteUsername.trim() },
+      {
+        onSuccess: () => {
+          setShowInviteDialog(false);
+          setInviteUsername("");
+        }
+      }
+    );
+  };
+
+  const handleRemoveMember = (memberId: string) => {
+    if (confirm("Remove this member from the team?")) {
+      removeMember.mutate({ memberId, teamId: team.id });
+    }
+  };
+
+  const handleLeaveTeam = () => {
+    if (confirm("Are you sure you want to leave this team?")) {
+      leaveTeam.mutate(team.id, {
+        onSuccess: () => navigate("/teams")
+      });
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <Navbar />
+      <main className="pt-24 pb-16">
+        <div className="container">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <Button 
+              variant="ghost" 
+              className="mb-4"
+              onClick={() => navigate("/teams")}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Teams
+            </Button>
+            
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+              <div className="flex items-start gap-4">
+                <div className="flex h-20 w-20 items-center justify-center rounded-sm bg-primary/20 text-3xl font-bold">
+                  {team.tag.substring(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <div className="flex items-center gap-3 mb-1">
+                    <h1 className="font-display text-3xl font-bold uppercase tracking-wide">
+                      {team.name}
+                    </h1>
+                    <Badge variant="secondary">[{team.tag}]</Badge>
+                  </div>
+                  <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                    <Crown className="h-4 w-4 text-warning" />
+                    <span>Captain: {team.captain?.username}</span>
+                  </div>
+                  {team.description && (
+                    <p className="text-muted-foreground max-w-xl">{team.description}</p>
+                  )}
+                </div>
+              </div>
+              
+              <div className="flex gap-2">
+                {isCaptain && (
+                  <Button variant="rift-outline" size="sm">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </Button>
+                )}
+                {isMember && !isCaptain && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={handleLeaveTeam}
+                    disabled={leaveTeam.isPending}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Leave Team
+                  </Button>
+                )}
+              </div>
+            </div>
+          </motion.div>
+
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* Members */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="lg:col-span-2"
+            >
+              <RiftCard>
+                <RiftCardHeader className="flex flex-row items-center justify-between">
+                  <RiftCardTitle className="flex items-center gap-2">
+                    <Users className="h-5 w-5 text-primary" />
+                    Members ({members?.length || 0}/{team.max_members})
+                  </RiftCardTitle>
+                  {canInvite && (
+                    <Button 
+                      variant="rift" 
+                      size="sm"
+                      onClick={() => setShowInviteDialog(true)}
+                    >
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Invite
+                    </Button>
+                  )}
+                </RiftCardHeader>
+                <RiftCardContent>
+                  <div className="space-y-3">
+                    {members?.map((member) => (
+                      <div
+                        key={member.id}
+                        className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={member.user?.avatar_url || undefined} />
+                            <AvatarFallback>
+                              {member.user?.username?.charAt(0).toUpperCase() || "?"}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium">{member.user?.username}</p>
+                              {member.role === "captain" && (
+                                <Crown className="h-4 w-4 text-warning" />
+                              )}
+                            </div>
+                            <p className="text-xs text-muted-foreground capitalize">
+                              {member.role}
+                            </p>
+                          </div>
+                        </div>
+                        {isCaptain && member.role !== "captain" && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => handleRemoveMember(member.id)}
+                            disabled={removeMember.isPending}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </RiftCardContent>
+              </RiftCard>
+            </motion.div>
+
+            {/* Pending Invites (Captain only) */}
+            {isCaptain && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <RiftCard>
+                  <RiftCardHeader>
+                    <RiftCardTitle className="flex items-center gap-2">
+                      <Mail className="h-5 w-5 text-primary" />
+                      Pending Invites
+                    </RiftCardTitle>
+                  </RiftCardHeader>
+                  <RiftCardContent>
+                    {!invites || invites.length === 0 ? (
+                      <p className="text-center text-muted-foreground py-4">
+                        No pending invites
+                      </p>
+                    ) : (
+                      <div className="space-y-2">
+                        {invites.map((invite) => (
+                          <div
+                            key={invite.id}
+                            className="flex items-center gap-3 p-3 bg-secondary/30 rounded-lg"
+                          >
+                            <Avatar className="h-8 w-8">
+                              <AvatarImage src={invite.user?.avatar_url || undefined} />
+                              <AvatarFallback>
+                                {invite.user?.username?.charAt(0).toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm font-medium flex-1">
+                              {invite.user?.username}
+                            </span>
+                            <Badge variant="secondary">Pending</Badge>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </RiftCardContent>
+                </RiftCard>
+              </motion.div>
+            )}
+          </div>
+        </div>
+      </main>
+      <Footer />
+
+      {/* Invite Dialog */}
+      <Dialog open={showInviteDialog} onOpenChange={setShowInviteDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Invite Player</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Username</Label>
+              <Input
+                placeholder="Enter player's username"
+                value={inviteUsername}
+                onChange={(e) => setInviteUsername(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setShowInviteDialog(false)}>
+              Cancel
+            </Button>
+            <Button 
+              variant="rift" 
+              onClick={handleInvite}
+              disabled={inviteToTeam.isPending || !inviteUsername.trim()}
+            >
+              {inviteToTeam.isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <UserPlus className="mr-2 h-4 w-4" />
+              )}
+              Send Invite
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default TeamDetail;

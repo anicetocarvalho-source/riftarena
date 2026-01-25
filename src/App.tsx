@@ -8,7 +8,6 @@ import Index from "./pages/Index";
 import Tournaments from "./pages/Tournaments";
 import Rankings from "./pages/Rankings";
 import Games from "./pages/Games";
-import Teams from "./pages/Teams";
 import Sponsors from "./pages/Sponsors";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -17,6 +16,9 @@ import AdminUsers from "./pages/AdminUsers";
 import SetupAdmin from "./pages/SetupAdmin";
 import CreateTournament from "./pages/CreateTournament";
 import ManageTournament from "./pages/ManageTournament";
+import TeamsPage from "./pages/TeamsPage";
+import CreateTeam from "./pages/CreateTeam";
+import TeamDetail from "./pages/TeamDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,7 +36,9 @@ const App = () => (
             <Route path="/tournaments/:id" element={<TournamentDetail />} />
             <Route path="/rankings" element={<Rankings />} />
             <Route path="/games" element={<Games />} />
-            <Route path="/teams" element={<Teams />} />
+            <Route path="/teams" element={<TeamsPage />} />
+            <Route path="/teams/create" element={<CreateTeam />} />
+            <Route path="/teams/:id" element={<TeamDetail />} />
             <Route path="/sponsors" element={<Sponsors />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />

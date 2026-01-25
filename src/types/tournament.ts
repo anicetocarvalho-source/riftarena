@@ -35,11 +35,13 @@ export interface Tournament {
 export interface TournamentRegistration {
   id: string;
   tournament_id: string;
-  user_id: string;
+  user_id: string | null;
+  team_id: string | null;
   status: string;
   seed: number | null;
   created_at: string;
   user?: { id: string; username: string; avatar_url: string | null };
+  team?: { id: string; name: string; tag: string };
 }
 
 export interface TournamentMatch {
