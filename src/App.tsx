@@ -14,6 +14,8 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import AdminUsers from "./pages/AdminUsers";
 import SetupAdmin from "./pages/SetupAdmin";
+import CreateTournament from "./pages/CreateTournament";
+import ManageTournament from "./pages/ManageTournament";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +38,8 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route path="/admin/setup" element={<SetupAdmin />} />
+            <Route path="/tournaments/create" element={<CreateTournament />} />
+            <Route path="/tournaments/manage/:id" element={<ManageTournament />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
