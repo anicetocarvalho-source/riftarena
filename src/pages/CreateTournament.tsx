@@ -32,6 +32,8 @@ const CreateTournament = () => {
     end_date: "",
     rules: "",
     bracket_type: "single_elimination",
+    is_team_based: false,
+    team_size: 5,
   });
 
   if (authLoading) {
