@@ -12,11 +12,12 @@ import { useTeamLogoUpload } from "@/hooks/useTeamLogo";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
   ArrowLeft, Users, Crown, Loader2, UserPlus, 
-  X, Mail, LogOut, Camera
+  X, Mail, LogOut, Camera, Pencil
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { EditTeamDialog } from "@/components/teams/EditTeamDialog";
 
 const TeamDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,6 +35,7 @@ const TeamDetail = () => {
   const logoInputRef = useRef<HTMLInputElement>(null);
 
   const [showInviteDialog, setShowInviteDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
   const [inviteUsername, setInviteUsername] = useState("");
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,6 +179,16 @@ const TeamDetail = () => {
               </div>
               
               <div className="flex gap-2">
+                {isCaptain && (
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setShowEditDialog(true)}
+                  >
+                    <Pencil className="mr-2 h-4 w-4" />
+                    Edit Team
+                  </Button>
+                )}
                 {isMember && !isCaptain && (
                   <Button 
                     variant="ghost" 
@@ -344,6 +356,15 @@ const TeamDetail = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Edit Team Dialog */}
+      {team && (
+        <EditTeamDialog
+          team={team}
+          open={showEditDialog}
+          onOpenChange={setShowEditDialog}
+        />
+      )}
     </div>
   );
 };
