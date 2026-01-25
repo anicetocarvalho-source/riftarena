@@ -1,86 +1,47 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { TournamentCard } from "@/components/tournaments/TournamentCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Filter, Search } from "lucide-react";
+import { Calendar, Filter, Search, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
-
-const tournaments = [
-  {
-    id: "1",
-    name: "RIFT Championship Series",
-    game: "Free Fire",
-    gameIcon: "🔥",
-    status: "live" as const,
-    prizePool: "$50,000",
-    participants: 128,
-    maxParticipants: 128,
-    date: "Jan 28, 2025",
-    sponsor: "Samsung",
-  },
-  {
-    id: "2",
-    name: "Mobile Legends Cup",
-    game: "PUBG Mobile",
-    gameIcon: "🎯",
-    status: "upcoming" as const,
-    prizePool: "$25,000",
-    participants: 89,
-    maxParticipants: 100,
-    date: "Feb 5, 2025",
-    sponsor: "Redbull",
-  },
-  {
-    id: "3",
-    name: "Pro League Season 4",
-    game: "Call of Duty Mobile",
-    gameIcon: "💀",
-    status: "upcoming" as const,
-    prizePool: "$15,000",
-    participants: 45,
-    maxParticipants: 64,
-    date: "Feb 12, 2025",
-  },
-  {
-    id: "4",
-    name: "Elite Squad Tournament",
-    game: "Free Fire",
-    gameIcon: "🔥",
-    status: "upcoming" as const,
-    prizePool: "$10,000",
-    participants: 32,
-    maxParticipants: 64,
-    date: "Feb 18, 2025",
-    sponsor: "Intel",
-  },
-  {
-    id: "5",
-    name: "Battle Royale Masters",
-    game: "PUBG Mobile",
-    gameIcon: "🎯",
-    status: "completed" as const,
-    prizePool: "$20,000",
-    participants: 100,
-    maxParticipants: 100,
-    date: "Jan 20, 2025",
-  },
-  {
-    id: "6",
-    name: "COD Pro Invitational",
-    game: "Call of Duty Mobile",
-    gameIcon: "💀",
-    status: "completed" as const,
-    prizePool: "$12,000",
-    participants: 48,
-    maxParticipants: 48,
-    date: "Jan 15, 2025",
-    sponsor: "Razer",
-  },
-];
+import { useTournaments } from "@/hooks/useTournaments";
+import { useAuth } from "@/contexts/AuthContext";
+import { Loader2 } from "lucide-react";
 
 const Tournaments = () => {
+  const navigate = useNavigate();
+  const { isOrganizer, isAdmin, user } = useAuth();
+  const { data: tournaments, isLoading } = useTournaments();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredTournaments = tournaments?.filter(t => 
+    t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    t.game?.name.toLowerCase().includes(searchTerm.toLowerCase())
+  ) || [];
+
+  // Transform database tournaments to match TournamentCard format
+  const transformedTournaments = filteredTournaments.map(t => ({
+    id: t.id,
+    name: t.name,
+    game: t.game?.name || "Unknown",
+    gameIcon: t.game?.icon || "🎮",
+    status: t.status as "live" | "upcoming" | "completed",
+    prizePool: `$${t.prize_pool.toLocaleString()}`,
+    participants: 0, // Will be fetched separately if needed
+    maxParticipants: t.max_participants,
+    date: new Date(t.start_date).toLocaleDateString("en-US", { 
+      month: "short", 
+      day: "numeric", 
+      year: "numeric" 
+    }),
+    sponsor: undefined,
+    isOwner: t.organizer_id === user?.id,
+  }));
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
@@ -92,14 +53,24 @@ const Tournaments = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-12"
           >
-            <Badge variant="default" className="mb-4">Browse Tournaments</Badge>
-            <h1 className="font-display text-4xl font-bold uppercase tracking-wide mb-4">
-              Tournaments
-            </h1>
-            <p className="text-muted-foreground max-w-2xl">
-              Find and join competitive tournaments across all supported games. 
-              Compete for cash prizes, sponsor rewards, and global recognition.
-            </p>
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+              <div>
+                <Badge variant="default" className="mb-4">Browse Tournaments</Badge>
+                <h1 className="font-display text-4xl font-bold uppercase tracking-wide mb-4">
+                  Tournaments
+                </h1>
+                <p className="text-muted-foreground max-w-2xl">
+                  Find and join competitive tournaments across all supported games. 
+                  Compete for cash prizes, sponsor rewards, and global recognition.
+                </p>
+              </div>
+              {(isOrganizer || isAdmin) && (
+                <Button variant="rift" onClick={() => navigate("/tournaments/create")}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create Tournament
+                </Button>
+              )}
+            </div>
           </motion.div>
 
           {/* Filters */}
@@ -114,6 +85,8 @@ const Tournaments = () => {
               <Input 
                 placeholder="Search tournaments..." 
                 className="pl-10 bg-secondary border-border"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div className="flex gap-2">
@@ -129,11 +102,31 @@ const Tournaments = () => {
           </motion.div>
 
           {/* Tournament Grid */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {tournaments.map((tournament, index) => (
-              <TournamentCard key={tournament.id} tournament={tournament} index={index} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : transformedTournaments.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground mb-4">No tournaments found</p>
+              {(isOrganizer || isAdmin) && (
+                <Button variant="rift" onClick={() => navigate("/tournaments/create")}>
+                  Create Your First Tournament
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {transformedTournaments.map((tournament, index) => (
+                <TournamentCard 
+                  key={tournament.id} 
+                  tournament={tournament} 
+                  index={index}
+                  onManage={tournament.isOwner ? () => navigate(`/tournaments/manage/${tournament.id}`) : undefined}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </main>
       <Footer />

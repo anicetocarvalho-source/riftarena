@@ -214,7 +214,7 @@ const Dashboard = () => {
                 </RiftCardHeader>
                 <RiftCardContent>
                   <div className="grid gap-4 md:grid-cols-3">
-                    <Button variant="rift-outline" className="justify-start h-auto py-4">
+                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/tournaments/create")}>
                       <div className="text-left">
                         <p className="font-display uppercase tracking-wider">Create Tournament</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
@@ -222,7 +222,7 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </Button>
-                    <Button variant="rift-outline" className="justify-start h-auto py-4">
+                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/tournaments")}>
                       <div className="text-left">
                         <p className="font-display uppercase tracking-wider">Manage Tournaments</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
@@ -230,7 +230,7 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </Button>
-                    <Button variant="rift-outline" className="justify-start h-auto py-4">
+                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/tournaments")}>
                       <div className="text-left">
                         <p className="font-display uppercase tracking-wider">Match Results</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">

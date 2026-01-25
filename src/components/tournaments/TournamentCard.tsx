@@ -9,20 +9,24 @@ interface Tournament {
   name: string;
   game: string;
   gameIcon: string;
-  status: "live" | "upcoming" | "completed";
+  status: "live" | "upcoming" | "completed" | "draft" | "registration" | "cancelled";
   prizePool: string;
   participants: number;
   maxParticipants: number;
   date: string;
   sponsor?: string;
+  isOwner?: boolean;
 }
 
 interface TournamentCardProps {
   tournament: Tournament;
   index?: number;
+  onManage?: () => void;
 }
 
-export function TournamentCard({ tournament, index = 0 }: TournamentCardProps) {
+export function TournamentCard({ tournament, index = 0, onManage }: TournamentCardProps) {
+  const displayStatus = tournament.status === "registration" ? "upcoming" : tournament.status;
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -32,7 +36,7 @@ export function TournamentCard({ tournament, index = 0 }: TournamentCardProps) {
       <RiftCard className="group relative overflow-hidden">
         {/* Status Indicator */}
         <div className="absolute right-4 top-4">
-          <Badge variant={tournament.status}>
+          <Badge variant={displayStatus as "live" | "upcoming" | "completed"}>
             {tournament.status === "live" && "● "}
             {tournament.status.toUpperCase()}
           </Badge>
@@ -86,10 +90,17 @@ export function TournamentCard({ tournament, index = 0 }: TournamentCardProps) {
           )}
 
           {/* CTA */}
-          <Button variant="rift-outline" className="mt-4 w-full group-hover:bg-primary group-hover:text-primary-foreground">
-            View Tournament
-            <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Button>
+          {onManage ? (
+            <Button variant="rift" className="mt-4 w-full" onClick={onManage}>
+              Manage Tournament
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          ) : (
+            <Button variant="rift-outline" className="mt-4 w-full group-hover:bg-primary group-hover:text-primary-foreground">
+              View Tournament
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          )}
         </RiftCardContent>
       </RiftCard>
     </motion.div>
