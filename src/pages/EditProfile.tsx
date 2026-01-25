@@ -1,0 +1,240 @@
+import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { useEditProfile } from "@/hooks/useEditProfile";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Loader2, Camera, Save, ArrowLeft, User } from "lucide-react";
+
+const EditProfile = () => {
+  const { user, profile, isLoading: authLoading } = useAuth();
+  const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const [username, setUsername] = useState("");
+  const [bio, setBio] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  
+  const { isLoading, isUploading, uploadAvatar, updateProfile } = useEditProfile(user?.id || "");
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/auth");
+    }
+  }, [user, authLoading, navigate]);
+
+  useEffect(() => {
+    if (profile) {
+      setUsername(profile.username || "");
+      setBio(profile.bio || "");
+      setCity(profile.city || "");
+      setCountry(profile.country || "");
+      setAvatarUrl(profile.avatar_url);
+    }
+  }, [profile]);
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Show preview immediately
+    const reader = new FileReader();
+    reader.onload = (e) => setAvatarPreview(e.target?.result as string);
+    reader.readAsDataURL(file);
+    
+    // Upload to storage
+    const url = await uploadAvatar(file);
+    if (url) {
+      setAvatarUrl(url);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const success = await updateProfile({
+      username: username.trim(),
+      bio: bio.trim(),
+      city: city.trim(),
+      country: country.trim(),
+      avatar_url: avatarUrl,
+    });
+    
+    if (success) {
+      navigate(`/player/${user?.id}`);
+    }
+  };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!user || !profile) {
+    return null;
+  }
+
+  const displayAvatar = avatarPreview || avatarUrl;
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <Navbar />
+      <main className="pt-24 pb-16">
+        <div className="container max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate(-1)}
+              className="mb-6"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </Button>
+
+            <RiftCard>
+              <RiftCardHeader>
+                <RiftCardTitle className="flex items-center gap-2">
+                  <User className="h-5 w-5 text-primary" />
+                  Edit Profile
+                </RiftCardTitle>
+              </RiftCardHeader>
+              <RiftCardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Avatar Upload */}
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="relative group">
+                      <Avatar className="h-24 w-24 border-2 border-primary/20">
+                        <AvatarImage src={displayAvatar || undefined} />
+                        <AvatarFallback className="text-2xl bg-primary/10">
+                          {username.charAt(0).toUpperCase() || "?"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isUploading}
+                        className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        {isUploading ? (
+                          <Loader2 className="h-6 w-6 animate-spin text-white" />
+                        ) : (
+                          <Camera className="h-6 w-6 text-white" />
+                        )}
+                      </button>
+                    </div>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleAvatarChange}
+                      className="hidden"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Click to upload a new avatar
+                    </p>
+                  </div>
+
+                  {/* Username */}
+                  <div className="space-y-2">
+                    <Label htmlFor="username">Username</Label>
+                    <Input
+                      id="username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="Enter your username"
+                      required
+                      maxLength={50}
+                    />
+                  </div>
+
+                  {/* Bio */}
+                  <div className="space-y-2">
+                    <Label htmlFor="bio">Bio</Label>
+                    <Textarea
+                      id="bio"
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                      placeholder="Tell us about yourself..."
+                      rows={4}
+                      maxLength={500}
+                    />
+                    <p className="text-xs text-muted-foreground text-right">
+                      {bio.length}/500
+                    </p>
+                  </div>
+
+                  {/* Location */}
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="city">City</Label>
+                      <Input
+                        id="city"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        placeholder="Your city"
+                        maxLength={100}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="country">Country</Label>
+                      <Input
+                        id="country"
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                        placeholder="Your country"
+                        maxLength={100}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Submit */}
+                  <div className="flex justify-end gap-3 pt-4">
+                    <Button
+                      type="button"
+                      variant="rift-outline"
+                      onClick={() => navigate(-1)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="rift"
+                      disabled={isLoading || isUploading || !username.trim()}
+                    >
+                      {isLoading ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <Save className="mr-2 h-4 w-4" />
+                      )}
+                      Save Changes
+                    </Button>
+                  </div>
+                </form>
+              </RiftCardContent>
+            </RiftCard>
+          </motion.div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default EditProfile;
