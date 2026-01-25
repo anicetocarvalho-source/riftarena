@@ -12,6 +12,7 @@ import Teams from "./pages/Teams";
 import Sponsors from "./pages/Sponsors";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import TournamentDetail from "./pages/TournamentDetail";
 import AdminUsers from "./pages/AdminUsers";
 import SetupAdmin from "./pages/SetupAdmin";
 import CreateTournament from "./pages/CreateTournament";
@@ -30,6 +31,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/tournaments" element={<Tournaments />} />
+            <Route path="/tournaments/:id" element={<TournamentDetail />} />
             <Route path="/rankings" element={<Rankings />} />
             <Route path="/games" element={<Games />} />
             <Route path="/teams" element={<Teams />} />

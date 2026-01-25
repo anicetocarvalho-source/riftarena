@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
@@ -25,6 +26,7 @@ interface TournamentCardProps {
 }
 
 export function TournamentCard({ tournament, index = 0, onManage }: TournamentCardProps) {
+  const navigate = useNavigate();
   const displayStatus = tournament.status === "registration" ? "upcoming" : tournament.status;
   
   return (
@@ -96,7 +98,11 @@ export function TournamentCard({ tournament, index = 0, onManage }: TournamentCa
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           ) : (
-            <Button variant="rift-outline" className="mt-4 w-full group-hover:bg-primary group-hover:text-primary-foreground">
+            <Button 
+              variant="rift-outline" 
+              className="mt-4 w-full group-hover:bg-primary group-hover:text-primary-foreground"
+              onClick={() => navigate(`/tournaments/${tournament.id}`)}
+            >
               View Tournament
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
