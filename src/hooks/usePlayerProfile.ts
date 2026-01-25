@@ -26,6 +26,9 @@ export interface PlayerProfile {
   country: string | null;
   city: string | null;
   bio: string | null;
+  discord_username: string | null;
+  twitter_username: string | null;
+  twitch_username: string | null;
   created_at: string;
 }
 

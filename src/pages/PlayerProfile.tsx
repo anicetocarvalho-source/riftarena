@@ -8,8 +8,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Loader2, Trophy, Target, TrendingUp, Gamepad2, 
-  MapPin, Calendar, Award, Lock, ChevronRight
+  MapPin, Calendar, Award, Lock, ChevronRight, ExternalLink
 } from "lucide-react";
+import { SiDiscord, SiX, SiTwitch } from "@icons-pack/react-simple-icons";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { 
@@ -161,6 +162,43 @@ const PlayerProfile = () => {
                       <p className="mt-3 text-muted-foreground max-w-2xl">
                         {profile.bio}
                       </p>
+                    )}
+                    
+                    {/* Social Links */}
+                    {(profile.discord_username || profile.twitter_username || profile.twitch_username) && (
+                      <div className="flex items-center gap-3 mt-4">
+                        {profile.discord_username && (
+                          <div 
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#5865F2]/10 text-[#5865F2] text-sm"
+                            title={`Discord: ${profile.discord_username}`}
+                          >
+                            <SiDiscord className="h-4 w-4" />
+                            <span>{profile.discord_username}</span>
+                          </div>
+                        )}
+                        {profile.twitter_username && (
+                          <a
+                            href={`https://x.com/${profile.twitter_username}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-foreground/10 text-foreground text-sm hover:bg-foreground/20 transition-colors"
+                          >
+                            <SiX className="h-4 w-4" />
+                            <span>@{profile.twitter_username}</span>
+                          </a>
+                        )}
+                        {profile.twitch_username && (
+                          <a
+                            href={`https://twitch.tv/${profile.twitch_username}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#9146FF]/10 text-[#9146FF] text-sm hover:bg-[#9146FF]/20 transition-colors"
+                          >
+                            <SiTwitch className="h-4 w-4" />
+                            <span>{profile.twitch_username}</span>
+                          </a>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>

@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, Camera, Save, ArrowLeft, User } from "lucide-react";
+import { SiDiscord, SiX, SiTwitch } from "@icons-pack/react-simple-icons";
 
 const EditProfile = () => {
   const { user, profile, isLoading: authLoading } = useAuth();
@@ -22,6 +23,9 @@ const EditProfile = () => {
   const [bio, setBio] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
+  const [discordUsername, setDiscordUsername] = useState("");
+  const [twitterUsername, setTwitterUsername] = useState("");
+  const [twitchUsername, setTwitchUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   
@@ -39,6 +43,9 @@ const EditProfile = () => {
       setBio(profile.bio || "");
       setCity(profile.city || "");
       setCountry(profile.country || "");
+      setDiscordUsername(profile.discord_username || "");
+      setTwitterUsername(profile.twitter_username || "");
+      setTwitchUsername(profile.twitch_username || "");
       setAvatarUrl(profile.avatar_url);
     }
   }, [profile]);
@@ -67,6 +74,9 @@ const EditProfile = () => {
       bio: bio.trim(),
       city: city.trim(),
       country: country.trim(),
+      discord_username: discordUsername.trim() || null,
+      twitter_username: twitterUsername.trim() || null,
+      twitch_username: twitchUsername.trim() || null,
       avatar_url: avatarUrl,
     });
     
@@ -191,7 +201,50 @@ const EditProfile = () => {
                         placeholder="Your city"
                         maxLength={100}
                       />
+                  </div>
+
+                  {/* Social Links */}
+                  <div className="space-y-4">
+                    <Label className="text-base">Social Links</Label>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-md bg-[#5865F2]/10">
+                          <SiDiscord className="h-5 w-5 text-[#5865F2]" />
+                        </div>
+                        <Input
+                          placeholder="Discord username"
+                          value={discordUsername}
+                          onChange={(e) => setDiscordUsername(e.target.value)}
+                          maxLength={50}
+                          className="flex-1"
+                        />
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-md bg-foreground/10">
+                          <SiX className="h-5 w-5" />
+                        </div>
+                        <Input
+                          placeholder="X (Twitter) username"
+                          value={twitterUsername}
+                          onChange={(e) => setTwitterUsername(e.target.value)}
+                          maxLength={50}
+                          className="flex-1"
+                        />
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-md bg-[#9146FF]/10">
+                          <SiTwitch className="h-5 w-5 text-[#9146FF]" />
+                        </div>
+                        <Input
+                          placeholder="Twitch username"
+                          value={twitchUsername}
+                          onChange={(e) => setTwitchUsername(e.target.value)}
+                          maxLength={50}
+                          className="flex-1"
+                        />
+                      </div>
                     </div>
+                  </div>
                     <div className="space-y-2">
                       <Label htmlFor="country">Country</Label>
                       <Input
