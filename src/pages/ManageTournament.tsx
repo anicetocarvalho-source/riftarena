@@ -274,11 +274,14 @@ const ManageTournament = () => {
                   matches={matches || []}
                   isLoading={matchesLoading}
                   tournamentId={tournament.id}
-                  onUpdateResult={(matchId, winnerId, p1Score, p2Score) =>
+                  gameId={tournament.game_id}
+                  onUpdateResult={(matchId, winnerId, loserId, p1Score, p2Score) =>
                     updateMatchResult.mutate({
                       matchId,
                       tournamentId: tournament.id,
                       winnerId,
+                      loserId,
+                      gameId: tournament.game_id,
                       participant1Score: p1Score,
                       participant2Score: p2Score,
                     })
