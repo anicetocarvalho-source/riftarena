@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
@@ -8,10 +8,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTeam, useTeamMembers, useTeamInvites, useInviteToTeam, useRemoveTeamMember, useLeaveTeam } from "@/hooks/useTeams";
+import { useTeamLogoUpload } from "@/hooks/useTeamLogo";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
   ArrowLeft, Users, Crown, Loader2, UserPlus, 
-  X, Mail, LogOut, Settings
+  X, Mail, LogOut, Camera
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -29,9 +30,26 @@ const TeamDetail = () => {
   const inviteToTeam = useInviteToTeam();
   const removeMember = useRemoveTeamMember();
   const leaveTeam = useLeaveTeam();
+  const { uploadLogo, uploading: logoUploading } = useTeamLogoUpload();
+  const logoInputRef = useRef<HTMLInputElement>(null);
 
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const [inviteUsername, setInviteUsername] = useState("");
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !team) return;
+
+    if (!file.type.startsWith("image/")) {
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      return;
+    }
+
+    uploadLogo.mutate({ teamId: team.id, file });
+  };
 
   if (teamLoading) {
     return (
@@ -111,8 +129,35 @@ const TeamDetail = () => {
             
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
               <div className="flex items-start gap-4">
-                <div className="flex h-20 w-20 items-center justify-center rounded-sm bg-primary/20 text-3xl font-bold">
-                  {team.tag.substring(0, 2).toUpperCase()}
+                <div className="relative group">
+                  <Avatar className="h-20 w-20 rounded-sm">
+                    <AvatarImage src={team.logo_url || undefined} className="object-cover" />
+                    <AvatarFallback className="rounded-sm bg-primary/20 text-3xl font-bold font-display">
+                      {team.tag.substring(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  {isCaptain && (
+                    <>
+                      <input
+                        ref={logoInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleLogoUpload}
+                        className="hidden"
+                      />
+                      <button
+                        onClick={() => logoInputRef.current?.click()}
+                        disabled={logoUploading}
+                        className="absolute inset-0 flex items-center justify-center bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity rounded-sm cursor-pointer"
+                      >
+                        {logoUploading ? (
+                          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                        ) : (
+                          <Camera className="h-6 w-6 text-primary" />
+                        )}
+                      </button>
+                    </>
+                  )}
                 </div>
                 <div>
                   <div className="flex items-center gap-3 mb-1">
@@ -132,12 +177,6 @@ const TeamDetail = () => {
               </div>
               
               <div className="flex gap-2">
-                {isCaptain && (
-                  <Button variant="rift-outline" size="sm">
-                    <Settings className="mr-2 h-4 w-4" />
-                    Settings
-                  </Button>
-                )}
                 {isMember && !isCaptain && (
                   <Button 
                     variant="ghost" 
