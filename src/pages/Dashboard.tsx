@@ -74,6 +74,10 @@ const Dashboard = () => {
                 </p>
               </div>
               <div className="flex gap-3">
+                <Button variant="rift" size="sm" onClick={() => navigate(`/player/${user.id}`)}>
+                  <Users className="mr-2 h-4 w-4" />
+                  View Profile
+                </Button>
                 <Button variant="rift-outline" size="sm">
                   <Settings className="mr-2 h-4 w-4" />
                   Settings
