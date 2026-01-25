@@ -167,7 +167,10 @@ export type Database = {
           city: string | null
           country: string | null
           created_at: string
+          discord_username: string | null
           id: string
+          twitch_username: string | null
+          twitter_username: string | null
           updated_at: string
           username: string
         }
@@ -177,7 +180,10 @@ export type Database = {
           city?: string | null
           country?: string | null
           created_at?: string
+          discord_username?: string | null
           id: string
+          twitch_username?: string | null
+          twitter_username?: string | null
           updated_at?: string
           username: string
         }
@@ -187,7 +193,10 @@ export type Database = {
           city?: string | null
           country?: string | null
           created_at?: string
+          discord_username?: string | null
           id?: string
+          twitch_username?: string | null
+          twitter_username?: string | null
           updated_at?: string
           username?: string
         }

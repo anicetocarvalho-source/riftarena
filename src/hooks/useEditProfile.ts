@@ -8,6 +8,9 @@ interface ProfileData {
   city: string;
   country: string;
   avatar_url: string | null;
+  discord_username: string | null;
+  twitter_username: string | null;
+  twitch_username: string | null;
 }
 
 export const useEditProfile = (userId: string) => {
