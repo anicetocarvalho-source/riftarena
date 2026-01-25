@@ -1,30 +1,20 @@
+import { useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
-import { RankingRow } from "@/components/rankings/RankingRow";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
-
-const games = ["All Games", "Free Fire", "PUBG Mobile", "COD Mobile"];
-const seasons = ["Season 4", "Season 3", "Season 2", "All Time"];
-
-const allPlayers = [
-  { rank: 1, username: "PHANTOM_X", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=phantom", country: "🇧🇷 Brazil", elo: 2847, wins: 342, losses: 45, winRate: 88 },
-  { rank: 2, username: "SHADOW_STRIKE", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=shadow", country: "🇮🇩 Indonesia", elo: 2756, wins: 298, losses: 52, winRate: 85 },
-  { rank: 3, username: "VIPER_ACE", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=viper", country: "🇮🇳 India", elo: 2698, wins: 276, losses: 61, winRate: 82 },
-  { rank: 4, username: "STORM_FURY", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=storm", country: "🇵🇭 Philippines", elo: 2634, wins: 254, losses: 68, winRate: 79 },
-  { rank: 5, username: "BLAZE_KING", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=blaze", country: "🇻🇳 Vietnam", elo: 2589, wins: 231, losses: 72, winRate: 76 },
-  { rank: 6, username: "NIGHT_OWL", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=night", country: "🇹🇭 Thailand", elo: 2534, wins: 218, losses: 78, winRate: 74 },
-  { rank: 7, username: "FROST_BITE", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=frost", country: "🇲🇾 Malaysia", elo: 2487, wins: 205, losses: 82, winRate: 71 },
-  { rank: 8, username: "THUNDER_BOLT", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=thunder", country: "🇸🇬 Singapore", elo: 2445, wins: 198, losses: 85, winRate: 70 },
-  { rank: 9, username: "DARK_REAPER", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=dark", country: "🇯🇵 Japan", elo: 2398, wins: 187, losses: 89, winRate: 68 },
-  { rank: 10, username: "IRON_FIST", avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=iron", country: "🇰🇷 South Korea", elo: 2356, wins: 176, losses: 92, winRate: 66 },
-];
+import { useRankings, getRankTier, getWinRate } from "@/hooks/useRankings";
+import { useGames } from "@/hooks/useTournaments";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Loader2, TrendingUp, Trophy, Target } from "lucide-react";
 
 const Rankings = () => {
-  const [activeGame, setActiveGame] = useState("All Games");
-  const [activeSeason, setActiveSeason] = useState("Season 4");
+  const [activeGameId, setActiveGameId] = useState<string | undefined>(undefined);
+  const { data: games, isLoading: gamesLoading } = useGames();
+  const { data: rankings, isLoading: rankingsLoading } = useRankings(activeGameId, 100);
+
+  const isLoading = gamesLoading || rankingsLoading;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -47,53 +37,41 @@ const Rankings = () => {
             </p>
           </motion.div>
 
-          {/* Filters */}
+          {/* Game Filter */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="flex flex-col sm:flex-row gap-6 mb-8"
+            className="mb-8"
           >
-            {/* Game Filter */}
-            <div>
-              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Game</p>
-              <div className="flex flex-wrap gap-2">
-                {games.map((game) => (
-                  <button
-                    key={game}
-                    onClick={() => setActiveGame(game)}
-                    className={cn(
-                      "px-4 py-2 text-sm font-display uppercase tracking-wider transition-all rounded-sm border",
-                      activeGame === game
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-transparent text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
-                    )}
-                  >
-                    {game}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Season Filter */}
-            <div>
-              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Season</p>
-              <div className="flex flex-wrap gap-2">
-                {seasons.map((season) => (
-                  <button
-                    key={season}
-                    onClick={() => setActiveSeason(season)}
-                    className={cn(
-                      "px-4 py-2 text-sm font-display uppercase tracking-wider transition-all rounded-sm border",
-                      activeSeason === season
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-transparent text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
-                    )}
-                  >
-                    {season}
-                  </button>
-                ))}
-              </div>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Game</p>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setActiveGameId(undefined)}
+                className={cn(
+                  "px-4 py-2 text-sm font-display uppercase tracking-wider transition-all rounded-sm border",
+                  !activeGameId
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-transparent text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
+                )}
+              >
+                All Games
+              </button>
+              {games?.map((game) => (
+                <button
+                  key={game.id}
+                  onClick={() => setActiveGameId(game.id)}
+                  className={cn(
+                    "px-4 py-2 text-sm font-display uppercase tracking-wider transition-all rounded-sm border flex items-center gap-2",
+                    activeGameId === game.id
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-transparent text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
+                  )}
+                >
+                  <span>{game.icon}</span>
+                  {game.name}
+                </button>
+              ))}
             </div>
           </motion.div>
 
@@ -112,8 +90,11 @@ const Rankings = () => {
               <div className="flex-1 text-xs font-display uppercase tracking-wider text-muted-foreground">
                 Player
               </div>
+              <div className="hidden md:block w-24 text-center text-xs font-display uppercase tracking-wider text-muted-foreground">
+                Tier
+              </div>
               <div className="hidden sm:flex items-center gap-6 text-xs font-display uppercase tracking-wider text-muted-foreground">
-                <div className="w-16 text-center">W/L</div>
+                <div className="w-20 text-center">W/L</div>
                 <div className="w-16 text-center">Win Rate</div>
               </div>
               <div className="w-20 text-right text-xs font-display uppercase tracking-wider text-muted-foreground">
@@ -121,10 +102,116 @@ const Rankings = () => {
               </div>
             </div>
 
-            {/* Player Rows */}
-            {allPlayers.map((player, index) => (
-              <RankingRow key={player.username} player={player} index={index} />
-            ))}
+            {/* Loading State */}
+            {isLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : !rankings || rankings.length === 0 ? (
+              <div className="text-center py-12">
+                <Trophy className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+                <p className="text-muted-foreground">No rankings yet</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Complete matches in tournaments to appear on the leaderboard
+                </p>
+              </div>
+            ) : (
+              /* Player Rows */
+              rankings.map((ranking, index) => {
+                const tier = getRankTier(ranking.elo_rating);
+                const winRate = getWinRate(ranking.wins, ranking.losses);
+                
+                return (
+                  <motion.div
+                    key={ranking.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.03 }}
+                    className={cn(
+                      "flex items-center gap-4 px-4 py-3 border-b border-border/50 hover:bg-secondary/30 transition-colors",
+                      index < 3 && "bg-gradient-to-r from-primary/5 to-transparent"
+                    )}
+                  >
+                    {/* Rank */}
+                    <div className="w-12 text-center">
+                      {index < 3 ? (
+                        <div className={cn(
+                          "inline-flex items-center justify-center w-8 h-8 rounded-full font-display font-bold",
+                          index === 0 && "bg-yellow-500/20 text-yellow-500",
+                          index === 1 && "bg-slate-400/20 text-slate-400",
+                          index === 2 && "bg-amber-600/20 text-amber-600"
+                        )}>
+                          {index + 1}
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground font-display">{index + 1}</span>
+                      )}
+                    </div>
+
+                    {/* Player */}
+                    <div className="flex-1 flex items-center gap-3 min-w-0">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={ranking.user?.avatar_url || undefined} />
+                        <AvatarFallback>
+                          {ranking.user?.username?.charAt(0).toUpperCase() || "?"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0">
+                        <p className="font-display font-medium truncate">
+                          {ranking.user?.username || "Unknown"}
+                        </p>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          {ranking.user?.country && <span>{ranking.user.country}</span>}
+                          {!activeGameId && ranking.game && (
+                            <span className="flex items-center gap-1">
+                              {ranking.game.icon} {ranking.game.name}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Tier */}
+                    <div className="hidden md:flex items-center justify-center w-24">
+                      <span className={cn("flex items-center gap-1 text-sm", tier.color)}>
+                        <span>{tier.icon}</span>
+                        <span className="font-display">{tier.name}</span>
+                      </span>
+                    </div>
+
+                    {/* W/L */}
+                    <div className="hidden sm:flex items-center gap-6">
+                      <div className="w-20 text-center">
+                        <span className="text-success">{ranking.wins}</span>
+                        <span className="text-muted-foreground mx-1">/</span>
+                        <span className="text-destructive">{ranking.losses}</span>
+                      </div>
+                      <div className="w-16 text-center">
+                        <span className={cn(
+                          "font-medium",
+                          winRate >= 60 ? "text-success" : winRate >= 40 ? "text-foreground" : "text-destructive"
+                        )}>
+                          {winRate}%
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* ELO */}
+                    <div className="w-20 text-right">
+                      <span className="font-display font-bold text-primary text-lg">
+                        {ranking.elo_rating}
+                      </span>
+                      {ranking.win_streak > 2 && (
+                        <div className="flex items-center justify-end gap-1 text-xs text-success">
+                          <TrendingUp className="h-3 w-3" />
+                          {ranking.win_streak} streak
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                );
+              })
+            )}
           </motion.div>
         </div>
       </main>

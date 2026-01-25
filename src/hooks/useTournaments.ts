@@ -316,12 +316,16 @@ export const useUpdateMatchResult = () => {
       matchId,
       tournamentId,
       winnerId,
+      loserId,
+      gameId,
       participant1Score,
       participant2Score,
     }: {
       matchId: string;
       tournamentId: string;
       winnerId: string;
+      loserId: string;
+      gameId: string;
       participant1Score: number;
       participant2Score: number;
     }) => {
@@ -340,6 +344,19 @@ export const useUpdateMatchResult = () => {
         .single();
 
       if (error) throw error;
+
+      // Update ELO ratings using the database function
+      const { error: eloError } = await supabase.rpc("update_elo_after_match", {
+        _match_id: matchId,
+        _winner_id: winnerId,
+        _loser_id: loserId,
+        _game_id: gameId,
+      });
+
+      if (eloError) {
+        console.error("ELO update error:", eloError);
+        // Don't throw - match result is saved, ELO is secondary
+      }
 
       // Find next round match and update with winner
       const nextRound = match.round + 1;
@@ -365,7 +382,8 @@ export const useUpdateMatchResult = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["tournament-matches", data.tournamentId] });
-      toast({ title: "Match result saved!" });
+      queryClient.invalidateQueries({ queryKey: ["rankings"] });
+      toast({ title: "Match result saved! ELO updated." });
     },
     onError: (error) => {
       toast({ title: "Error saving result", description: error.message, variant: "destructive" });

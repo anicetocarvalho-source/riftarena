@@ -12,7 +12,8 @@ interface MatchesTabProps {
   matches: TournamentMatch[];
   isLoading: boolean;
   tournamentId: string;
-  onUpdateResult: (matchId: string, winnerId: string, p1Score: number, p2Score: number) => void;
+  gameId: string;
+  onUpdateResult: (matchId: string, winnerId: string, loserId: string, p1Score: number, p2Score: number) => void;
   isUpdating: boolean;
   tournamentStatus: TournamentStatus;
 }
@@ -21,6 +22,7 @@ export const MatchesTab = ({
   matches,
   isLoading,
   tournamentId,
+  gameId,
   onUpdateResult,
   isUpdating,
   tournamentStatus,
@@ -63,8 +65,11 @@ export const MatchesTab = ({
     const winnerId = score1 > score2 
       ? selectedMatch.participant1_id! 
       : selectedMatch.participant2_id!;
+    const loserId = score1 > score2 
+      ? selectedMatch.participant2_id! 
+      : selectedMatch.participant1_id!;
     
-    onUpdateResult(selectedMatch.id, winnerId, score1, score2);
+    onUpdateResult(selectedMatch.id, winnerId, loserId, score1, score2);
     setSelectedMatch(null);
     setP1Score("");
     setP2Score("");
