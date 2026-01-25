@@ -2,9 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { RiftLogo } from "@/components/brand/RiftLogo";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
   { href: "/tournaments", label: "Tournaments" },
@@ -17,6 +18,7 @@ const navLinks = [
 export function Navbar() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, profile, isLoading } = useAuth();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
@@ -46,8 +48,27 @@ export function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden lg:flex items-center gap-4">
-          <Button variant="ghost">Sign In</Button>
-          <Button variant="rift">Join RIFT</Button>
+          {!isLoading && (
+            <>
+              {user ? (
+                <Link to="/dashboard">
+                  <Button variant="rift" className="gap-2">
+                    <User className="h-4 w-4" />
+                    {profile?.username || "Dashboard"}
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link to="/auth">
+                    <Button variant="ghost">Sign In</Button>
+                  </Link>
+                  <Link to="/auth">
+                    <Button variant="rift">Join RIFT</Button>
+                  </Link>
+                </>
+              )}
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -87,8 +108,23 @@ export function Navbar() {
                 </Link>
               ))}
               <div className="flex flex-col gap-3 pt-4">
-                <Button variant="rift-outline" className="w-full">Sign In</Button>
-                <Button variant="rift" className="w-full">Join RIFT</Button>
+                {user ? (
+                  <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="rift" className="w-full gap-2">
+                      <User className="h-4 w-4" />
+                      {profile?.username || "Dashboard"}
+                    </Button>
+                  </Link>
+                ) : (
+                  <>
+                    <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="rift-outline" className="w-full">Sign In</Button>
+                    </Link>
+                    <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="rift" className="w-full">Join RIFT</Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </nav>
           </motion.div>
