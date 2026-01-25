@@ -38,6 +38,128 @@ export type Database = {
         }
         Relationships: []
       }
+      match_elo_history: {
+        Row: {
+          created_at: string
+          elo_after: number
+          elo_before: number
+          elo_change: number
+          id: string
+          match_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          elo_after: number
+          elo_before: number
+          elo_change: number
+          id?: string
+          match_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          elo_after?: number
+          elo_before?: number
+          elo_change?: number
+          id?: string
+          match_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "match_elo_history_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "tournament_matches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "match_elo_history_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "admin_user_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "match_elo_history_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      player_rankings: {
+        Row: {
+          best_win_streak: number
+          created_at: string
+          elo_rating: number
+          game_id: string
+          id: string
+          last_match_at: string | null
+          losses: number
+          matches_played: number
+          peak_elo: number
+          updated_at: string
+          user_id: string
+          win_streak: number
+          wins: number
+        }
+        Insert: {
+          best_win_streak?: number
+          created_at?: string
+          elo_rating?: number
+          game_id: string
+          id?: string
+          last_match_at?: string | null
+          losses?: number
+          matches_played?: number
+          peak_elo?: number
+          updated_at?: string
+          user_id: string
+          win_streak?: number
+          wins?: number
+        }
+        Update: {
+          best_win_streak?: number
+          created_at?: string
+          elo_rating?: number
+          game_id?: string
+          id?: string
+          last_match_at?: string | null
+          losses?: number
+          matches_played?: number
+          peak_elo?: number
+          updated_at?: string
+          user_id?: string
+          win_streak?: number
+          wins?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "player_rankings_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "player_rankings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "admin_user_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "player_rankings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -541,6 +663,34 @@ export type Database = {
     }
     Functions: {
       bootstrap_first_admin: { Args: { _user_id: string }; Returns: boolean }
+      calculate_elo_change: {
+        Args: { k_factor?: number; loser_elo: number; winner_elo: number }
+        Returns: number
+      }
+      get_or_create_ranking: {
+        Args: { _game_id: string; _user_id: string }
+        Returns: {
+          best_win_streak: number
+          created_at: string
+          elo_rating: number
+          game_id: string
+          id: string
+          last_match_at: string | null
+          losses: number
+          matches_played: number
+          peak_elo: number
+          updated_at: string
+          user_id: string
+          win_streak: number
+          wins: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "player_rankings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       get_user_roles: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"][]
@@ -551,6 +701,18 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      update_elo_after_match: {
+        Args: {
+          _game_id: string
+          _loser_id: string
+          _match_id: string
+          _winner_id: string
+        }
+        Returns: {
+          loser_change: number
+          winner_change: number
+        }[]
       }
     }
     Enums: {
