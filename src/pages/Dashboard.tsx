@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { MyTeamsSection } from "@/components/dashboard/MyTeamsSection";
 import { 
   Trophy, Users, Gamepad2, Calendar, TrendingUp, Settings, 
   Shield, BarChart3, DollarSign, Bell, ChevronRight, Loader2
@@ -200,6 +201,9 @@ const Dashboard = () => {
               </RiftCard>
             </motion.div>
           </div>
+
+          {/* My Teams Section */}
+          <MyTeamsSection />
 
           {/* Organizer Section */}
           {isOrganizer && (
