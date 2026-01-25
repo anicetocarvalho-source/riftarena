@@ -4,26 +4,44 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center font-display text-xs font-semibold uppercase tracking-wider transition-colors",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
+        default: "bg-primary/20 text-primary border border-primary/30 rounded-sm px-2.5 py-0.5",
+        secondary: "bg-secondary text-secondary-foreground rounded-sm px-2.5 py-0.5",
+        destructive: "bg-destructive/20 text-destructive border border-destructive/30 rounded-sm px-2.5 py-0.5",
+        success: "bg-success/20 text-success border border-success/30 rounded-sm px-2.5 py-0.5",
+        warning: "bg-warning/20 text-warning border border-warning/30 rounded-sm px-2.5 py-0.5",
+        outline: "border border-border text-foreground rounded-sm px-2.5 py-0.5",
+        // Game Badges
+        live: "bg-destructive text-destructive-foreground animate-pulse rounded-sm px-2.5 py-0.5",
+        upcoming: "bg-primary/20 text-primary border border-primary/30 rounded-sm px-2.5 py-0.5",
+        completed: "bg-muted text-muted-foreground rounded-sm px-2.5 py-0.5",
+        // Rank Badges
+        diamond: "rank-diamond text-foreground rounded-sm px-2.5 py-0.5",
+        platinum: "rank-platinum text-foreground rounded-sm px-2.5 py-0.5",
+        gold: "rank-gold text-foreground rounded-sm px-2.5 py-0.5",
+        silver: "rank-silver text-foreground rounded-sm px-2.5 py-0.5",
+        bronze: "rank-bronze text-foreground rounded-sm px-2.5 py-0.5",
+      },
+      size: {
+        default: "",
+        sm: "px-2 py-0.5 text-[10px]",
+        lg: "px-3 py-1",
       },
     },
     defaultVariants: {
       variant: "default",
+      size: "default",
     },
   },
 );
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {}
 
-function Badge({ className, variant, ...props }: BadgeProps) {
-  return <div className={cn(badgeVariants({ variant }), className)} {...props} />;
+function Badge({ className, variant, size, ...props }: BadgeProps) {
+  return <div className={cn(badgeVariants({ variant, size }), className)} {...props} />;
 }
 
 export { Badge, badgeVariants };
