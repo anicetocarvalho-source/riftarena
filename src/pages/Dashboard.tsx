@@ -308,7 +308,7 @@ const Dashboard = () => {
                 </RiftCardHeader>
                 <RiftCardContent>
                   <div className="grid gap-4 md:grid-cols-4">
-                    <Button variant="rift-outline" className="justify-start h-auto py-4">
+                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/admin/users")}>
                       <div className="text-left">
                         <p className="font-display uppercase tracking-wider">User Management</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
