@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { EditTeamDialog } from "@/components/teams/EditTeamDialog";
+import { TeamRosterHistory } from "@/components/teams/TeamRosterHistory";
 
 const TeamDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -316,6 +317,16 @@ const TeamDetail = () => {
                 </RiftCard>
               </motion.div>
             )}
+
+            {/* Roster History */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="lg:col-span-3"
+            >
+              <TeamRosterHistory teamId={id || ""} />
+            </motion.div>
           </div>
         </div>
       </main>
