@@ -1,0 +1,27 @@
+{
+  "name": "RiftArena - Plataforma de Esports",
+  "short_name": "RiftArena",
+  "description": "Plataforma premium de competições esports. Participe de torneios, suba no ranking global e compete com os melhores jogadores.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#7A3FFF",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["games", "entertainment", "sports"],
+  "lang": "pt-BR",
+  "dir": "ltr"
+}
