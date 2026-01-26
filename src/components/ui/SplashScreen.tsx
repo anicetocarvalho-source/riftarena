@@ -28,7 +28,7 @@ export function SplashScreen({ isLoading = true }: SplashScreenProps) {
         <motion.img
           src={logoSvg}
           alt="RIFT Arena"
-          className="h-32 w-auto md:h-40"
+          className="h-48 w-auto md:h-64"
           animate={{
             filter: [
               "drop-shadow(0 0 20px hsl(262 100% 62% / 0.3))",

@@ -8,10 +8,10 @@ interface RiftLogoProps {
 }
 
 const sizeClasses = {
-  sm: "h-8",
-  default: "h-10",
-  lg: "h-16",
-  xl: "h-24",
+  sm: "h-12",
+  default: "h-16",
+  lg: "h-20",
+  xl: "h-32",
 };
 
 export function RiftLogo({ className, size = "default", showTagline = false }: RiftLogoProps) {
