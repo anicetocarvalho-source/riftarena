@@ -4,6 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { SplashScreen } from "@/components/ui/SplashScreen";
+import { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 import Index from "./pages/Index";
 import Tournaments from "./pages/Tournaments";
 import Rankings from "./pages/Rankings";
@@ -25,38 +28,54 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/tournaments" element={<Tournaments />} />
-            <Route path="/tournaments/:id" element={<TournamentDetail />} />
-            <Route path="/rankings" element={<Rankings />} />
-            <Route path="/games" element={<Games />} />
-            <Route path="/teams" element={<TeamsPage />} />
-            <Route path="/teams/create" element={<CreateTeam />} />
-            <Route path="/teams/:id" element={<TeamDetail />} />
-            <Route path="/sponsors" element={<Sponsors />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/admin/users" element={<AdminUsers />} />
-            <Route path="/admin/setup" element={<SetupAdmin />} />
-            <Route path="/tournaments/create" element={<CreateTournament />} />
-            <Route path="/tournaments/manage/:id" element={<ManageTournament />} />
-            <Route path="/player/:id" element={<PlayerProfile />} />
-            <Route path="/profile/edit" element={<EditProfile />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate initial load / wait for assets
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <AuthProvider>
+          <AnimatePresence mode="wait">
+            {isLoading && <SplashScreen isLoading={isLoading} />}
+          </AnimatePresence>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/tournaments" element={<Tournaments />} />
+              <Route path="/tournaments/:id" element={<TournamentDetail />} />
+              <Route path="/rankings" element={<Rankings />} />
+              <Route path="/games" element={<Games />} />
+              <Route path="/teams" element={<TeamsPage />} />
+              <Route path="/teams/create" element={<CreateTeam />} />
+              <Route path="/teams/:id" element={<TeamDetail />} />
+              <Route path="/sponsors" element={<Sponsors />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/admin/users" element={<AdminUsers />} />
+              <Route path="/admin/setup" element={<SetupAdmin />} />
+              <Route path="/tournaments/create" element={<CreateTournament />} />
+              <Route path="/tournaments/manage/:id" element={<ManageTournament />} />
+              <Route path="/player/:id" element={<PlayerProfile />} />
+              <Route path="/profile/edit" element={<EditProfile />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
