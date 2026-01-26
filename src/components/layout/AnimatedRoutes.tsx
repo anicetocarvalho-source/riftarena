@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { PageTransition } from "./PageTransition";
+import { ScrollToTop } from "./ScrollToTop";
 import Index from "@/pages/Index";
 import Tournaments from "@/pages/Tournaments";
 import Rankings from "@/pages/Rankings";
@@ -24,7 +25,9 @@ export function AnimatedRoutes() {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
+    <>
+      <ScrollToTop />
+      <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<PageTransition><Index /></PageTransition>} />
         <Route path="/tournaments" element={<PageTransition><Tournaments /></PageTransition>} />
@@ -46,5 +49,6 @@ export function AnimatedRoutes() {
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>
+    </>
   );
 }
