@@ -307,7 +307,7 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </Button>
-                    <Button variant="rift-outline" className="justify-start h-auto py-4">
+                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/tournaments")}>
                       <div className="text-left">
                         <p className="font-display uppercase tracking-wider">All Tournaments</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
@@ -315,7 +315,7 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </Button>
-                    <Button variant="rift-outline" className="justify-start h-auto py-4">
+                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/sponsors")}>
                       <div className="text-left">
                         <p className="font-display uppercase tracking-wider">Sponsor Management</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
@@ -323,7 +323,7 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </Button>
-                    <Button variant="rift-outline" className="justify-start h-auto py-4">
+                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/rankings")}>
                       <div className="text-left">
                         <p className="font-display uppercase tracking-wider">Platform Analytics</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">

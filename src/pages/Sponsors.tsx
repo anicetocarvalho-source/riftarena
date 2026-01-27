@@ -4,7 +4,9 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { RiftCard, RiftCardContent } from "@/components/ui/rift-card";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, ExternalLink, TrendingUp, Users, Trophy } from "lucide-react";
+import { ChevronRight, ExternalLink, TrendingUp, Users, Trophy, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const sponsors = [
   {
@@ -111,9 +113,16 @@ const Sponsors = () => {
                   rankings, and live streams.
                 </p>
               </div>
-              <Button variant="rift" size="lg">
-                Become a Sponsor
-                <ExternalLink className="ml-2 h-4 w-4" />
+              <Button 
+                variant="rift" 
+                size="lg"
+                onClick={() => {
+                  window.location.href = "mailto:sponsors@riftarena.com?subject=Partnership%20Inquiry";
+                  toast.success("Opening email client...");
+                }}
+              >
+                <Mail className="mr-2 h-4 w-4" />
+                Contact for Partnership
               </Button>
             </div>
           </motion.div>
@@ -175,10 +184,12 @@ const Sponsors = () => {
                       <Badge variant="outline" size="sm">
                         {sponsor.activeCampaigns} Active Campaign{sponsor.activeCampaigns > 1 ? 's' : ''}
                       </Badge>
-                      <Button variant="rift-ghost" size="sm">
-                        Details
-                        <ChevronRight className="ml-1 h-3 w-3" />
-                      </Button>
+                      <Link to={`/tournaments?sponsor=${sponsor.name.toLowerCase()}`}>
+                        <Button variant="rift-ghost" size="sm">
+                          Ver Torneios
+                          <ChevronRight className="ml-1 h-3 w-3" />
+                        </Button>
+                      </Link>
                     </div>
                   </RiftCardContent>
                 </RiftCard>

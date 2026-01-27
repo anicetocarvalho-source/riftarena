@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { RiftLogo } from "@/components/brand/RiftLogo";
 import { ChevronRight, Play, Users, Trophy, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroBg from "@/assets/hero-bg.jpg";
 
 export function HeroSection() {
@@ -62,14 +63,18 @@ export function HeroSection() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
           >
-            <Button variant="rift" size="xl" className="pulse-purple">
-              Join Tournament
-              <ChevronRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button variant="rift-outline" size="xl">
-              <Play className="mr-2 h-5 w-5" />
-              Watch Live
-            </Button>
+            <Link to="/tournaments">
+              <Button variant="rift" size="xl" className="pulse-purple">
+                Join Tournament
+                <ChevronRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+            <Link to="/rankings">
+              <Button variant="rift-outline" size="xl">
+                <Trophy className="mr-2 h-5 w-5" />
+                View Rankings
+              </Button>
+            </Link>
           </motion.div>
 
           {/* Stats */}
