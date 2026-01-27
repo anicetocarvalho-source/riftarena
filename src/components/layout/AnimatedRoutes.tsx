@@ -9,6 +9,7 @@ import Games from "@/pages/Games";
 import Sponsors from "@/pages/Sponsors";
 import Auth from "@/pages/Auth";
 import Dashboard from "@/pages/Dashboard";
+import SponsorDashboard from "@/pages/SponsorDashboard";
 import TournamentDetail from "@/pages/TournamentDetail";
 import AdminUsers from "@/pages/AdminUsers";
 import SetupAdmin from "@/pages/SetupAdmin";
@@ -40,6 +41,7 @@ export function AnimatedRoutes() {
         <Route path="/sponsors" element={<PageTransition><Sponsors /></PageTransition>} />
         <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
         <Route path="/dashboard" element={<PageTransition><Dashboard /></PageTransition>} />
+        <Route path="/sponsor/dashboard" element={<PageTransition><SponsorDashboard /></PageTransition>} />
         <Route path="/admin/users" element={<PageTransition><AdminUsers /></PageTransition>} />
         <Route path="/admin/setup" element={<PageTransition><SetupAdmin /></PageTransition>} />
         <Route path="/tournaments/create" element={<PageTransition><CreateTournament /></PageTransition>} />
