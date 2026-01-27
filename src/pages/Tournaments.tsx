@@ -28,27 +28,45 @@ const Tournaments = () => {
   
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGame, setSelectedGame] = useState<string>(searchParams.get("game") || "all");
+  const [selectedStatus, setSelectedStatus] = useState<string>(searchParams.get("status") || "all");
 
-  // Sync URL param with state
+  // Sync URL params with state
   useEffect(() => {
     const gameParam = searchParams.get("game");
+    const statusParam = searchParams.get("status");
     if (gameParam) {
       setSelectedGame(gameParam);
+    }
+    if (statusParam) {
+      setSelectedStatus(statusParam);
     }
   }, [searchParams]);
 
   const handleGameChange = (value: string) => {
     setSelectedGame(value);
+    const newParams = new URLSearchParams(searchParams);
     if (value === "all") {
-      searchParams.delete("game");
+      newParams.delete("game");
     } else {
-      searchParams.set("game", value);
+      newParams.set("game", value);
     }
-    setSearchParams(searchParams);
+    setSearchParams(newParams);
+  };
+
+  const handleStatusChange = (value: string) => {
+    setSelectedStatus(value);
+    const newParams = new URLSearchParams(searchParams);
+    if (value === "all") {
+      newParams.delete("status");
+    } else {
+      newParams.set("status", value);
+    }
+    setSearchParams(newParams);
   };
 
   const clearFilters = () => {
     setSelectedGame("all");
+    setSelectedStatus("all");
     setSearchTerm("");
     setSearchParams({});
   };
@@ -57,10 +75,11 @@ const Tournaments = () => {
     const matchesSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       t.game?.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesGame = selectedGame === "all" || t.game_id === selectedGame;
-    return matchesSearch && matchesGame;
+    const matchesStatus = selectedStatus === "all" || t.status === selectedStatus;
+    return matchesSearch && matchesGame && matchesStatus;
   }) || [];
 
-  const hasActiveFilters = selectedGame !== "all" || searchTerm !== "";
+  const hasActiveFilters = selectedGame !== "all" || selectedStatus !== "all" || searchTerm !== "";
 
   // Transform database tournaments to match TournamentCard format
   const transformedTournaments = filteredTournaments.map(t => ({
@@ -140,6 +159,19 @@ const Tournaments = () => {
                       {game.icon} {game.name}
                     </SelectItem>
                   ))}
+                </SelectContent>
+              </Select>
+              <Select value={selectedStatus} onValueChange={handleStatusChange}>
+                <SelectTrigger className="w-[150px] bg-secondary border-border">
+                  <SelectValue placeholder="All Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="live">🔴 Live</SelectItem>
+                  <SelectItem value="registration">📝 Registration</SelectItem>
+                  <SelectItem value="upcoming">📅 Upcoming</SelectItem>
+                  <SelectItem value="completed">✅ Completed</SelectItem>
+                  <SelectItem value="cancelled">❌ Cancelled</SelectItem>
                 </SelectContent>
               </Select>
               <Button variant="rift-outline" size="default">
