@@ -1,27 +1,66 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { TournamentCard } from "@/components/tournaments/TournamentCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Filter, Search, Plus } from "lucide-react";
+import { Calendar, Filter, Search, Plus, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useTournaments } from "@/hooks/useTournaments";
+import { useTournaments, useGames } from "@/hooks/useTournaments";
 import { useAuth } from "@/contexts/AuthContext";
 import { Loader2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Tournaments = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { isOrganizer, isAdmin, user } = useAuth();
   const { data: tournaments, isLoading } = useTournaments();
+  const { data: games } = useGames();
+  
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedGame, setSelectedGame] = useState<string>(searchParams.get("game") || "all");
 
-  const filteredTournaments = tournaments?.filter(t => 
-    t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    t.game?.name.toLowerCase().includes(searchTerm.toLowerCase())
-  ) || [];
+  // Sync URL param with state
+  useEffect(() => {
+    const gameParam = searchParams.get("game");
+    if (gameParam) {
+      setSelectedGame(gameParam);
+    }
+  }, [searchParams]);
+
+  const handleGameChange = (value: string) => {
+    setSelectedGame(value);
+    if (value === "all") {
+      searchParams.delete("game");
+    } else {
+      searchParams.set("game", value);
+    }
+    setSearchParams(searchParams);
+  };
+
+  const clearFilters = () => {
+    setSelectedGame("all");
+    setSearchTerm("");
+    setSearchParams({});
+  };
+
+  const filteredTournaments = tournaments?.filter(t => {
+    const matchesSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.game?.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesGame = selectedGame === "all" || t.game_id === selectedGame;
+    return matchesSearch && matchesGame;
+  }) || [];
+
+  const hasActiveFilters = selectedGame !== "all" || searchTerm !== "";
 
   // Transform database tournaments to match TournamentCard format
   const transformedTournaments = filteredTournaments.map(t => ({
@@ -89,15 +128,30 @@ const Tournaments = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex gap-2">
-              <Button variant="rift-outline" size="default">
-                <Filter className="mr-2 h-4 w-4" />
-                Filter
-              </Button>
+            <div className="flex gap-2 flex-wrap">
+              <Select value={selectedGame} onValueChange={handleGameChange}>
+                <SelectTrigger className="w-[180px] bg-secondary border-border">
+                  <SelectValue placeholder="All Games" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Games</SelectItem>
+                  {games?.map((game) => (
+                    <SelectItem key={game.id} value={game.id}>
+                      {game.icon} {game.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <Button variant="rift-outline" size="default">
                 <Calendar className="mr-2 h-4 w-4" />
                 Date
               </Button>
+              {hasActiveFilters && (
+                <Button variant="ghost" size="default" onClick={clearFilters}>
+                  <X className="mr-2 h-4 w-4" />
+                  Clear
+                </Button>
+              )}
             </div>
           </motion.div>
 
