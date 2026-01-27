@@ -268,30 +268,13 @@ const Dashboard = () => {
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
-                  <div className="grid gap-4 md:grid-cols-3">
-                    <Button variant="rift-outline" className="justify-start h-auto py-4">
-                      <div className="text-left">
-                        <p className="font-display uppercase tracking-wider">Campaign Analytics</p>
-                        <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
-                          View engagement metrics
-                        </p>
-                      </div>
-                    </Button>
-                    <Button variant="rift-outline" className="justify-start h-auto py-4">
-                      <div className="text-left">
-                        <p className="font-display uppercase tracking-wider">Brand Exposure</p>
-                        <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
-                          Track visibility across events
-                        </p>
-                      </div>
-                    </Button>
-                    <Button variant="rift-outline" className="justify-start h-auto py-4">
-                      <div className="text-left">
-                        <p className="font-display uppercase tracking-wider">Audience Insights</p>
-                        <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
-                          Demographics and reach
-                        </p>
-                      </div>
+                  <div className="flex flex-col gap-4">
+                    <p className="text-muted-foreground">
+                      Acesse o dashboard completo para visualizar métricas de engajamento, campanhas e audiência.
+                    </p>
+                    <Button variant="rift" onClick={() => navigate("/sponsor/dashboard")}>
+                      <BarChart3 className="mr-2 h-4 w-4" />
+                      Abrir Dashboard de Sponsor
                     </Button>
                   </div>
                 </RiftCardContent>
