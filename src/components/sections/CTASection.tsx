@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Shield, Trophy, BarChart3, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const features = [
   {
@@ -76,13 +77,17 @@ export function CTASection() {
               Your journey to the top starts here.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button variant="rift" size="xl">
-                Create Account
-                <ChevronRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button variant="rift-outline" size="xl">
-                Learn More
-              </Button>
+              <Link to="/auth">
+                <Button variant="rift" size="xl">
+                  Create Account
+                  <ChevronRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link to="/games">
+                <Button variant="rift-outline" size="xl">
+                  View Games
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </div>
