@@ -72,7 +72,8 @@ export const useTournamentRegistrations = (tournamentId: string) => {
         .from("tournament_registrations")
         .select(`
           *,
-          user:profiles(id, username, avatar_url)
+          user:profiles(id, username, avatar_url),
+          team:teams(id, name, tag, logo_url)
         `)
         .eq("tournament_id", tournamentId)
         .order("created_at");

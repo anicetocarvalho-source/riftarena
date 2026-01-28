@@ -41,7 +41,7 @@ export interface TournamentRegistration {
   seed: number | null;
   created_at: string;
   user?: { id: string; username: string; avatar_url: string | null };
-  team?: { id: string; name: string; tag: string };
+  team?: { id: string; name: string; tag: string; logo_url: string | null };
 }
 
 export interface TournamentMatch {
