@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { TournamentCard } from "@/components/tournaments/TournamentCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Filter, Search, Plus, X } from "lucide-react";
+import { Calendar, Search, Plus, X, ArrowUpDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useTournaments, useGames } from "@/hooks/useTournaments";
 import { useAuth } from "@/contexts/AuthContext";
@@ -29,17 +29,16 @@ const Tournaments = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGame, setSelectedGame] = useState<string>(searchParams.get("game") || "all");
   const [selectedStatus, setSelectedStatus] = useState<string>(searchParams.get("status") || "all");
+  const [sortBy, setSortBy] = useState<string>(searchParams.get("sort") || "date_desc");
 
   // Sync URL params with state
   useEffect(() => {
     const gameParam = searchParams.get("game");
     const statusParam = searchParams.get("status");
-    if (gameParam) {
-      setSelectedGame(gameParam);
-    }
-    if (statusParam) {
-      setSelectedStatus(statusParam);
-    }
+    const sortParam = searchParams.get("sort");
+    if (gameParam) setSelectedGame(gameParam);
+    if (statusParam) setSelectedStatus(statusParam);
+    if (sortParam) setSortBy(sortParam);
   }, [searchParams]);
 
   const handleGameChange = (value: string) => {
@@ -64,22 +63,58 @@ const Tournaments = () => {
     setSearchParams(newParams);
   };
 
+  const handleSortChange = (value: string) => {
+    setSortBy(value);
+    const newParams = new URLSearchParams(searchParams);
+    if (value === "date_desc") {
+      newParams.delete("sort");
+    } else {
+      newParams.set("sort", value);
+    }
+    setSearchParams(newParams);
+  };
+
   const clearFilters = () => {
     setSelectedGame("all");
     setSelectedStatus("all");
     setSearchTerm("");
+    setSortBy("date_desc");
     setSearchParams({});
   };
 
-  const filteredTournaments = tournaments?.filter(t => {
-    const matchesSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.game?.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesGame = selectedGame === "all" || t.game_id === selectedGame;
-    const matchesStatus = selectedStatus === "all" || t.status === selectedStatus;
-    return matchesSearch && matchesGame && matchesStatus;
-  }) || [];
+  const filteredTournaments = useMemo(() => {
+    let result = tournaments?.filter(t => {
+      const matchesSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        t.game?.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesGame = selectedGame === "all" || t.game_id === selectedGame;
+      const matchesStatus = selectedStatus === "all" || t.status === selectedStatus;
+      return matchesSearch && matchesGame && matchesStatus;
+    }) || [];
 
-  const hasActiveFilters = selectedGame !== "all" || selectedStatus !== "all" || searchTerm !== "";
+    // Apply sorting
+    result = [...result].sort((a, b) => {
+      switch (sortBy) {
+        case "date_asc":
+          return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
+        case "date_desc":
+          return new Date(b.start_date).getTime() - new Date(a.start_date).getTime();
+        case "prize_desc":
+          return b.prize_pool - a.prize_pool;
+        case "prize_asc":
+          return a.prize_pool - b.prize_pool;
+        case "participants_desc":
+          return b.max_participants - a.max_participants;
+        case "participants_asc":
+          return a.max_participants - b.max_participants;
+        default:
+          return 0;
+      }
+    });
+
+    return result;
+  }, [tournaments, searchTerm, selectedGame, selectedStatus, sortBy]);
+
+  const hasActiveFilters = selectedGame !== "all" || selectedStatus !== "all" || searchTerm !== "" || sortBy !== "date_desc";
 
   // Transform database tournaments to match TournamentCard format
   const transformedTournaments = filteredTournaments.map(t => ({
@@ -172,6 +207,20 @@ const Tournaments = () => {
                   <SelectItem value="upcoming">📅 Upcoming</SelectItem>
                   <SelectItem value="completed">✅ Completed</SelectItem>
                   <SelectItem value="cancelled">❌ Cancelled</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={sortBy} onValueChange={handleSortChange}>
+                <SelectTrigger className="w-[180px] bg-secondary border-border">
+                  <ArrowUpDown className="mr-2 h-4 w-4" />
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="date_desc">📅 Date (Newest)</SelectItem>
+                  <SelectItem value="date_asc">📅 Date (Oldest)</SelectItem>
+                  <SelectItem value="prize_desc">💰 Prize (High→Low)</SelectItem>
+                  <SelectItem value="prize_asc">💰 Prize (Low→High)</SelectItem>
+                  <SelectItem value="participants_desc">👥 Size (Large→Small)</SelectItem>
+                  <SelectItem value="participants_asc">👥 Size (Small→Large)</SelectItem>
                 </SelectContent>
               </Select>
               <Button variant="rift-outline" size="default">
