@@ -9,12 +9,34 @@ import { Badge } from "@/components/ui/badge";
 import { Eye, EyeOff, Mail, Lock, User, Globe, ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const COUNTRIES = [
+  "Argentina", "Australia", "Austria", "Belgium", "Brazil", "Canada", "Chile",
+  "China", "Colombia", "Czech Republic", "Denmark", "Egypt", "Finland", "France",
+  "Germany", "Greece", "Hong Kong", "Hungary", "India", "Indonesia", "Ireland",
+  "Israel", "Italy", "Japan", "Malaysia", "Mexico", "Netherlands", "New Zealand",
+  "Norway", "Pakistan", "Peru", "Philippines", "Poland", "Portugal", "Romania",
+  "Russia", "Saudi Arabia", "Singapore", "South Africa", "South Korea", "Spain",
+  "Sweden", "Switzerland", "Taiwan", "Thailand", "Turkey", "Ukraine",
+  "United Arab Emirates", "United Kingdom", "United States", "Vietnam"
+];
 
 const signUpSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
+  confirmPassword: z.string().min(1, "Please confirm your password"),
   username: z.string().min(3, "Username must be at least 3 characters").max(20, "Username must be at most 20 characters"),
-  country: z.string().min(2, "Please enter your country"),
+  country: z.string().min(2, "Please select your country"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
 });
 
 const signInSchema = z.object({
@@ -26,9 +48,11 @@ const Auth = () => {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
   const [country, setCountry] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -42,7 +66,7 @@ const Auth = () => {
 
     try {
       if (mode === "signup") {
-        const validation = signUpSchema.safeParse({ email, password, username, country });
+        const validation = signUpSchema.safeParse({ email, password, confirmPassword, username, country });
         if (!validation.success) {
           const fieldErrors: Record<string, string> = {};
           validation.error.errors.forEach((err) => {
@@ -175,14 +199,19 @@ const Auth = () => {
 
                 <div>
                   <div className="relative">
-                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      type="text"
-                      placeholder="Country"
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                      className="pl-10 bg-secondary border-border"
-                    />
+                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
+                    <Select value={country} onValueChange={setCountry}>
+                      <SelectTrigger className="pl-10 bg-secondary border-border">
+                        <SelectValue placeholder="Select your country" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[300px] bg-card border-border">
+                        {COUNTRIES.map((c) => (
+                          <SelectItem key={c} value={c}>
+                            {c}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   {errors.country && (
                     <p className="mt-1 text-xs text-destructive">{errors.country}</p>
@@ -234,6 +263,31 @@ const Auth = () => {
                 </p>
               )}
             </div>
+
+            {mode === "signup" && (
+              <div>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="pl-10 pr-10 bg-secondary border-border"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+                {errors.confirmPassword && (
+                  <p className="mt-1 text-xs text-destructive">{errors.confirmPassword}</p>
+                )}
+              </div>
+            )}
 
             <Button
               type="submit"
