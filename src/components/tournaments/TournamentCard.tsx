@@ -92,21 +92,22 @@ export function TournamentCard({ tournament, index = 0, onManage }: TournamentCa
           )}
 
           {/* CTA */}
-          {onManage ? (
-            <Button variant="rift" className="mt-4 w-full" onClick={onManage}>
-              Manage Tournament
-              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          ) : (
+          <div className="mt-4 flex flex-col gap-2">
             <Button 
               variant="rift-outline" 
-              className="mt-4 w-full group-hover:bg-primary group-hover:text-primary-foreground"
+              className="w-full group-hover:bg-primary group-hover:text-primary-foreground"
               onClick={() => navigate(`/tournaments/${tournament.id}`)}
             >
               View Tournament
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
-          )}
+            {onManage && (
+              <Button variant="rift" className="w-full" onClick={onManage}>
+                Manage Tournament
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            )}
+          </div>
         </RiftCardContent>
       </RiftCard>
     </motion.div>
