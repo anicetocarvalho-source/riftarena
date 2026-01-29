@@ -22,12 +22,7 @@ import {
   PlayerAchievement
 } from "@/hooks/usePlayerProfile";
 import { useEloHistory, getRankTier, getWinRate } from "@/hooks/useRankings";
-import { 
-  ChartContainer, 
-  ChartTooltip, 
-  ChartTooltipContent 
-} from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Area, AreaChart } from "recharts";
+import { EloProgressionChart } from "@/components/profile/EloProgressionChart";
 
 const PlayerProfile = () => {
   const { id } = useParams<{ id: string }>();
@@ -71,23 +66,10 @@ const PlayerProfile = () => {
     : null;
   const bestTier = bestRanking ? getRankTier(bestRanking.elo_rating) : null;
 
-  // Prepare ELO chart data
-  const chartData = eloHistory
-    ?.slice()
-    .reverse()
-    .map((entry, index) => ({
-      match: index + 1,
-      elo: entry.elo_after,
-      change: entry.elo_change,
-      date: format(new Date(entry.created_at), "MMM d"),
-    })) || [];
-
-  const chartConfig = {
-    elo: {
-      label: "ELO",
-      color: "hsl(var(--primary))",
-    },
-  };
+  // Get peak ELO from rankings
+  const peakElo = rankings && rankings.length > 0
+    ? Math.max(...rankings.map(r => r.peak_elo))
+    : 1200;
 
   // Calculate achievements
   const unlockedAchievements = rankings 
@@ -283,58 +265,12 @@ const PlayerProfile = () => {
               <TabsContent value="overview">
                 <div className="grid gap-6 lg:grid-cols-2">
                   {/* ELO Chart */}
-                  <RiftCard className="lg:col-span-2">
-                    <RiftCardHeader>
-                      <RiftCardTitle className="flex items-center gap-2">
-                        <TrendingUp className="h-5 w-5 text-primary" />
-                        ELO Progression
-                      </RiftCardTitle>
-                    </RiftCardHeader>
-                    <RiftCardContent>
-                      {chartData.length > 0 ? (
-                        <ChartContainer config={chartConfig} className="h-[300px] w-full">
-                          <AreaChart data={chartData}>
-                            <defs>
-                              <linearGradient id="eloGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                                <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
-                              </linearGradient>
-                            </defs>
-                            <XAxis 
-                              dataKey="date" 
-                              stroke="hsl(var(--muted-foreground))"
-                              fontSize={12}
-                              tickLine={false}
-                              axisLine={false}
-                            />
-                            <YAxis 
-                              stroke="hsl(var(--muted-foreground))"
-                              fontSize={12}
-                              tickLine={false}
-                              axisLine={false}
-                              domain={['dataMin - 50', 'dataMax + 50']}
-                            />
-                            <ChartTooltip content={<ChartTooltipContent />} />
-                            <Area
-                              type="monotone"
-                              dataKey="elo"
-                              stroke="hsl(var(--primary))"
-                              strokeWidth={2}
-                              fill="url(#eloGradient)"
-                            />
-                          </AreaChart>
-                        </ChartContainer>
-                      ) : (
-                        <div className="flex flex-col items-center justify-center py-12 text-center">
-                          <TrendingUp className="h-12 w-12 text-muted-foreground/50 mb-4" />
-                          <p className="text-muted-foreground">No match history yet</p>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Complete matches to see ELO progression
-                          </p>
-                        </div>
-                      )}
-                    </RiftCardContent>
-                  </RiftCard>
+                  <EloProgressionChart 
+                    eloHistory={eloHistory || []}
+                    currentElo={bestRanking?.elo_rating || 1200}
+                    peakElo={peakElo}
+                    className="lg:col-span-2"
+                  />
 
                   {/* Game Rankings */}
                   <RiftCard>
