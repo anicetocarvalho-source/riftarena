@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { RiftLogo } from "@/components/brand/RiftLogo";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, Shield } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -18,7 +18,7 @@ const navLinks = [
 export function Navbar() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, profile, isLoading } = useAuth();
+  const { user, profile, isLoading, isAdmin } = useAuth();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
@@ -50,6 +50,14 @@ export function Navbar() {
         <div className="hidden lg:flex items-center gap-4">
           {!isLoading && (
             <>
+              {isAdmin && (
+                <Link to="/admin/users">
+                  <Button variant="ghost" size="sm" className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10">
+                    <Shield className="h-4 w-4" />
+                    Admin
+                  </Button>
+                </Link>
+              )}
               {user ? (
                 <Link to="/dashboard">
                   <Button variant="rift" className="gap-2">
@@ -108,6 +116,14 @@ export function Navbar() {
                 </Link>
               ))}
               <div className="flex flex-col gap-3 pt-4">
+                {isAdmin && (
+                  <Link to="/admin/users" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start gap-2 text-destructive hover:text-destructive hover:bg-destructive/10">
+                      <Shield className="h-4 w-4" />
+                      Admin Panel
+                    </Button>
+                  </Link>
+                )}
                 {user ? (
                   <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="rift" className="w-full gap-2">
