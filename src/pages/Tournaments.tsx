@@ -132,7 +132,8 @@ const Tournaments = () => {
       year: "numeric" 
     }),
     sponsor: undefined,
-    isOwner: t.organizer_id === user?.id,
+    // Admin can manage all tournaments, organizer can manage their own
+    canManage: isAdmin || t.organizer_id === user?.id,
   }));
 
   return (
@@ -257,7 +258,7 @@ const Tournaments = () => {
                   key={tournament.id} 
                   tournament={tournament} 
                   index={index}
-                  onManage={tournament.isOwner ? () => navigate(`/tournaments/manage/${tournament.id}`) : undefined}
+                  onManage={tournament.canManage ? () => navigate(`/tournaments/manage/${tournament.id}`) : undefined}
                 />
               ))}
             </div>
