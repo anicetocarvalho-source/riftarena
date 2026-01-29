@@ -327,6 +327,56 @@ const Auth = () => {
               </p>
             </div>
           )}
+
+          {/* Quick Access - Test Accounts */}
+          {mode === "signin" && (
+            <div className="mt-6 p-4 rounded-sm bg-secondary/50 border border-border">
+              <p className="text-xs text-muted-foreground mb-3 font-display uppercase tracking-wider">
+                Quick Access (Test Accounts)
+              </p>
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail("admin@riftarena.com");
+                    setPassword("RiftManager2024!");
+                  }}
+                  className="w-full flex items-center justify-between p-2 rounded-sm bg-background/50 border border-border hover:border-primary/50 transition-colors text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <Badge variant="destructive" size="sm">Admin</Badge>
+                    <span className="text-xs text-muted-foreground">admin@riftarena.com</span>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail("organizer@riftarena.com");
+                    setPassword("RiftManager2024!");
+                  }}
+                  className="w-full flex items-center justify-between p-2 rounded-sm bg-background/50 border border-border hover:border-primary/50 transition-colors text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <Badge variant="default" size="sm">Organizer</Badge>
+                    <span className="text-xs text-muted-foreground">organizer@riftarena.com</span>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail("sponsor@riftarena.com");
+                    setPassword("RiftManager2024!");
+                  }}
+                  className="w-full flex items-center justify-between p-2 rounded-sm bg-background/50 border border-border hover:border-primary/50 transition-colors text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" size="sm">Sponsor</Badge>
+                    <span className="text-xs text-muted-foreground">sponsor@riftarena.com</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </motion.div>
     </div>
