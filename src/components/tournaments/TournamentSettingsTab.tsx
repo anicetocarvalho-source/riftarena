@@ -7,8 +7,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useUpdateTournament } from "@/hooks/useTournaments";
-import { Settings, Calendar as CalendarIcon, DollarSign, Users, FileText, Save, X, Edit } from "lucide-react";
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useUpdateTournament, useUpdateTournamentStatus } from "@/hooks/useTournaments";
+import { Settings, Calendar as CalendarIcon, DollarSign, Users, FileText, Save, X, Edit, Ban, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +30,7 @@ interface TournamentSettingsTabProps {
 export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const updateTournament = useUpdateTournament();
+  const updateStatus = useUpdateTournamentStatus();
   
   // Form state
   const [name, setName] = useState(tournament.name);
@@ -36,6 +48,11 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
   const [rules, setRules] = useState(tournament.rules || "");
 
   const canEdit = tournament.status === "draft" || tournament.status === "registration";
+  const canCancel = tournament.status !== "cancelled" && tournament.status !== "completed";
+
+  const handleCancelTournament = async () => {
+    await updateStatus.mutateAsync({ id: tournament.id, status: "cancelled" });
+  };
 
   const handleSave = async () => {
     await updateTournament.mutateAsync({
@@ -302,22 +319,63 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
 
   return (
     <div className="space-y-6">
-      {canEdit && (
-        <div className="flex justify-end">
-          <Button variant="rift" onClick={() => setIsEditing(true)}>
-            <Edit className="h-4 w-4 mr-2" />
-            Edit Tournament
-          </Button>
+      <div className="flex flex-wrap justify-between gap-4">
+        <div>
+          {!canEdit && tournament.status !== "cancelled" && (
+            <div className="bg-muted/50 border border-border rounded-sm p-3 text-sm text-muted-foreground">
+              Tournament editing is disabled for tournaments in <strong>{tournament.status}</strong> status.
+            </div>
+          )}
+          {tournament.status === "cancelled" && (
+            <div className="bg-destructive/10 border border-destructive/30 rounded-sm p-3 flex items-center gap-2">
+              <Ban className="h-4 w-4 text-destructive" />
+              <span className="text-sm text-destructive font-medium">This tournament has been cancelled.</span>
+            </div>
+          )}
         </div>
-      )}
-
-      {!canEdit && (
-        <div className="bg-muted/50 border border-border rounded-sm p-4 text-center">
-          <p className="text-sm text-muted-foreground">
-            Tournament editing is disabled for tournaments in <strong>{tournament.status}</strong> status.
-          </p>
+        
+        <div className="flex gap-2">
+          {canEdit && (
+            <Button variant="rift" onClick={() => setIsEditing(true)}>
+              <Edit className="h-4 w-4 mr-2" />
+              Edit Tournament
+            </Button>
+          )}
+          
+          {canCancel && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" className="gap-2">
+                  <Ban className="h-4 w-4" />
+                  Cancel Tournament
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5 text-destructive" />
+                    Cancel Tournament
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to cancel <strong>{tournament.name}</strong>? 
+                    This action cannot be undone. All registrations will be affected and 
+                    participants will be notified.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Keep Tournament</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleCancelTournament}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    {updateStatus.isPending ? "Cancelling..." : "Yes, Cancel Tournament"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
         </div>
-      )}
+      </div>
 
       <RiftCard>
         <RiftCardHeader>
