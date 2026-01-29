@@ -1,11 +1,19 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { RiftLogo } from "@/components/brand/RiftLogo";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, Shield } from "lucide-react";
+import { Menu, X, User, Shield, Users, Trophy, DollarSign, BarChart3, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navLinks = [
   { href: "/tournaments", label: "Tournaments" },
@@ -17,8 +25,16 @@ const navLinks = [
 
 export function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, profile, isLoading, isAdmin } = useAuth();
+
+  const adminMenuItems = [
+    { href: "/admin/users", label: "User Management", icon: Users, description: "Manage roles and accounts" },
+    { href: "/tournaments", label: "All Tournaments", icon: Trophy, description: "Oversee all competitions" },
+    { href: "/sponsors", label: "Sponsor Management", icon: DollarSign, description: "Manage brand partnerships" },
+    { href: "/rankings", label: "Platform Analytics", icon: BarChart3, description: "Overview of all metrics" },
+  ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
@@ -51,12 +67,35 @@ export function Navbar() {
           {!isLoading && (
             <>
               {isAdmin && (
-                <Link to="/admin/users">
-                  <Button variant="ghost" size="sm" className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10">
-                    <Shield className="h-4 w-4" />
-                    Admin
-                  </Button>
-                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10">
+                      <Shield className="h-4 w-4" />
+                      Admin
+                      <ChevronDown className="h-3 w-3" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 bg-background border-border">
+                    <DropdownMenuLabel className="flex items-center gap-2">
+                      <Shield className="h-4 w-4 text-destructive" />
+                      Admin Panel
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {adminMenuItems.map((item) => (
+                      <DropdownMenuItem 
+                        key={item.href} 
+                        onClick={() => navigate(item.href)}
+                        className="cursor-pointer"
+                      >
+                        <item.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                        <div className="flex flex-col">
+                          <span>{item.label}</span>
+                          <span className="text-xs text-muted-foreground">{item.description}</span>
+                        </div>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
               {user ? (
                 <Link to="/dashboard">
@@ -117,12 +156,24 @@ export function Navbar() {
               ))}
               <div className="flex flex-col gap-3 pt-4">
                 {isAdmin && (
-                  <Link to="/admin/users" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="ghost" className="w-full justify-start gap-2 text-destructive hover:text-destructive hover:bg-destructive/10">
-                      <Shield className="h-4 w-4" />
+                  <div className="border-b border-border pb-3 mb-3">
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-2">
+                      <Shield className="h-3 w-3 text-destructive" />
                       Admin Panel
-                    </Button>
-                  </Link>
+                    </p>
+                    {adminMenuItems.map((item) => (
+                      <Link 
+                        key={item.href} 
+                        to={item.href} 
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Button variant="ghost" size="sm" className="w-full justify-start gap-2 mb-1">
+                          <item.icon className="h-4 w-4 text-muted-foreground" />
+                          {item.label}
+                        </Button>
+                      </Link>
+                    ))}
+                  </div>
                 )}
                 {user ? (
                   <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
