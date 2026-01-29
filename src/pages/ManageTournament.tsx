@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,7 @@ import {
 } from "@/hooks/useTournaments";
 import { TournamentStatus } from "@/types/tournament";
 import { 
-  ArrowLeft, Trophy, Users, GitBranch, Settings, 
+  Trophy, Users, GitBranch, Settings, 
   Loader2, Check, X, Play, Pause, CheckCircle, AlertCircle
 } from "lucide-react";
 import { format } from "date-fns";
@@ -86,20 +87,22 @@ const ManageTournament = () => {
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">
+          {/* Breadcrumbs */}
+          <PageBreadcrumbs 
+            items={[
+              { label: "Dashboard", href: "/dashboard" },
+              { label: "Tournaments", href: "/tournaments" },
+              { label: tournament.name, icon: <span className="text-lg">{tournament.game?.icon}</span> }
+            ]}
+            className="mb-6"
+          />
+
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <Button 
-              variant="ghost" 
-              className="mb-4"
-              onClick={() => navigate("/dashboard")}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Dashboard
-            </Button>
             
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
               <div>
