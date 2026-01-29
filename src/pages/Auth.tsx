@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RiftLogo } from "@/components/brand/RiftLogo";
 import { Badge } from "@/components/ui/badge";
+import { PasswordStrengthIndicator } from "@/components/auth/PasswordStrengthIndicator";
 import { Eye, EyeOff, Mail, Lock, User, Globe, ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -258,9 +259,7 @@ const Auth = () => {
                 <p className="mt-1 text-xs text-destructive">{errors.password}</p>
               )}
               {mode === "signup" && (
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Minimum 8 characters
-                </p>
+                <PasswordStrengthIndicator password={password} />
               )}
             </div>
 
