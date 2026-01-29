@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,7 @@ import { useTeam, useTeamMembers, useTeamInvites, useInviteToTeam, useRemoveTeam
 import { useTeamLogoUpload } from "@/hooks/useTeamLogo";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
-  ArrowLeft, Users, Crown, Loader2, UserPlus, 
+  Users, Crown, Loader2, UserPlus, 
   X, Mail, LogOut, Camera, Pencil
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -115,20 +116,21 @@ const TeamDetail = () => {
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">
+          {/* Breadcrumbs */}
+          <PageBreadcrumbs 
+            items={[
+              { label: "Teams", href: "/teams" },
+              { label: team.name }
+            ]}
+            className="mb-6"
+          />
+
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <Button 
-              variant="ghost" 
-              className="mb-4"
-              onClick={() => navigate("/teams")}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Teams
-            </Button>
             
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
               <div className="flex items-start gap-4">

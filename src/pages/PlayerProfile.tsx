@@ -2,13 +2,14 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Loader2, Trophy, Target, TrendingUp, Gamepad2, 
-  MapPin, Calendar, Award, Lock, ChevronRight, ExternalLink
+  MapPin, Calendar, Award, Lock, ChevronRight, ExternalLink, User
 } from "lucide-react";
 import { SiDiscord, SiX, SiTwitch } from "@icons-pack/react-simple-icons";
 import { cn } from "@/lib/utils";
@@ -95,6 +96,15 @@ const PlayerProfile = () => {
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">
+          {/* Breadcrumbs */}
+          <PageBreadcrumbs 
+            items={[
+              { label: "Rankings", href: "/rankings" },
+              { label: profile.username, icon: <User className="h-4 w-4" /> }
+            ]}
+            className="mb-6"
+          />
+
           {/* Profile Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

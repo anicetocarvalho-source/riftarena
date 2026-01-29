@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,7 @@ import { useUserTeams } from "@/hooks/useTeams";
 import { useAuth } from "@/contexts/AuthContext";
 import { TournamentStatus } from "@/types/tournament";
 import { 
-  ArrowLeft, Trophy, Users, Calendar, DollarSign, 
+  Trophy, Users, Calendar, DollarSign, 
   Loader2, Clock, CheckCircle, XCircle, GitBranch, FileText, UsersRound
 } from "lucide-react";
 import { format } from "date-fns";
@@ -146,20 +147,21 @@ const TournamentDetail = () => {
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">
+          {/* Breadcrumbs */}
+          <PageBreadcrumbs 
+            items={[
+              { label: "Tournaments", href: "/tournaments" },
+              { label: tournament.name, icon: <span className="text-lg">{tournament.game?.icon}</span> }
+            ]}
+            className="mb-6"
+          />
+
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <Button 
-              variant="ghost" 
-              className="mb-4"
-              onClick={() => navigate("/tournaments")}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Tournaments
-            </Button>
             
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
               <div>
