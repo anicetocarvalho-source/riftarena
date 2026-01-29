@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-interface SponsorWithProfile {
+export interface SponsorWithProfile {
   id: string;
   user_id: string;
   role: string;
@@ -20,6 +20,13 @@ interface SponsorStats {
   tournamentsSponsored: number;
   totalPrizePool: number;
   totalParticipants: number;
+}
+
+export interface PromotableUser {
+  id: string;
+  username: string;
+  avatar_url: string | null;
+  country: string | null;
 }
 
 export const useSponsors = () => {
@@ -194,6 +201,98 @@ export const useRemoveSponsor = () => {
     },
     onError: (error) => {
       toast({ title: "Error removing sponsor", description: error.message, variant: "destructive" });
+    },
+  });
+};
+
+export const usePromotableUsers = () => {
+  return useQuery({
+    queryKey: ["promotable-users-sponsor"],
+    queryFn: async () => {
+      // Get users who are NOT already sponsors
+      const { data: existingSponsors, error: sponsorsError } = await supabase
+        .from("user_roles")
+        .select("user_id")
+        .eq("role", "sponsor");
+
+      if (sponsorsError) throw sponsorsError;
+
+      const sponsorUserIds = existingSponsors?.map(s => s.user_id) || [];
+
+      // Get all profiles except those who are already sponsors
+      let query = supabase
+        .from("profiles")
+        .select("id, username, avatar_url, country")
+        .order("username", { ascending: true });
+
+      if (sponsorUserIds.length > 0) {
+        query = query.not("id", "in", `(${sponsorUserIds.join(",")})`);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+      return data as PromotableUser[];
+    },
+  });
+};
+
+export const usePromoteToSponsor = () => {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async (userId: string) => {
+      const { error } = await supabase
+        .from("user_roles")
+        .insert({ user_id: userId, role: "sponsor" });
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-sponsors"] });
+      queryClient.invalidateQueries({ queryKey: ["promotable-users-sponsor"] });
+      queryClient.invalidateQueries({ queryKey: ["sponsor-stats"] });
+      toast({ title: "User promoted to sponsor successfully!" });
+    },
+    onError: (error) => {
+      toast({ title: "Error promoting user", description: error.message, variant: "destructive" });
+    },
+  });
+};
+
+export const useRemoveSponsorRole = () => {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async (userId: string) => {
+      // First remove any tournament associations
+      const { error: tournamentsError } = await supabase
+        .from("tournaments")
+        .update({ sponsor_id: null })
+        .eq("sponsor_id", userId);
+
+      if (tournamentsError) throw tournamentsError;
+
+      // Then remove the sponsor role
+      const { error } = await supabase
+        .from("user_roles")
+        .delete()
+        .eq("user_id", userId)
+        .eq("role", "sponsor");
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-sponsors"] });
+      queryClient.invalidateQueries({ queryKey: ["promotable-users-sponsor"] });
+      queryClient.invalidateQueries({ queryKey: ["sponsor-stats"] });
+      queryClient.invalidateQueries({ queryKey: ["sponsored-tournaments"] });
+      queryClient.invalidateQueries({ queryKey: ["unassigned-tournaments"] });
+      toast({ title: "Sponsor role removed successfully" });
+    },
+    onError: (error) => {
+      toast({ title: "Error removing sponsor role", description: error.message, variant: "destructive" });
     },
   });
 };
