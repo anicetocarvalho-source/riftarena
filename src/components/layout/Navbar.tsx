@@ -32,9 +32,9 @@ export function Navbar() {
   const adminMenuItems = [
     { href: "/admin/users", label: "User Management", icon: Users, description: "Manage roles and accounts" },
     { href: "/admin/games", label: "Game Management", icon: Gamepad2, description: "Add, edit, remove games" },
+    { href: "/admin/sponsors", label: "Sponsor Management", icon: DollarSign, description: "Partnerships and metrics" },
     { href: "/admin/analytics", label: "Platform Analytics", icon: BarChart3, description: "Metrics and statistics" },
     { href: "/tournaments", label: "All Tournaments", icon: Trophy, description: "Oversee all competitions" },
-    { href: "/sponsors", label: "Sponsor Management", icon: DollarSign, description: "Manage brand partnerships" },
   ];
 
   return (
