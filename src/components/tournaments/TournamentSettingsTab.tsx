@@ -46,6 +46,45 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
   const [registrationFee, setRegistrationFee] = useState(tournament.registration_fee.toString());
   const [maxParticipants, setMaxParticipants] = useState(tournament.max_participants.toString());
   const [rules, setRules] = useState(tournament.rules || "");
+  
+  // Validation errors
+  const [dateErrors, setDateErrors] = useState<{
+    endDate?: string;
+    registrationDeadline?: string;
+  }>({});
+
+  // Validate dates whenever they change
+  const validateDates = (start?: Date, end?: Date, regDeadline?: Date) => {
+    const errors: { endDate?: string; registrationDeadline?: string } = {};
+    
+    if (start && end && end <= start) {
+      errors.endDate = "End date must be after start date";
+    }
+    
+    if (start && regDeadline && regDeadline >= start) {
+      errors.registrationDeadline = "Registration deadline must be before start date";
+    }
+    
+    setDateErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleStartDateChange = (date: Date | undefined) => {
+    setStartDate(date);
+    validateDates(date, endDate, registrationDeadline);
+  };
+
+  const handleEndDateChange = (date: Date | undefined) => {
+    setEndDate(date);
+    validateDates(startDate, date, registrationDeadline);
+  };
+
+  const handleRegistrationDeadlineChange = (date: Date | undefined) => {
+    setRegistrationDeadline(date);
+    validateDates(startDate, endDate, date);
+  };
+
+  const hasValidationErrors = Object.keys(dateErrors).length > 0;
 
   const canEdit = tournament.status === "draft" || tournament.status === "registration";
   const canCancel = tournament.status !== "cancelled" && tournament.status !== "completed";
@@ -97,7 +136,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
             <Button 
               variant="rift" 
               onClick={handleSave}
-              disabled={updateTournament.isPending}
+              disabled={updateTournament.isPending || hasValidationErrors || !name.trim()}
             >
               <Save className="h-4 w-4 mr-2" />
               {updateTournament.isPending ? "Saving..." : "Save Changes"}
@@ -170,7 +209,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                     <Calendar
                       mode="single"
                       selected={startDate}
-                      onSelect={setStartDate}
+                      onSelect={handleStartDateChange}
                       initialFocus
                       className="p-3 pointer-events-auto"
                     />
@@ -185,7 +224,8 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                       variant="outline"
                       className={cn(
                         "w-full justify-start text-left font-normal",
-                        !endDate && "text-muted-foreground"
+                        !endDate && "text-muted-foreground",
+                        dateErrors.endDate && "border-destructive"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -196,12 +236,16 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                     <Calendar
                       mode="single"
                       selected={endDate}
-                      onSelect={setEndDate}
+                      onSelect={handleEndDateChange}
+                      disabled={(date) => startDate ? date <= startDate : false}
                       initialFocus
                       className="p-3 pointer-events-auto"
                     />
                   </PopoverContent>
                 </Popover>
+                {dateErrors.endDate && (
+                  <p className="text-xs text-destructive">{dateErrors.endDate}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label>Registration Deadline (Optional)</Label>
@@ -211,7 +255,8 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                       variant="outline"
                       className={cn(
                         "w-full justify-start text-left font-normal",
-                        !registrationDeadline && "text-muted-foreground"
+                        !registrationDeadline && "text-muted-foreground",
+                        dateErrors.registrationDeadline && "border-destructive"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -222,12 +267,16 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                     <Calendar
                       mode="single"
                       selected={registrationDeadline}
-                      onSelect={setRegistrationDeadline}
+                      onSelect={handleRegistrationDeadlineChange}
+                      disabled={(date) => startDate ? date >= startDate : false}
                       initialFocus
                       className="p-3 pointer-events-auto"
                     />
                   </PopoverContent>
                 </Popover>
+                {dateErrors.registrationDeadline && (
+                  <p className="text-xs text-destructive">{dateErrors.registrationDeadline}</p>
+                )}
               </div>
             </div>
           </RiftCardContent>
