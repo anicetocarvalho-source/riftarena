@@ -1,1 +1,4 @@
 project_id = "hukjbusmnrzhwiizhodt"
+
+[functions.create-platform-managers]
+verify_jwt = false
