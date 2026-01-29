@@ -14,7 +14,10 @@ import {
   useSponsoredTournaments, 
   useUnassignedTournaments,
   useAssignSponsor,
-  useRemoveSponsor 
+  useRemoveSponsor,
+  usePromotableUsers,
+  usePromoteToSponsor,
+  useRemoveSponsorRole
 } from "@/hooks/useSponsorManagement";
 import {
   Dialog,
@@ -41,7 +44,7 @@ import {
 } from "@/components/ui/table";
 import { 
   Shield, DollarSign, Trophy, Users, TrendingUp, 
-  Loader2, Link2, Unlink, Calendar, Award
+  Loader2, Link2, Unlink, Calendar, Award, UserPlus, UserMinus
 } from "lucide-react";
 
 const AdminSponsors = () => {
@@ -51,12 +54,17 @@ const AdminSponsors = () => {
   const { data: stats } = useSponsorStats();
   const { data: sponsoredTournaments } = useSponsoredTournaments();
   const { data: unassignedTournaments } = useUnassignedTournaments();
+  const { data: promotableUsers } = usePromotableUsers();
   const assignSponsor = useAssignSponsor();
   const removeSponsor = useRemoveSponsor();
+  const promoteToSponsor = usePromoteToSponsor();
+  const removeSponsorRole = useRemoveSponsorRole();
 
   const [selectedSponsor, setSelectedSponsor] = useState<string>("");
   const [selectedTournament, setSelectedTournament] = useState<string>("");
+  const [selectedUserToPromote, setSelectedUserToPromote] = useState<string>("");
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
+  const [addSponsorDialogOpen, setAddSponsorDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !isAdmin) {
@@ -85,6 +93,17 @@ const AdminSponsors = () => {
 
   const handleRemoveSponsor = async (tournamentId: string) => {
     await removeSponsor.mutateAsync(tournamentId);
+  };
+
+  const handlePromoteToSponsor = async () => {
+    if (!selectedUserToPromote) return;
+    await promoteToSponsor.mutateAsync(selectedUserToPromote);
+    setAddSponsorDialogOpen(false);
+    setSelectedUserToPromote("");
+  };
+
+  const handleRemoveSponsorRole = async (userId: string) => {
+    await removeSponsorRole.mutateAsync(userId);
   };
 
   if (authLoading || sponsorsLoading) {
@@ -132,67 +151,128 @@ const AdminSponsors = () => {
                 </p>
               </div>
               
-              <Dialog open={assignDialogOpen} onOpenChange={setAssignDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="rift" className="gap-2" disabled={!unassignedTournaments?.length || !sponsors?.length}>
-                    <Link2 className="h-4 w-4" />
-                    Assign Sponsor
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Assign Sponsor to Tournament</DialogTitle>
-                    <DialogDescription>
-                      Associa um sponsor a um torneio disponível.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4 py-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Sponsor</label>
-                      <Select value={selectedSponsor} onValueChange={setSelectedSponsor}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a sponsor..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {sponsors?.map((sponsor) => (
-                            <SelectItem key={sponsor.user_id} value={sponsor.user_id}>
-                              {sponsor.profile?.username || "Unknown"}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Tournament</label>
-                      <Select value={selectedTournament} onValueChange={setSelectedTournament}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a tournament..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {unassignedTournaments?.map((tournament) => (
-                            <SelectItem key={tournament.id} value={tournament.id}>
-                              {tournament.game?.icon} {tournament.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="flex justify-end gap-2">
-                    <Button variant="ghost" onClick={() => setAssignDialogOpen(false)}>
-                      Cancel
+              <div className="flex flex-wrap gap-2">
+                {/* Add New Sponsor Dialog */}
+                <Dialog open={addSponsorDialogOpen} onOpenChange={setAddSponsorDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="rift" className="gap-2">
+                      <UserPlus className="h-4 w-4" />
+                      Add New Sponsor
                     </Button>
-                    <Button 
-                      variant="rift" 
-                      onClick={handleAssignSponsor}
-                      disabled={!selectedSponsor || !selectedTournament || assignSponsor.isPending}
-                    >
-                      {assignSponsor.isPending && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
-                      Assign
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Add New Sponsor</DialogTitle>
+                      <DialogDescription>
+                        Promove um utilizador existente a sponsor.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Select User</label>
+                        <Select value={selectedUserToPromote} onValueChange={setSelectedUserToPromote}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a user to promote..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {promotableUsers?.map((user) => (
+                              <SelectItem key={user.id} value={user.id}>
+                                <div className="flex items-center gap-2">
+                                  <span>{user.username}</span>
+                                  {user.country && (
+                                    <span className="text-xs text-muted-foreground">({user.country})</span>
+                                  )}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      {promotableUsers?.length === 0 && (
+                        <p className="text-sm text-muted-foreground text-center py-2">
+                          Todos os utilizadores já são sponsors.
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <Button variant="ghost" onClick={() => setAddSponsorDialogOpen(false)}>
+                        Cancel
+                      </Button>
+                      <Button 
+                        variant="rift" 
+                        onClick={handlePromoteToSponsor}
+                        disabled={!selectedUserToPromote || promoteToSponsor.isPending}
+                      >
+                        {promoteToSponsor.isPending && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                        Promote to Sponsor
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
+                {/* Assign Sponsor to Tournament Dialog */}
+                <Dialog open={assignDialogOpen} onOpenChange={setAssignDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="rift-outline" className="gap-2" disabled={!unassignedTournaments?.length || !sponsors?.length}>
+                      <Link2 className="h-4 w-4" />
+                      Assign to Tournament
                     </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Assign Sponsor to Tournament</DialogTitle>
+                      <DialogDescription>
+                        Associa um sponsor a um torneio disponível.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Sponsor</label>
+                        <Select value={selectedSponsor} onValueChange={setSelectedSponsor}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a sponsor..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {sponsors?.map((sponsor) => (
+                              <SelectItem key={sponsor.user_id} value={sponsor.user_id}>
+                                {sponsor.profile?.username || "Unknown"}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Tournament</label>
+                        <Select value={selectedTournament} onValueChange={setSelectedTournament}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a tournament..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {unassignedTournaments?.map((tournament) => (
+                              <SelectItem key={tournament.id} value={tournament.id}>
+                                {tournament.game?.icon} {tournament.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <Button variant="ghost" onClick={() => setAssignDialogOpen(false)}>
+                        Cancel
+                      </Button>
+                      <Button 
+                        variant="rift" 
+                        onClick={handleAssignSponsor}
+                        disabled={!selectedSponsor || !selectedTournament || assignSponsor.isPending}
+                      >
+                        {assignSponsor.isPending && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                        Assign
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
           </motion.div>
 
@@ -290,7 +370,7 @@ const AdminSponsors = () => {
                                 </p>
                               </div>
                             </div>
-                            <div className="text-right">
+                            <div className="flex items-center gap-3">
                               <div className="flex items-center gap-4">
                                 <div className="text-center">
                                   <p className="font-display font-bold">{sponsorStats.tournamentsSponsored}</p>
@@ -303,6 +383,16 @@ const AdminSponsors = () => {
                                   <p className="text-xs text-muted-foreground">Prize Pool</p>
                                 </div>
                               </div>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                                onClick={() => handleRemoveSponsorRole(sponsor.user_id)}
+                                disabled={removeSponsorRole.isPending}
+                                title="Remove sponsor role"
+                              >
+                                <UserMinus className="h-4 w-4" />
+                              </Button>
                             </div>
                           </div>
                         );
@@ -314,9 +404,17 @@ const AdminSponsors = () => {
                       <p className="text-muted-foreground">
                         No sponsors registered yet.
                       </p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Assign the sponsor role to users in User Management.
+                      <p className="text-sm text-muted-foreground mt-1 mb-4">
+                        Click "Add New Sponsor" to promote a user.
                       </p>
+                      <Button 
+                        variant="rift-outline" 
+                        size="sm"
+                        onClick={() => setAddSponsorDialogOpen(true)}
+                      >
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        Add New Sponsor
+                      </Button>
                     </div>
                   )}
                 </RiftCardContent>
