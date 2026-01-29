@@ -26,20 +26,30 @@ export const useSponsors = () => {
   return useQuery({
     queryKey: ["admin-sponsors"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // First get sponsor role users
+      const { data: sponsorRoles, error: rolesError } = await supabase
         .from("user_roles")
-        .select(`
-          id,
-          user_id,
-          role,
-          created_at,
-          profile:profiles!user_roles_user_id_fkey(id, username, avatar_url, country)
-        `)
+        .select("id, user_id, role, created_at")
         .eq("role", "sponsor")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      return data as unknown as SponsorWithProfile[];
+      if (rolesError) throw rolesError;
+      if (!sponsorRoles || sponsorRoles.length === 0) return [];
+
+      // Then get their profiles
+      const userIds = sponsorRoles.map(r => r.user_id);
+      const { data: profiles, error: profilesError } = await supabase
+        .from("profiles")
+        .select("id, username, avatar_url, country")
+        .in("id", userIds);
+
+      if (profilesError) throw profilesError;
+
+      // Combine the data
+      return sponsorRoles.map(role => ({
+        ...role,
+        profile: profiles?.find(p => p.id === role.user_id) || null
+      })) as SponsorWithProfile[];
     },
   });
 };
