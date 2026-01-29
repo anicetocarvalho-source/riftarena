@@ -13,6 +13,7 @@ import SponsorDashboard from "@/pages/SponsorDashboard";
 import TournamentDetail from "@/pages/TournamentDetail";
 import AdminUsers from "@/pages/AdminUsers";
 import AdminAnalytics from "@/pages/AdminAnalytics";
+import AdminGames from "@/pages/AdminGames";
 import SetupAdmin from "@/pages/SetupAdmin";
 import CreateTournament from "@/pages/CreateTournament";
 import ManageTournament from "@/pages/ManageTournament";
@@ -45,6 +46,7 @@ export function AnimatedRoutes() {
         <Route path="/sponsor/dashboard" element={<PageTransition><SponsorDashboard /></PageTransition>} />
         <Route path="/admin/users" element={<PageTransition><AdminUsers /></PageTransition>} />
         <Route path="/admin/analytics" element={<PageTransition><AdminAnalytics /></PageTransition>} />
+        <Route path="/admin/games" element={<PageTransition><AdminGames /></PageTransition>} />
         <Route path="/admin/setup" element={<PageTransition><SetupAdmin /></PageTransition>} />
         <Route path="/tournaments/create" element={<PageTransition><CreateTournament /></PageTransition>} />
         <Route path="/tournaments/manage/:id" element={<PageTransition><ManageTournament /></PageTransition>} />
