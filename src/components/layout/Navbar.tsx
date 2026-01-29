@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { RiftLogo } from "@/components/brand/RiftLogo";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, Shield, Users, Trophy, DollarSign, BarChart3, ChevronDown } from "lucide-react";
+import { Menu, X, User, Shield, Users, Trophy, DollarSign, BarChart3, ChevronDown, Gamepad2 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -31,6 +31,7 @@ export function Navbar() {
 
   const adminMenuItems = [
     { href: "/admin/users", label: "User Management", icon: Users, description: "Manage roles and accounts" },
+    { href: "/admin/games", label: "Game Management", icon: Gamepad2, description: "Add, edit, remove games" },
     { href: "/admin/analytics", label: "Platform Analytics", icon: BarChart3, description: "Metrics and statistics" },
     { href: "/tournaments", label: "All Tournaments", icon: Trophy, description: "Oversee all competitions" },
     { href: "/sponsors", label: "Sponsor Management", icon: DollarSign, description: "Manage brand partnerships" },
