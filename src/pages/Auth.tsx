@@ -19,14 +19,22 @@ import {
 } from "@/components/ui/select";
 
 const COUNTRIES = [
-  "Argentina", "Australia", "Austria", "Belgium", "Brazil", "Canada", "Chile",
-  "China", "Colombia", "Czech Republic", "Denmark", "Egypt", "Finland", "France",
-  "Germany", "Greece", "Hong Kong", "Hungary", "India", "Indonesia", "Ireland",
-  "Israel", "Italy", "Japan", "Malaysia", "Mexico", "Netherlands", "New Zealand",
-  "Norway", "Pakistan", "Peru", "Philippines", "Poland", "Portugal", "Romania",
-  "Russia", "Saudi Arabia", "Singapore", "South Africa", "South Korea", "Spain",
-  "Sweden", "Switzerland", "Taiwan", "Thailand", "Turkey", "Ukraine",
-  "United Arab Emirates", "United Kingdom", "United States", "Vietnam"
+  "Algeria", "Angola", "Argentina", "Australia", "Austria", "Belgium", "Benin",
+  "Botswana", "Brazil", "Burkina Faso", "Burundi", "Cameroon", "Canada", "Cape Verde",
+  "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros",
+  "Congo", "Côte d'Ivoire", "Czech Republic", "Democratic Republic of the Congo",
+  "Denmark", "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini",
+  "Ethiopia", "Finland", "France", "Gabon", "Gambia", "Germany", "Ghana", "Greece",
+  "Guinea", "Guinea-Bissau", "Hong Kong", "Hungary", "India", "Indonesia", "Ireland",
+  "Israel", "Italy", "Japan", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar",
+  "Malawi", "Malaysia", "Mali", "Mauritania", "Mauritius", "Mexico", "Morocco",
+  "Mozambique", "Namibia", "Netherlands", "New Zealand", "Niger", "Nigeria", "Norway",
+  "Pakistan", "Peru", "Philippines", "Poland", "Portugal", "Romania", "Russia",
+  "Rwanda", "Saudi Arabia", "Senegal", "Seychelles", "Sierra Leone", "Singapore",
+  "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sudan", "Sweden",
+  "Switzerland", "Taiwan", "Tanzania", "Thailand", "Togo", "Tunisia", "Turkey",
+  "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States",
+  "Vietnam", "Zambia", "Zimbabwe"
 ];
 
 const signUpSchema = z.object({
