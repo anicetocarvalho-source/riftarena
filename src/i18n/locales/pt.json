@@ -395,7 +395,53 @@
     "platinum": "Platinum",
     "gold": "Gold",
     "silver": "Silver",
-    "trustedBy": "Marcas de Confiança Global"
+    "trustedBy": "Marcas de Confiança Global",
+    "hero": {
+      "badge": "Parcerias de Marca",
+      "title": "Conecta a Tua Marca ao Futuro dos Esports",
+      "description": "Junta-te às marcas líderes que estão a moldar o ecossistema competitivo de gaming. Alcança milhões de jogadores apaixonados através de torneios, transmissões ao vivo e integrações personalizadas.",
+      "cta": "Contactar Equipa de Parcerias",
+      "viewTiers": "Ver Planos de Parceria",
+      "emailOpening": "A abrir cliente de email...",
+      "stats": {
+        "reach": "Alcance Mensal",
+        "satisfaction": "Satisfação de Parceiros",
+        "partners": "Parceiros Ativos"
+      }
+    },
+    "tiers": {
+      "badge": "Planos de Parceria",
+      "title": "Escolhe o Teu Nível de Parceria",
+      "description": "Oferecemos planos flexíveis para marcas de todos os tamanhos. Desde startups a empresas globais, temos a solução certa para ti.",
+      "mostPopular": "Mais Popular"
+    },
+    "caseStudies": {
+      "badge": "Casos de Sucesso",
+      "title": "Resultados Comprovados",
+      "description": "Descobre como as marcas parceiras alcançaram resultados excecionais através das campanhas RIFT.",
+      "results": "Resultados da Campanha"
+    },
+    "mediaKit": {
+      "badge": "Media Kit",
+      "title": "Recursos para Parceiros",
+      "description": "Descarrega os nossos recursos oficiais para criar campanhas alinhadas com a marca RIFT.",
+      "brandGuidelines": "Diretrizes de Marca",
+      "brandGuidelinesDesc": "Guia completo de identidade visual",
+      "logoAssets": "Logótipos",
+      "logoAssetsDesc": "SVG, PNG em várias resoluções",
+      "promoVideos": "Vídeos Promocionais",
+      "promoVideosDesc": "Clips de torneios e highlights",
+      "partnershipDeck": "Apresentação de Parceria",
+      "partnershipDeckDesc": "Deck completo com métricas e planos",
+      "downloadAll": "Descarregar Kit Completo",
+      "downloadStarting": "A iniciar download de {{asset}}...",
+      "fullKit": "Kit Completo"
+    },
+    "currentPartners": {
+      "badge": "Parceiros Atuais",
+      "title": "Marcas que Confiam em Nós",
+      "description": "Junta-te a estas marcas líderes no ecossistema de esports competitivo."
+    }
   },
   "language": {
     "select": "Idioma",
