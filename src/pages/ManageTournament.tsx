@@ -92,8 +92,8 @@ const ManageTournament = () => {
           {/* Breadcrumbs */}
           <PageBreadcrumbs 
             items={[
-              { label: "Dashboard", href: "/dashboard" },
-              { label: "Tournaments", href: "/tournaments" },
+              { label: t('breadcrumbs.dashboard'), href: "/dashboard" },
+              { label: t('breadcrumbs.tournaments'), href: "/tournaments" },
               { label: tournament.name, icon: <span className="text-lg">{tournament.game?.icon}</span> }
             ]}
             className="mb-6"
@@ -117,7 +117,7 @@ const ManageTournament = () => {
                 </div>
                 <p className="text-muted-foreground">
                   {tournament.game?.name} • {format(new Date(tournament.start_date), "PPP")} • 
-                  ${tournament.prize_pool.toLocaleString()} Prize Pool
+                  ${tournament.prize_pool.toLocaleString()} {t('tournaments.prizePool')}
                 </p>
               </div>
               
@@ -213,7 +213,7 @@ const ManageTournament = () => {
                 </div>
                 <div>
                   <p className="text-xl font-display font-bold">${tournament.prize_pool.toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground">Prize Pool</p>
+                  <p className="text-xs text-muted-foreground">{t('tournaments.prizePool')}</p>
                 </div>
               </RiftCardContent>
             </RiftCard>

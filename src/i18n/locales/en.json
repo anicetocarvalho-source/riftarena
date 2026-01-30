@@ -756,5 +756,20 @@
       "completed": "Completed",
       "draft": "Draft"
     }
+  },
+  "passwordStrength": {
+    "label": "Password strength",
+    "weak": "Weak",
+    "fair": "Fair",
+    "good": "Good",
+    "strong": "Strong",
+    "minChars": "At least 8 characters",
+    "mixedCase": "Upper & lowercase letters",
+    "number": "At least one number",
+    "special": "At least one special character"
+  },
+  "breadcrumbs": {
+    "dashboard": "Dashboard",
+    "tournaments": "Tournaments"
   }
 }
