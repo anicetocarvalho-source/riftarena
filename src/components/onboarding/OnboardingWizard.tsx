@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -28,8 +28,8 @@ interface Game {
 const TOTAL_STEPS = 4;
 
 export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) {
+  const { t } = useTranslation();
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedGames, setSelectedGames] = useState<string[]>([]);
   const [isCompleting, setIsCompleting] = useState(false);
@@ -79,10 +79,10 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
         })
         .eq("id", user.id);
       
-      toast.success("Bem-vindo à Rift Arena! 🎮");
+      toast.success(t('onboarding.messages.welcomeSuccess'));
       onComplete();
     } catch (error) {
-      toast.error("Erro ao completar onboarding");
+      toast.error(t('onboarding.messages.completeError'));
     } finally {
       setIsCompleting(false);
     }
@@ -113,8 +113,8 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
   const steps = [
     // Step 0: Welcome
     {
-      title: "Bem-vindo à Rift Arena! 🎮",
-      subtitle: "A tua plataforma de esports competitivos",
+      title: t('onboarding.welcome.title'),
+      subtitle: t('onboarding.welcome.subtitle'),
       content: (
         <div className="space-y-6">
           <motion.div 
@@ -135,10 +135,10 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
           </motion.div>
           <div className="text-center space-y-2">
             <p className="text-muted-foreground">
-              Vamos ajudar-te a configurar a tua conta e descobrir como tirar o máximo partido da plataforma.
+              {t('onboarding.welcome.description')}
             </p>
             <p className="text-sm text-muted-foreground/70">
-              Demora apenas 2 minutos!
+              {t('onboarding.welcome.duration')}
             </p>
           </div>
         </div>
@@ -146,8 +146,8 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
     },
     // Step 1: Platform Features
     {
-      title: "O que podes fazer aqui",
-      subtitle: "Descobre as funcionalidades principais",
+      title: t('onboarding.features.title'),
+      subtitle: t('onboarding.features.subtitle'),
       content: (
         <div className="grid gap-4">
           <motion.div 
@@ -160,9 +160,9 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
               <Trophy className="h-5 w-5" />
             </div>
             <div>
-              <h4 className="font-display font-semibold">Torneios Competitivos</h4>
+              <h4 className="font-display font-semibold">{t('onboarding.features.tournaments')}</h4>
               <p className="text-sm text-muted-foreground">
-                Inscreve-te em torneios de Free Fire, PUBG Mobile, COD Mobile e eFootball.
+                {t('onboarding.features.tournamentsDesc')}
               </p>
             </div>
           </motion.div>
@@ -177,9 +177,9 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
               <Target className="h-5 w-5" />
             </div>
             <div>
-              <h4 className="font-display font-semibold">Sistema de Ranking ELO</h4>
+              <h4 className="font-display font-semibold">{t('onboarding.features.ranking')}</h4>
               <p className="text-sm text-muted-foreground">
-                Sobe no ranking competindo. Quanto melhor jogares, mais alto chegas!
+                {t('onboarding.features.rankingDesc')}
               </p>
             </div>
           </motion.div>
@@ -194,9 +194,9 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
               <Users className="h-5 w-5" />
             </div>
             <div>
-              <h4 className="font-display font-semibold">Equipas & Comunidade</h4>
+              <h4 className="font-display font-semibold">{t('onboarding.features.teams')}</h4>
               <p className="text-sm text-muted-foreground">
-                Cria ou junta-te a equipas para competir em torneios de equipa.
+                {t('onboarding.features.teamsDesc')}
               </p>
             </div>
           </motion.div>
@@ -205,8 +205,8 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
     },
     // Step 2: Select Games
     {
-      title: "Quais jogos te interessam?",
-      subtitle: "Seleciona os teus jogos favoritos (opcional)",
+      title: t('onboarding.games.title'),
+      subtitle: t('onboarding.games.subtitle'),
       content: (
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -238,15 +238,15 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
             ))}
           </div>
           <p className="text-center text-xs text-muted-foreground">
-            Podes alterar isto mais tarde no teu perfil
+            {t('onboarding.games.changeNote')}
           </p>
         </div>
       ),
     },
     // Step 3: Ready to Start
     {
-      title: "Tudo pronto! 🚀",
-      subtitle: "Estás preparado para começar",
+      title: t('onboarding.ready.title'),
+      subtitle: t('onboarding.ready.subtitle'),
       content: (
         <div className="space-y-6 text-center">
           <motion.div 
@@ -268,21 +268,21 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
           
           <div className="space-y-4">
             <p className="text-muted-foreground">
-              Próximos passos recomendados:
+              {t('onboarding.ready.nextSteps')}
             </p>
             
             <div className="grid gap-2 text-left">
               <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
                 <Shield className="h-5 w-5 text-primary" />
-                <span className="text-sm">Completa o teu perfil com avatar e bio</span>
+                <span className="text-sm">{t('onboarding.ready.completeProfile')}</span>
               </div>
               <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
                 <Trophy className="h-5 w-5 text-warning" />
-                <span className="text-sm">Explora os torneios disponíveis</span>
+                <span className="text-sm">{t('onboarding.ready.exploreTournaments')}</span>
               </div>
               <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
                 <Users className="h-5 w-5 text-success" />
-                <span className="text-sm">Junta-te ou cria uma equipa</span>
+                <span className="text-sm">{t('onboarding.ready.joinTeam')}</span>
               </div>
             </div>
           </div>
@@ -305,7 +305,7 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
             <div className="flex items-center gap-2">
               <Gamepad2 className="h-5 w-5 text-primary" />
               <span className="text-sm text-muted-foreground">
-                Passo {currentStep + 1} de {TOTAL_STEPS}
+                {t('onboarding.step', { current: currentStep + 1, total: TOTAL_STEPS })}
               </span>
             </div>
             <Button variant="ghost" size="sm" onClick={handleSkip}>
@@ -345,12 +345,12 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
               className={cn(currentStep === 0 && "invisible")}
             >
               <ChevronLeft className="h-4 w-4 mr-1" />
-              Anterior
+              {t('onboarding.navigation.previous')}
             </Button>
 
             {currentStep < TOTAL_STEPS - 1 ? (
               <Button variant="rift" onClick={handleNext}>
-                Próximo
+                {t('onboarding.navigation.next')}
                 <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             ) : (
@@ -359,7 +359,7 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
                 onClick={handleComplete}
                 disabled={isCompleting}
               >
-                {isCompleting ? "A guardar..." : "Começar!"}
+                {isCompleting ? t('onboarding.navigation.saving') : t('onboarding.navigation.start')}
                 <Sparkles className="h-4 w-4 ml-1" />
               </Button>
             )}
@@ -371,7 +371,7 @@ export function OnboardingWizard({ onComplete, onSkip }: OnboardingWizardProps) 
               onClick={handleSkip}
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              Saltar introdução
+              {t('onboarding.navigation.skip')}
             </button>
           </div>
         </RiftCardContent>

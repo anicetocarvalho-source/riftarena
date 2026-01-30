@@ -404,9 +404,19 @@
   "cta": {
     "ready": "Ready to",
     "compete": "Compete",
-    "description": "Join thousands of players who have already found their competitive battleground. Create your profile and start climbing the ranks today.",
-    "joinNow": "Join Now",
-    "learnMore": "Learn More"
+    "description": "Join thousands of players competing in the most prestigious esports tournaments. Your journey to the top starts here.",
+    "createAccount": "Create Account",
+    "viewGames": "View Games",
+    "features": {
+      "eliteTournaments": "Elite Tournaments",
+      "eliteTournamentsDesc": "Compete in professionally organized tournaments with cash prizes and sponsor rewards.",
+      "realTimeRankings": "Real-Time Rankings",
+      "realTimeRankingsDesc": "Track your ELO rating across games with our advanced ranking algorithm.",
+      "fairPlay": "Fair Play",
+      "fairPlayDesc": "Our anti-cheat systems and admin validation ensure competitive integrity.",
+      "instantMatchmaking": "Instant Matchmaking",
+      "instantMatchmakingDesc": "Find matches quickly with players at your skill level, anytime."
+    }
   },
   "playerProfile": {
     "notFound": "Player Not Found",
@@ -634,5 +644,56 @@
     "winRate": "Win Rate",
     "noRankings": "No rankings yet. Be the first to compete!",
     "joinTournament": "Join a Tournament"
+  },
+  "onboarding": {
+    "step": "Step {{current}} of {{total}}",
+    "welcome": {
+      "title": "Welcome to Rift Arena! 🎮",
+      "subtitle": "Your competitive esports platform",
+      "description": "Let us help you set up your account and discover how to get the most out of the platform.",
+      "duration": "It only takes 2 minutes!"
+    },
+    "features": {
+      "title": "What you can do here",
+      "subtitle": "Discover the main features",
+      "tournaments": "Competitive Tournaments",
+      "tournamentsDesc": "Sign up for Free Fire, PUBG Mobile, COD Mobile, and eFootball tournaments.",
+      "ranking": "ELO Ranking System",
+      "rankingDesc": "Climb the rankings by competing. The better you play, the higher you go!",
+      "teams": "Teams & Community",
+      "teamsDesc": "Create or join teams to compete in team-based tournaments."
+    },
+    "games": {
+      "title": "Which games interest you?",
+      "subtitle": "Select your favorite games (optional)",
+      "changeNote": "You can change this later in your profile"
+    },
+    "ready": {
+      "title": "All set! 🚀",
+      "subtitle": "You're ready to begin",
+      "nextSteps": "Recommended next steps:",
+      "completeProfile": "Complete your profile with avatar and bio",
+      "exploreTournaments": "Explore available tournaments",
+      "joinTeam": "Join or create a team"
+    },
+    "navigation": {
+      "previous": "Previous",
+      "next": "Next",
+      "start": "Start!",
+      "saving": "Saving...",
+      "skip": "Skip introduction"
+    },
+    "messages": {
+      "welcomeSuccess": "Welcome to Rift Arena! 🎮",
+      "completeError": "Error completing onboarding"
+    }
+  },
+  "tournamentStatus": {
+    "live": "LIVE",
+    "registration": "REGISTRATION",
+    "upcoming": "UPCOMING",
+    "completed": "COMPLETED",
+    "cancelled": "CANCELLED",
+    "draft": "DRAFT"
   }
 }

@@ -404,9 +404,19 @@
   "cta": {
     "ready": "Preparado para",
     "compete": "Competir",
-    "description": "Junta-te a milhares de jogadores que já encontraram o seu campo de batalha competitivo. Cria o teu perfil e começa a subir nos rankings hoje.",
-    "joinNow": "Juntar-me Agora",
-    "learnMore": "Saber Mais"
+    "description": "Junta-te a milhares de jogadores competindo nos torneios de esports mais prestigiados. A tua jornada para o topo começa aqui.",
+    "createAccount": "Criar Conta",
+    "viewGames": "Ver Jogos",
+    "features": {
+      "eliteTournaments": "Torneios de Elite",
+      "eliteTournamentsDesc": "Compete em torneios organizados profissionalmente com prémios em dinheiro e recompensas de patrocinadores.",
+      "realTimeRankings": "Rankings em Tempo Real",
+      "realTimeRankingsDesc": "Acompanha a tua classificação ELO em todos os jogos com o nosso algoritmo de ranking avançado.",
+      "fairPlay": "Jogo Limpo",
+      "fairPlayDesc": "Os nossos sistemas anti-cheat e validação de administradores garantem integridade competitiva.",
+      "instantMatchmaking": "Matchmaking Instantâneo",
+      "instantMatchmakingDesc": "Encontra partidas rapidamente com jogadores do teu nível, a qualquer hora."
+    }
   },
   "playerProfile": {
     "notFound": "Jogador Não Encontrado",
@@ -634,5 +644,56 @@
     "winRate": "Taxa Vitória",
     "noRankings": "Ainda não há rankings. Sê o primeiro a competir!",
     "joinTournament": "Entrar num Torneio"
+  },
+  "onboarding": {
+    "step": "Passo {{current}} de {{total}}",
+    "welcome": {
+      "title": "Bem-vindo à Rift Arena! 🎮",
+      "subtitle": "A tua plataforma de esports competitivos",
+      "description": "Vamos ajudar-te a configurar a tua conta e descobrir como tirar o máximo partido da plataforma.",
+      "duration": "Demora apenas 2 minutos!"
+    },
+    "features": {
+      "title": "O que podes fazer aqui",
+      "subtitle": "Descobre as funcionalidades principais",
+      "tournaments": "Torneios Competitivos",
+      "tournamentsDesc": "Inscreve-te em torneios de Free Fire, PUBG Mobile, COD Mobile e eFootball.",
+      "ranking": "Sistema de Ranking ELO",
+      "rankingDesc": "Sobe no ranking competindo. Quanto melhor jogares, mais alto chegas!",
+      "teams": "Equipas & Comunidade",
+      "teamsDesc": "Cria ou junta-te a equipas para competir em torneios de equipa."
+    },
+    "games": {
+      "title": "Quais jogos te interessam?",
+      "subtitle": "Seleciona os teus jogos favoritos (opcional)",
+      "changeNote": "Podes alterar isto mais tarde no teu perfil"
+    },
+    "ready": {
+      "title": "Tudo pronto! 🚀",
+      "subtitle": "Estás preparado para começar",
+      "nextSteps": "Próximos passos recomendados:",
+      "completeProfile": "Completa o teu perfil com avatar e bio",
+      "exploreTournaments": "Explora os torneios disponíveis",
+      "joinTeam": "Junta-te ou cria uma equipa"
+    },
+    "navigation": {
+      "previous": "Anterior",
+      "next": "Próximo",
+      "start": "Começar!",
+      "saving": "A guardar...",
+      "skip": "Saltar introdução"
+    },
+    "messages": {
+      "welcomeSuccess": "Bem-vindo à Rift Arena! 🎮",
+      "completeError": "Erro ao completar onboarding"
+    }
+  },
+  "tournamentStatus": {
+    "live": "AO VIVO",
+    "registration": "INSCRIÇÕES",
+    "upcoming": "PRÓXIMO",
+    "completed": "TERMINADO",
+    "cancelled": "CANCELADO",
+    "draft": "RASCUNHO"
   }
 }
