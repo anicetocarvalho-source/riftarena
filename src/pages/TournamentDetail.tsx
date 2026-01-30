@@ -152,7 +152,7 @@ const TournamentDetail = () => {
           {/* Breadcrumbs */}
           <PageBreadcrumbs 
             items={[
-              { label: "Tournaments", href: "/tournaments" },
+              { label: t('breadcrumbs.tournaments'), href: "/tournaments" },
               { label: tournament.name, icon: <span className="text-lg">{tournament.game?.icon}</span> }
             ]}
             className="mb-6"

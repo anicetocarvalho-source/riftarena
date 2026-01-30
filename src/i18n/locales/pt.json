@@ -756,5 +756,20 @@
       "completed": "Finalizado",
       "draft": "Rascunho"
     }
+  },
+  "passwordStrength": {
+    "label": "Força da palavra-passe",
+    "weak": "Fraca",
+    "fair": "Razoável",
+    "good": "Boa",
+    "strong": "Forte",
+    "minChars": "Pelo menos 8 caracteres",
+    "mixedCase": "Letras maiúsculas e minúsculas",
+    "number": "Pelo menos um número",
+    "special": "Pelo menos um caractere especial"
+  },
+  "breadcrumbs": {
+    "dashboard": "Dashboard",
+    "tournaments": "Torneios"
   }
 }
