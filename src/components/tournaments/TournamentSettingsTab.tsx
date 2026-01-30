@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Tournament, TournamentStatus } from "@/types/tournament";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ interface TournamentSettingsTabProps {
 }
 
 export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps) => {
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const updateTournament = useUpdateTournament();
   const updateStatus = useUpdateTournamentStatus();
@@ -58,11 +60,11 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
     const errors: { endDate?: string; registrationDeadline?: string } = {};
     
     if (start && end && end <= start) {
-      errors.endDate = "End date must be after start date";
+      errors.endDate = t('tournamentSettings.endDateError');
     }
     
     if (start && regDeadline && regDeadline >= start) {
-      errors.registrationDeadline = "Registration deadline must be before start date";
+      errors.registrationDeadline = t('tournamentSettings.regDeadlineError');
     }
     
     setDateErrors(errors);
@@ -127,11 +129,11 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-xl font-bold">Edit Tournament</h2>
+          <h2 className="font-display text-xl font-bold">{t('tournamentSettings.editTournament')}</h2>
           <div className="flex gap-2">
             <Button variant="ghost" onClick={handleCancel}>
               <X className="h-4 w-4 mr-2" />
-              Cancel
+              {t('tournamentSettings.cancel')}
             </Button>
             <Button 
               variant="rift" 
@@ -139,7 +141,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
               disabled={updateTournament.isPending || hasValidationErrors || !name.trim()}
             >
               <Save className="h-4 w-4 mr-2" />
-              {updateTournament.isPending ? "Saving..." : "Save Changes"}
+              {updateTournament.isPending ? t('tournamentSettings.saving') : t('tournamentSettings.saveChanges')}
             </Button>
           </div>
         </div>
@@ -148,33 +150,33 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
           <RiftCardHeader>
             <RiftCardTitle className="flex items-center gap-2">
               <Settings className="h-5 w-5 text-primary" />
-              Tournament Details
+              {t('tournamentSettings.tournamentDetails')}
             </RiftCardTitle>
           </RiftCardHeader>
           <RiftCardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">{t('tournamentSettings.name')}</Label>
                 <Input
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Tournament name"
+                  placeholder={t('tournamentSettings.tournamentName')}
                 />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-2">Game</p>
+                <p className="text-sm text-muted-foreground mb-2">{t('tournamentSettings.game')}</p>
                 <p className="font-medium">{tournament.game?.icon} {tournament.game?.name}</p>
-                <p className="text-xs text-muted-foreground">(Cannot be changed)</p>
+                <p className="text-xs text-muted-foreground">{t('tournamentSettings.cannotChange')}</p>
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t('tournamentSettings.description')}</Label>
               <Textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Tournament description"
+                placeholder={t('tournamentSettings.tournamentDescription')}
                 rows={3}
               />
             </div>
@@ -185,13 +187,13 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
           <RiftCardHeader>
             <RiftCardTitle className="flex items-center gap-2">
               <CalendarIcon className="h-5 w-5 text-primary" />
-              Schedule
+              {t('tournamentSettings.schedule')}
             </RiftCardTitle>
           </RiftCardHeader>
           <RiftCardContent>
             <div className="grid gap-4 md:grid-cols-3">
               <div className="space-y-2">
-                <Label>Start Date</Label>
+                <Label>{t('tournamentSettings.startDate')}</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -202,7 +204,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {startDate ? format(startDate, "PPP") : "Pick a date"}
+                      {startDate ? format(startDate, "PPP") : t('tournamentSettings.pickDate')}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
@@ -217,7 +219,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                 </Popover>
               </div>
               <div className="space-y-2">
-                <Label>End Date (Optional)</Label>
+                <Label>{t('tournamentSettings.endDate')}</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -229,7 +231,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {endDate ? format(endDate, "PPP") : "Pick a date"}
+                      {endDate ? format(endDate, "PPP") : t('tournamentSettings.pickDate')}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
@@ -248,7 +250,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                 )}
               </div>
               <div className="space-y-2">
-                <Label>Registration Deadline (Optional)</Label>
+                <Label>{t('tournamentSettings.registrationDeadline')}</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -260,7 +262,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {registrationDeadline ? format(registrationDeadline, "PPP") : "Pick a date"}
+                      {registrationDeadline ? format(registrationDeadline, "PPP") : t('tournamentSettings.pickDate')}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
@@ -286,13 +288,13 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
           <RiftCardHeader>
             <RiftCardTitle className="flex items-center gap-2">
               <DollarSign className="h-5 w-5 text-primary" />
-              Prize & Fees
+              {t('tournamentSettings.prizeFees')}
             </RiftCardTitle>
           </RiftCardHeader>
           <RiftCardContent>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="prizePool">Prize Pool ($)</Label>
+                <Label htmlFor="prizePool">{t('tournamentSettings.prizePool')}</Label>
                 <Input
                   id="prizePool"
                   type="number"
@@ -303,7 +305,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="registrationFee">Registration Fee ($)</Label>
+                <Label htmlFor="registrationFee">{t('tournamentSettings.registrationFee')}</Label>
                 <Input
                   id="registrationFee"
                   type="number"
@@ -321,12 +323,12 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
           <RiftCardHeader>
             <RiftCardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5 text-primary" />
-              Capacity
+              {t('tournamentSettings.capacity')}
             </RiftCardTitle>
           </RiftCardHeader>
           <RiftCardContent>
             <div className="space-y-2">
-              <Label htmlFor="maxParticipants">Max Participants</Label>
+              <Label htmlFor="maxParticipants">{t('tournamentSettings.maxParticipants')}</Label>
               <Input
                 id="maxParticipants"
                 type="number"
@@ -336,7 +338,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                 max="256"
               />
               <p className="text-xs text-muted-foreground">
-                Recommended: 8, 16, 32, or 64 for optimal bracket generation
+                {t('tournamentSettings.capacityRecommendation')}
               </p>
             </div>
           </RiftCardContent>
@@ -346,17 +348,17 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
           <RiftCardHeader>
             <RiftCardTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5 text-primary" />
-              Rules
+              {t('tournamentSettings.rules')}
             </RiftCardTitle>
           </RiftCardHeader>
           <RiftCardContent>
             <div className="space-y-2">
-              <Label htmlFor="rules">Tournament Rules</Label>
+              <Label htmlFor="rules">{t('tournamentSettings.tournamentRules')}</Label>
               <Textarea
                 id="rules"
                 value={rules}
                 onChange={(e) => setRules(e.target.value)}
-                placeholder="Enter tournament rules..."
+                placeholder={t('tournamentSettings.enterRules')}
                 rows={6}
               />
             </div>
@@ -372,13 +374,13 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
         <div>
           {!canEdit && tournament.status !== "cancelled" && (
             <div className="bg-muted/50 border border-border rounded-sm p-3 text-sm text-muted-foreground">
-              Tournament editing is disabled for tournaments in <strong>{tournament.status}</strong> status.
+              {t('tournamentSettings.editingDisabled')} <strong>{tournament.status}</strong>.
             </div>
           )}
           {tournament.status === "cancelled" && (
             <div className="bg-destructive/10 border border-destructive/30 rounded-sm p-3 flex items-center gap-2">
               <Ban className="h-4 w-4 text-destructive" />
-              <span className="text-sm text-destructive font-medium">This tournament has been cancelled.</span>
+              <span className="text-sm text-destructive font-medium">{t('tournamentSettings.tournamentCancelled')}</span>
             </div>
           )}
         </div>
@@ -387,7 +389,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
           {canEdit && (
             <Button variant="rift" onClick={() => setIsEditing(true)}>
               <Edit className="h-4 w-4 mr-2" />
-              Edit Tournament
+              {t('tournamentSettings.editBtn')}
             </Button>
           )}
           
@@ -396,28 +398,27 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
               <AlertDialogTrigger asChild>
                 <Button variant="destructive" className="gap-2">
                   <Ban className="h-4 w-4" />
-                  Cancel Tournament
+                  {t('tournamentSettings.cancelTournament')}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle className="flex items-center gap-2">
                     <AlertTriangle className="h-5 w-5 text-destructive" />
-                    Cancel Tournament
+                    {t('tournamentSettings.cancelTournamentTitle')}
                   </AlertDialogTitle>
                   <AlertDialogDescription>
-                    Are you sure you want to cancel <strong>{tournament.name}</strong>? 
-                    This action cannot be undone. All registrations will be affected and 
-                    participants will be notified.
+                    {t('tournamentSettings.cancelTournamentConfirm')} <strong>{tournament.name}</strong>? 
+                    {t('tournamentSettings.cancelTournamentWarning')}
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Keep Tournament</AlertDialogCancel>
+                  <AlertDialogCancel>{t('tournamentSettings.keepTournament')}</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleCancelTournament}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
-                    {updateStatus.isPending ? "Cancelling..." : "Yes, Cancel Tournament"}
+                    {updateStatus.isPending ? t('tournamentSettings.cancelling') : t('tournamentSettings.yesCancelTournament')}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -430,31 +431,31 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
         <RiftCardHeader>
           <RiftCardTitle className="flex items-center gap-2">
             <Settings className="h-5 w-5 text-primary" />
-            Tournament Details
+            {t('tournamentSettings.tournamentDetails')}
           </RiftCardTitle>
         </RiftCardHeader>
         <RiftCardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <p className="text-sm text-muted-foreground">Name</p>
+              <p className="text-sm text-muted-foreground">{t('tournamentSettings.name')}</p>
               <p className="font-medium">{tournament.name}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Game</p>
+              <p className="text-sm text-muted-foreground">{t('tournamentSettings.game')}</p>
               <p className="font-medium">{tournament.game?.icon} {tournament.game?.name}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Bracket Type</p>
+              <p className="text-sm text-muted-foreground">{t('tournamentSettings.bracketType')}</p>
               <p className="font-medium capitalize">{tournament.bracket_type.replace("_", " ")}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Status</p>
+              <p className="text-sm text-muted-foreground">{t('tournamentSettings.status')}</p>
               <p className="font-medium capitalize">{tournament.status}</p>
             </div>
           </div>
           {tournament.description && (
             <div>
-              <p className="text-sm text-muted-foreground">Description</p>
+              <p className="text-sm text-muted-foreground">{t('tournamentSettings.description')}</p>
               <p className="font-medium">{tournament.description}</p>
             </div>
           )}
@@ -465,24 +466,24 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
         <RiftCardHeader>
           <RiftCardTitle className="flex items-center gap-2">
             <CalendarIcon className="h-5 w-5 text-primary" />
-            Schedule
+            {t('tournamentSettings.schedule')}
           </RiftCardTitle>
         </RiftCardHeader>
         <RiftCardContent>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <p className="text-sm text-muted-foreground">Start Date</p>
+              <p className="text-sm text-muted-foreground">{t('tournamentSettings.startDate')}</p>
               <p className="font-medium">{format(new Date(tournament.start_date), "PPP p")}</p>
             </div>
             {tournament.end_date && (
               <div>
-                <p className="text-sm text-muted-foreground">End Date</p>
+                <p className="text-sm text-muted-foreground">{t('tournamentSettings.endDate')}</p>
                 <p className="font-medium">{format(new Date(tournament.end_date), "PPP p")}</p>
               </div>
             )}
             {tournament.registration_deadline && (
               <div>
-                <p className="text-sm text-muted-foreground">Registration Deadline</p>
+                <p className="text-sm text-muted-foreground">{t('tournamentSettings.registrationDeadline')}</p>
                 <p className="font-medium">{format(new Date(tournament.registration_deadline), "PPP p")}</p>
               </div>
             )}
@@ -494,17 +495,17 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
         <RiftCardHeader>
           <RiftCardTitle className="flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-primary" />
-            Prize & Fees
+            {t('tournamentSettings.prizeFees')}
           </RiftCardTitle>
         </RiftCardHeader>
         <RiftCardContent>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <p className="text-sm text-muted-foreground">Prize Pool</p>
+              <p className="text-sm text-muted-foreground">{t('tournamentSettings.prizePool')}</p>
               <p className="font-medium text-xl">${tournament.prize_pool.toLocaleString()}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Registration Fee</p>
+              <p className="text-sm text-muted-foreground">{t('tournamentSettings.registrationFee')}</p>
               <p className="font-medium">${tournament.registration_fee}</p>
             </div>
           </div>
@@ -515,12 +516,12 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
         <RiftCardHeader>
           <RiftCardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5 text-primary" />
-            Capacity
+            {t('tournamentSettings.capacity')}
           </RiftCardTitle>
         </RiftCardHeader>
         <RiftCardContent>
           <div>
-            <p className="text-sm text-muted-foreground">Max Participants</p>
+            <p className="text-sm text-muted-foreground">{t('tournamentSettings.maxParticipants')}</p>
             <p className="font-medium">{tournament.max_participants}</p>
           </div>
         </RiftCardContent>
@@ -531,7 +532,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
           <RiftCardHeader>
             <RiftCardTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5 text-primary" />
-              Rules
+              {t('tournamentSettings.rules')}
             </RiftCardTitle>
           </RiftCardHeader>
           <RiftCardContent>
