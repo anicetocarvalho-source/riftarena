@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Mail, ArrowRight } from "lucide-react";
-import { toast } from "sonner";
+import { PartnershipContactForm } from "./PartnershipContactForm";
 
 export function SponsorHero() {
   const { t } = useTranslation();
@@ -34,17 +34,12 @@ export function SponsorHero() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button
-              variant="rift"
-              size="lg"
-              onClick={() => {
-                window.location.href = "mailto:sponsors@riftarena.com?subject=Partnership%20Inquiry";
-                toast.success(t("sponsors.hero.emailOpening"));
-              }}
-            >
-              <Mail className="mr-2 h-4 w-4" />
-              {t("sponsors.hero.cta")}
-            </Button>
+            <PartnershipContactForm>
+              <Button variant="rift" size="lg">
+                <Mail className="mr-2 h-4 w-4" />
+                {t("sponsors.hero.cta")}
+              </Button>
+            </PartnershipContactForm>
             <Button
               variant="outline"
               size="lg"
