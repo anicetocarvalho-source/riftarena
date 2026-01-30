@@ -16,7 +16,7 @@ const sizeClasses = {
 
 export function RiftLogo({ className, size = "default", showTagline = false }: RiftLogoProps) {
   return (
-    <div className={cn("flex flex-col items-center", className)}>
+    <div className={cn("flex flex-col", className)}>
       <img
         src={logoSvg}
         alt="RIFT Arena"
