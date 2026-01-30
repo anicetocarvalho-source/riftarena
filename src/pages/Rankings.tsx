@@ -9,6 +9,7 @@ import { useRankings, getRankTier, getWinRate } from "@/hooks/useRankings";
 import { useGames } from "@/hooks/useTournaments";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, TrendingUp, Trophy, Target } from "lucide-react";
+import { GlossaryTerm } from "@/components/ui/glossary-term";
 
 const Rankings = () => {
   const [activeGameId, setActiveGameId] = useState<string | undefined>(undefined);
@@ -99,7 +100,7 @@ const Rankings = () => {
                 <div className="w-16 text-center">Win Rate</div>
               </div>
               <div className="w-20 text-right text-xs font-display uppercase tracking-wider text-muted-foreground">
-                ELO
+                <GlossaryTerm term="elo" showIcon={false}>ELO</GlossaryTerm>
               </div>
             </div>
 
