@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
@@ -22,6 +23,7 @@ import { EditTeamDialog } from "@/components/teams/EditTeamDialog";
 import { TeamRosterHistory } from "@/components/teams/TeamRosterHistory";
 
 const TeamDetail = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -69,9 +71,9 @@ const TeamDetail = () => {
         <Navbar />
         <main className="pt-24 pb-16">
           <div className="container text-center">
-            <h1 className="text-2xl font-bold mb-4">Team not found</h1>
+            <h1 className="text-2xl font-bold mb-4">{t('teamDetail.notFound')}</h1>
             <Button variant="rift" onClick={() => navigate("/teams")}>
-              Browse Teams
+              {t('teamDetail.browseTeams')}
             </Button>
           </div>
         </main>
@@ -98,13 +100,13 @@ const TeamDetail = () => {
   };
 
   const handleRemoveMember = (memberId: string) => {
-    if (confirm("Remove this member from the team?")) {
+    if (confirm(t('teamDetail.confirmRemove'))) {
       removeMember.mutate({ memberId, teamId: team.id });
     }
   };
 
   const handleLeaveTeam = () => {
-    if (confirm("Are you sure you want to leave this team?")) {
+    if (confirm(t('teamDetail.confirmLeave'))) {
       leaveTeam.mutate(team.id, {
         onSuccess: () => navigate("/teams")
       });
@@ -189,7 +191,7 @@ const TeamDetail = () => {
                     onClick={() => setShowEditDialog(true)}
                   >
                     <Pencil className="mr-2 h-4 w-4" />
-                    Edit Team
+                    {t('teamDetail.editTeam')}
                   </Button>
                 )}
                 {isMember && !isCaptain && (
@@ -200,7 +202,7 @@ const TeamDetail = () => {
                     disabled={leaveTeam.isPending}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
-                    Leave Team
+                    {t('teamDetail.leaveTeam')}
                   </Button>
                 )}
               </div>
@@ -219,7 +221,7 @@ const TeamDetail = () => {
                 <RiftCardHeader className="flex flex-row items-center justify-between">
                   <RiftCardTitle className="flex items-center gap-2">
                     <Users className="h-5 w-5 text-primary" />
-                    Members ({members?.length || 0}/{team.max_members})
+                    {t('teamDetail.members')} ({members?.length || 0}/{team.max_members})
                   </RiftCardTitle>
                   {canInvite && (
                     <Button 
@@ -228,7 +230,7 @@ const TeamDetail = () => {
                       onClick={() => setShowInviteDialog(true)}
                     >
                       <UserPlus className="mr-2 h-4 w-4" />
-                      Invite
+                      {t('teamDetail.invite')}
                     </Button>
                   )}
                 </RiftCardHeader>
@@ -286,13 +288,13 @@ const TeamDetail = () => {
                   <RiftCardHeader>
                     <RiftCardTitle className="flex items-center gap-2">
                       <Mail className="h-5 w-5 text-primary" />
-                      Pending Invites
+                      {t('teamDetail.pendingInvites')}
                     </RiftCardTitle>
                   </RiftCardHeader>
                   <RiftCardContent>
                     {!invites || invites.length === 0 ? (
                       <p className="text-center text-muted-foreground py-4">
-                        No pending invites
+                        {t('teamDetail.noPendingInvites')}
                       </p>
                     ) : (
                       <div className="space-y-2">
@@ -310,7 +312,7 @@ const TeamDetail = () => {
                             <span className="text-sm font-medium flex-1">
                               {invite.user?.username}
                             </span>
-                            <Badge variant="secondary">Pending</Badge>
+                            <Badge variant="secondary">{t('teamDetail.pending')}</Badge>
                           </div>
                         ))}
                       </div>
@@ -338,13 +340,13 @@ const TeamDetail = () => {
       <Dialog open={showInviteDialog} onOpenChange={setShowInviteDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Invite Player</DialogTitle>
+            <DialogTitle>{t('teamDetail.invitePlayer')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Username</Label>
+              <Label>{t('teamDetail.username')}</Label>
               <Input
-                placeholder="Enter player's username"
+                placeholder={t('teamDetail.usernamePlaceholder')}
                 value={inviteUsername}
                 onChange={(e) => setInviteUsername(e.target.value)}
               />
@@ -352,7 +354,7 @@ const TeamDetail = () => {
           </div>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setShowInviteDialog(false)}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button 
               variant="rift" 
@@ -364,7 +366,7 @@ const TeamDetail = () => {
               ) : (
                 <UserPlus className="mr-2 h-4 w-4" />
               )}
-              Send Invite
+              {t('teamDetail.sendInvite')}
             </Button>
           </DialogFooter>
         </DialogContent>

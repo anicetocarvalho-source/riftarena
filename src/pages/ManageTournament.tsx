@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -30,6 +31,7 @@ import { MatchesTab } from "@/components/tournaments/MatchesTab";
 import { TournamentSettingsTab } from "@/components/tournaments/TournamentSettingsTab";
 
 const ManageTournament = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { user, isOrganizer, isAdmin, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -121,43 +123,43 @@ const ManageTournament = () => {
               
               <div className="flex flex-wrap gap-2">
                 {tournament.status === "draft" && (
-                  <Button 
-                    variant="rift" 
-                    onClick={() => handleStatusChange("registration")}
-                    disabled={updateStatus.isPending}
-                  >
-                    <Play className="mr-2 h-4 w-4" />
-                    Open Registration
+                    <Button 
+                      variant="rift" 
+                      onClick={() => handleStatusChange("registration")}
+                      disabled={updateStatus.isPending}
+                    >
+                      <Play className="mr-2 h-4 w-4" />
+                      {t('manageTournament.openRegistration')}
                   </Button>
                 )}
                 {tournament.status === "registration" && (
                   <>
-                    <Button 
-                      variant="rift" 
-                      onClick={() => handleStatusChange("live")}
-                      disabled={updateStatus.isPending || confirmedCount < 2}
-                    >
-                      <Play className="mr-2 h-4 w-4" />
-                      Start Tournament
-                    </Button>
-                    <Button 
-                      variant="rift-outline" 
-                      onClick={() => handleStatusChange("draft")}
-                      disabled={updateStatus.isPending}
-                    >
-                      <Pause className="mr-2 h-4 w-4" />
-                      Close Registration
+                      <Button 
+                        variant="rift" 
+                        onClick={() => handleStatusChange("live")}
+                        disabled={updateStatus.isPending || confirmedCount < 2}
+                      >
+                        <Play className="mr-2 h-4 w-4" />
+                        {t('manageTournament.startTournament')}
+                      </Button>
+                      <Button 
+                        variant="rift-outline" 
+                        onClick={() => handleStatusChange("draft")}
+                        disabled={updateStatus.isPending}
+                      >
+                        <Pause className="mr-2 h-4 w-4" />
+                        {t('manageTournament.closeRegistration')}
                     </Button>
                   </>
                 )}
                 {tournament.status === "live" && (
                   <Button 
-                    variant="rift" 
-                    onClick={() => handleStatusChange("completed")}
-                    disabled={updateStatus.isPending}
-                  >
-                    <CheckCircle className="mr-2 h-4 w-4" />
-                    Complete Tournament
+                      variant="rift" 
+                      onClick={() => handleStatusChange("completed")}
+                      disabled={updateStatus.isPending}
+                    >
+                      <CheckCircle className="mr-2 h-4 w-4" />
+                      {t('manageTournament.completeTournament')}
                   </Button>
                 )}
               </div>
@@ -178,7 +180,7 @@ const ManageTournament = () => {
                 </div>
                 <div>
                   <p className="text-xl font-display font-bold">{confirmedCount}/{tournament.max_participants}</p>
-                  <p className="text-xs text-muted-foreground">Confirmed</p>
+                  <p className="text-xs text-muted-foreground">{t('manageTournament.confirmed')}</p>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -189,7 +191,7 @@ const ManageTournament = () => {
                 </div>
                 <div>
                   <p className="text-xl font-display font-bold">{pendingCount}</p>
-                  <p className="text-xs text-muted-foreground">Pending</p>
+                  <p className="text-xs text-muted-foreground">{t('manageTournament.pending')}</p>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -200,7 +202,7 @@ const ManageTournament = () => {
                 </div>
                 <div>
                   <p className="text-xl font-display font-bold">{matches?.length || 0}</p>
-                  <p className="text-xs text-muted-foreground">Matches</p>
+                  <p className="text-xs text-muted-foreground">{t('manageTournament.matches')}</p>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -227,19 +229,19 @@ const ManageTournament = () => {
               <TabsList className="mb-6">
                 <TabsTrigger value="registrations">
                   <Users className="mr-2 h-4 w-4" />
-                  Registrations
+                  {t('manageTournament.registrations')}
                 </TabsTrigger>
                 <TabsTrigger value="bracket">
                   <GitBranch className="mr-2 h-4 w-4" />
-                  Bracket
+                  {t('manageTournament.bracket')}
                 </TabsTrigger>
                 <TabsTrigger value="matches">
                   <Trophy className="mr-2 h-4 w-4" />
-                  Matches
+                  {t('manageTournament.matches')}
                 </TabsTrigger>
                 <TabsTrigger value="settings">
                   <Settings className="mr-2 h-4 w-4" />
-                  Settings
+                  {t('manageTournament.settings')}
                 </TabsTrigger>
               </TabsList>
 

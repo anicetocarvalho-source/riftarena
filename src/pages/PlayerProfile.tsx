@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
@@ -27,6 +28,7 @@ import { EloProgressionChart } from "@/components/profile/EloProgressionChart";
 import { GlossaryTerm } from "@/components/ui/glossary-term";
 
 const PlayerProfile = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { data: profile, isLoading: profileLoading } = usePlayerProfile(id || "");
   const { data: matches, isLoading: matchesLoading } = usePlayerMatches(id || "", 20);
@@ -49,8 +51,8 @@ const PlayerProfile = () => {
         <Navbar />
         <main className="pt-24 pb-16">
           <div className="container text-center py-20">
-            <h1 className="font-display text-2xl uppercase mb-4">Player Not Found</h1>
-            <p className="text-muted-foreground">This player profile doesn't exist.</p>
+            <h1 className="font-display text-2xl uppercase mb-4">{t('playerProfile.notFound')}</h1>
+            <p className="text-muted-foreground">{t('playerProfile.notFoundDesc')}</p>
           </div>
         </main>
         <Footer />
@@ -147,10 +149,10 @@ const PlayerProfile = () => {
                         </span>
                       )}
                       <span className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" />
-                        Joined {format(new Date(profile.created_at), "MMM yyyy")}
-                      </span>
-                    </div>
+                          <Calendar className="h-4 w-4" />
+                          {t('playerProfile.joined')} {format(new Date(profile.created_at), "MMM yyyy")}
+                        </span>
+                      </div>
                     {profile.bio && (
                       <p className="mt-3 text-muted-foreground max-w-2xl">
                         {profile.bio}
@@ -214,7 +216,7 @@ const PlayerProfile = () => {
                 <div>
                   <p className="text-2xl font-display font-bold">{bestRanking?.elo_rating || 1200}</p>
                   <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                    <GlossaryTerm term="elo" showIcon={false}>Current ELO</GlossaryTerm>
+                    <GlossaryTerm term="elo" showIcon={false}>{t('playerProfile.currentElo')}</GlossaryTerm>
                   </p>
                 </div>
               </RiftCardContent>
@@ -228,7 +230,7 @@ const PlayerProfile = () => {
                 <div>
                   <p className="text-2xl font-display font-bold">{winRate}%</p>
                   <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                    <GlossaryTerm term="winRate" showIcon={false}>Win Rate</GlossaryTerm>
+                    <GlossaryTerm term="winRate" showIcon={false}>{t('playerProfile.winRate')}</GlossaryTerm>
                   </p>
                 </div>
               </RiftCardContent>
@@ -241,7 +243,7 @@ const PlayerProfile = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-display font-bold">{totalMatches}</p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">Matches</p>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">{t('playerProfile.matches')}</p>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -257,7 +259,7 @@ const PlayerProfile = () => {
                     <span className="text-muted-foreground mx-1">/</span>
                     <span className="text-destructive">{totalLosses}</span>
                   </p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">W/L Record</p>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">{t('playerProfile.wlRecord')}</p>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -271,9 +273,9 @@ const PlayerProfile = () => {
           >
             <Tabs defaultValue="overview" className="w-full">
               <TabsList className="mb-6">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="matches">Match History</TabsTrigger>
-                <TabsTrigger value="achievements">Achievements</TabsTrigger>
+                <TabsTrigger value="overview">{t('playerProfile.overview')}</TabsTrigger>
+                <TabsTrigger value="matches">{t('playerProfile.matchHistory')}</TabsTrigger>
+                <TabsTrigger value="achievements">{t('playerProfile.achievements')}</TabsTrigger>
               </TabsList>
 
               {/* Overview Tab */}
@@ -292,7 +294,7 @@ const PlayerProfile = () => {
                     <RiftCardHeader>
                       <RiftCardTitle className="flex items-center gap-2">
                         <Gamepad2 className="h-5 w-5 text-primary" />
-                        Rankings by Game
+                        {t('playerProfile.rankingsByGame')}
                       </RiftCardTitle>
                     </RiftCardHeader>
                     <RiftCardContent>
@@ -325,7 +327,7 @@ const PlayerProfile = () => {
                         </div>
                       ) : (
                         <div className="text-center py-8 text-muted-foreground">
-                          No game rankings yet
+                          {t('playerProfile.noRankings')}
                         </div>
                       )}
                     </RiftCardContent>
@@ -336,7 +338,7 @@ const PlayerProfile = () => {
                     <RiftCardHeader>
                       <RiftCardTitle className="flex items-center gap-2">
                         <Award className="h-5 w-5 text-primary" />
-                        Recent Achievements
+                        {t('playerProfile.recentAchievements')}
                       </RiftCardTitle>
                     </RiftCardHeader>
                     <RiftCardContent>
@@ -360,7 +362,7 @@ const PlayerProfile = () => {
                         </div>
                       ) : (
                         <div className="text-center py-8 text-muted-foreground">
-                          No achievements unlocked yet
+                          {t('playerProfile.noAchievements')}
                         </div>
                       )}
                     </RiftCardContent>
@@ -372,7 +374,7 @@ const PlayerProfile = () => {
               <TabsContent value="matches">
                 <RiftCard>
                   <RiftCardHeader>
-                    <RiftCardTitle>Match History</RiftCardTitle>
+                    <RiftCardTitle>{t('playerProfile.matchHistory')}</RiftCardTitle>
                   </RiftCardHeader>
                   <RiftCardContent>
                     {matches && matches.length > 0 ? (
@@ -401,16 +403,16 @@ const PlayerProfile = () => {
                             >
                               <div className="flex items-center gap-4">
                                 <Badge variant={isWinner ? "default" : "destructive"} className="font-display w-12 justify-center">
-                                  {isWinner ? "WIN" : "LOSS"}
+                                  {isWinner ? t('playerProfile.win') : t('playerProfile.loss')}
                                 </Badge>
                                 <div>
                                   <p className="font-display text-sm">
-                                    vs {opponent?.username || "Unknown"}
+                                    {t('playerProfile.vs')} {opponent?.username || "Unknown"}
                                   </p>
                                   <p className="text-xs text-muted-foreground flex items-center gap-2">
                                     {match.tournament?.game?.icon} {match.tournament?.name}
                                     <span>•</span>
-                                    Round {match.round}
+                                    {t('playerProfile.round')} {match.round}
                                   </p>
                                 </div>
                               </div>
@@ -429,9 +431,9 @@ const PlayerProfile = () => {
                     ) : (
                       <div className="flex flex-col items-center justify-center py-12 text-center">
                         <Gamepad2 className="h-12 w-12 text-muted-foreground/50 mb-4" />
-                        <p className="text-muted-foreground">No matches played yet</p>
+                        <p className="text-muted-foreground">{t('playerProfile.noMatches')}</p>
                         <p className="text-sm text-muted-foreground mt-1">
-                          Join a tournament to start competing
+                          {t('playerProfile.noMatchesDesc')}
                         </p>
                       </div>
                     )}
@@ -448,7 +450,7 @@ const PlayerProfile = () => {
                       <RiftCardHeader>
                         <RiftCardTitle className="flex items-center gap-2">
                           <Award className="h-5 w-5 text-primary" />
-                          Unlocked ({unlockedAchievements.length})
+                          {t('playerProfile.unlocked')} ({unlockedAchievements.length})
                         </RiftCardTitle>
                       </RiftCardHeader>
                       <RiftCardContent>
@@ -481,7 +483,7 @@ const PlayerProfile = () => {
                     <RiftCardHeader>
                       <RiftCardTitle className="flex items-center gap-2">
                         <Lock className="h-5 w-5 text-muted-foreground" />
-                        Locked ({lockedAchievements.length})
+                        {t('playerProfile.locked')} ({lockedAchievements.length})
                       </RiftCardTitle>
                     </RiftCardHeader>
                     <RiftCardContent>
