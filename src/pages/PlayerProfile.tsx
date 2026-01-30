@@ -102,7 +102,7 @@ const PlayerProfile = () => {
           {/* Breadcrumbs */}
           <PageBreadcrumbs 
             items={[
-              { label: "Rankings", href: "/rankings" },
+              { label: t('rankings.title'), href: "/rankings" },
               { label: profile.username, icon: <User className="h-4 w-4" /> }
             ]}
             className="mb-6"
