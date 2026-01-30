@@ -1,33 +1,36 @@
+import { useTranslation } from "react-i18next";
 import { RiftLogo } from "@/components/brand/RiftLogo";
 import { Link } from "react-router-dom";
 
-const footerLinks = {
-  platform: [
-    { label: "Tournaments", href: "/tournaments" },
-    { label: "Rankings", href: "/rankings" },
-    { label: "Games", href: "/games" },
-    { label: "Teams", href: "/teams" },
-  ],
-  company: [
-    { label: "About", href: "/about" },
-    { label: "Partners", href: "/sponsors" },
-    { label: "Careers", href: "/careers" },
-    { label: "Press", href: "/press" },
-  ],
-  support: [
-    { label: "Help Center", href: "/help" },
-    { label: "Contact", href: "/contact" },
-    { label: "Rules", href: "/rules" },
-    { label: "Report", href: "/report" },
-  ],
-  legal: [
-    { label: "Privacy", href: "/privacy" },
-    { label: "Terms", href: "/terms" },
-    { label: "Cookies", href: "/cookies" },
-  ],
-};
-
 export function Footer() {
+  const { t } = useTranslation();
+
+  const footerLinks = {
+    platform: [
+      { label: t("nav.tournaments"), href: "/tournaments" },
+      { label: t("nav.rankings"), href: "/rankings" },
+      { label: t("nav.games"), href: "/games" },
+      { label: t("nav.teams"), href: "/teams" },
+    ],
+    company: [
+      { label: t("footer.about"), href: "/about" },
+      { label: t("footer.partners"), href: "/sponsors" },
+      { label: t("footer.careers"), href: "/careers" },
+      { label: t("footer.press"), href: "/press" },
+    ],
+    support: [
+      { label: t("footer.helpCenter"), href: "/help" },
+      { label: t("footer.contact"), href: "/contact" },
+      { label: t("footer.rules"), href: "/rules" },
+      { label: t("footer.report"), href: "/report" },
+    ],
+    legal: [
+      { label: t("footer.privacy"), href: "/privacy" },
+      { label: t("footer.terms"), href: "/terms" },
+      { label: t("footer.cookies"), href: "/cookies" },
+    ],
+  };
+
   return (
     <footer className="border-t border-border bg-background">
       <div className="container py-16">
@@ -36,14 +39,14 @@ export function Footer() {
           <div className="col-span-2 flex flex-col items-start">
             <RiftLogo showTagline />
             <p className="mt-6 text-sm text-muted-foreground max-w-xs text-left">
-              The premier esports competition platform. Where champions are born and legends compete.
+              {t("footer.description")}
             </p>
           </div>
 
           {/* Links */}
           <div>
             <h4 className="font-display text-sm font-semibold uppercase tracking-wider mb-4">
-              Platform
+              {t("footer.platform")}
             </h4>
             <ul className="space-y-3">
               {footerLinks.platform.map((link) => (
@@ -61,7 +64,7 @@ export function Footer() {
 
           <div>
             <h4 className="font-display text-sm font-semibold uppercase tracking-wider mb-4">
-              Company
+              {t("footer.company")}
             </h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
@@ -79,7 +82,7 @@ export function Footer() {
 
           <div>
             <h4 className="font-display text-sm font-semibold uppercase tracking-wider mb-4">
-              Support
+              {t("footer.support")}
             </h4>
             <ul className="space-y-3">
               {footerLinks.support.map((link) => (
@@ -97,7 +100,7 @@ export function Footer() {
 
           <div>
             <h4 className="font-display text-sm font-semibold uppercase tracking-wider mb-4">
-              Legal
+              {t("footer.legal")}
             </h4>
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
@@ -117,7 +120,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            © 2025 RIFT. All rights reserved.
+            © 2025 RIFT. {t("footer.rights")}
           </p>
           <div className="flex items-center gap-6">
             <a href="https://x.com/riftarena" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" title="X (Twitter)">
