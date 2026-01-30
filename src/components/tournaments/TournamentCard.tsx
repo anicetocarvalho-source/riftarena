@@ -42,7 +42,7 @@ export function TournamentCard({ tournament, index = 0, onManage }: TournamentCa
         <div className="absolute right-4 top-4">
           <Badge variant={displayStatus as "live" | "upcoming" | "completed"}>
             {tournament.status === "live" && "● "}
-            {tournament.status.toUpperCase()}
+            {t(`tournamentStatus.${tournament.status}`)}
           </Badge>
         </div>
 
