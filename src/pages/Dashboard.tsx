@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/layout/Navbar";
@@ -11,12 +12,13 @@ import { MyTeamsSection } from "@/components/dashboard/MyTeamsSection";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { 
-  Trophy, Users, Gamepad2, Calendar, TrendingUp, Settings, 
-  Shield, BarChart3, DollarSign, Bell, ChevronRight, Loader2, Search
+  Trophy, Users, Gamepad2, TrendingUp, Settings, 
+  Shield, BarChart3, DollarSign, Bell, Loader2, Search
 } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const { user, profile, roles, isLoading, isAdmin, isOrganizer, isSponsor, signOut } = useAuth();
   const { showOnboarding, isLoading: onboardingLoading, completeOnboarding, skipOnboarding } = useOnboarding();
   const navigate = useNavigate();
@@ -73,7 +75,7 @@ const Dashboard = () => {
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <h1 className="font-display text-3xl font-bold uppercase tracking-wide">
-                    Welcome, {profile.username}
+                    {t('dashboard.welcome')}, {profile.username}
                   </h1>
                   <div className="flex gap-2">
                     {roles.map((role) => (
@@ -85,20 +87,20 @@ const Dashboard = () => {
                 </div>
                 <p className="text-muted-foreground">
                   {profile.country && `${profile.country} • `}
-                  Manage your tournaments, track rankings, and grow your esports career.
+                  {t('dashboard.welcomeMessage')}
                 </p>
               </div>
               <div className="flex gap-3">
                 <Button variant="rift" size="sm" onClick={() => navigate(`/player/${user.id}`)}>
                   <Users className="mr-2 h-4 w-4" />
-                  View Profile
+                  {t('dashboard.viewProfile')}
                 </Button>
                 <Button variant="rift-outline" size="sm" onClick={() => navigate("/settings")}>
                   <Settings className="mr-2 h-4 w-4" />
-                  Configurações
+                  {t('dashboard.settings')}
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => signOut()}>
-                  Sign Out
+                  {t('dashboard.signOut')}
                 </Button>
               </div>
             </div>
@@ -118,7 +120,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-display font-bold">0</p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">Tournaments</p>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">{t('dashboard.tournaments')}</p>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -130,7 +132,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-display font-bold">—</p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">Current Rank</p>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">{t('dashboard.currentRank')}</p>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -142,7 +144,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-display font-bold">0</p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">Matches Played</p>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">{t('dashboard.matchesPlayed')}</p>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -154,7 +156,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-display font-bold">$0</p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">Winnings</p>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">{t('dashboard.winnings')}</p>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -173,18 +175,18 @@ const Dashboard = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <Gamepad2 className="h-5 w-5 text-primary" />
-                    My Tournaments
+                    {t('dashboard.myTournaments')}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
                   <EmptyState
                     icon={Trophy}
-                    title="Ainda não participaste em torneios"
-                    description="Explora os torneios disponíveis e inscreve-te para começar a competir e subir no ranking!"
-                    tip="Torneios gratuitos são uma ótima forma de começar."
+                    title={t('dashboard.noTournamentsYet')}
+                    description={t('dashboard.noTournamentsDesc')}
+                    tip={t('dashboard.noTournamentsTip')}
                     actions={[
                       {
-                        label: "Explorar Torneios",
+                        label: t('dashboard.exploreTournaments'),
                         onClick: () => navigate("/tournaments"),
                         icon: Search,
                       },
@@ -205,14 +207,14 @@ const Dashboard = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <Bell className="h-5 w-5 text-primary" />
-                    Notifications
+                    {t('dashboard.notifications')}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
                   <div className="flex flex-col items-center justify-center py-8 text-center">
                     <Bell className="h-8 w-8 text-muted-foreground/50 mb-3" />
                     <p className="text-sm text-muted-foreground">
-                      No new notifications
+                      {t('dashboard.noNotifications')}
                     </p>
                   </div>
                 </RiftCardContent>
@@ -235,32 +237,32 @@ const Dashboard = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <Trophy className="h-5 w-5 text-primary" />
-                    Organizer Dashboard
+                    {t('dashboard.organizerDashboard')}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
                   <div className="grid gap-4 md:grid-cols-3">
                     <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/tournaments/create")}>
                       <div className="text-left">
-                        <p className="font-display uppercase tracking-wider">Create Tournament</p>
+                        <p className="font-display uppercase tracking-wider">{t('dashboard.createTournament')}</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
-                          Set up a new competition
+                          {t('dashboard.createTournamentDesc')}
                         </p>
                       </div>
                     </Button>
                     <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/tournaments")}>
                       <div className="text-left">
-                        <p className="font-display uppercase tracking-wider">Manage Tournaments</p>
+                        <p className="font-display uppercase tracking-wider">{t('dashboard.manageTournaments')}</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
-                          Edit existing events
+                          {t('dashboard.manageTournamentsDesc')}
                         </p>
                       </div>
                     </Button>
                     <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/tournaments")}>
                       <div className="text-left">
-                        <p className="font-display uppercase tracking-wider">Match Results</p>
+                        <p className="font-display uppercase tracking-wider">{t('dashboard.matchResults')}</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
-                          Validate and submit scores
+                          {t('dashboard.matchResultsDesc')}
                         </p>
                       </div>
                     </Button>
@@ -282,17 +284,17 @@ const Dashboard = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <BarChart3 className="h-5 w-5 text-primary" />
-                    Sponsor Dashboard
+                    {t('dashboard.sponsorDashboard')}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
                   <div className="flex flex-col gap-4">
                     <p className="text-muted-foreground">
-                      Acesse o dashboard completo para visualizar métricas de engajamento, campanhas e audiência.
+                      {t('dashboard.sponsorDashboardDesc')}
                     </p>
                     <Button variant="rift" onClick={() => navigate("/sponsor/dashboard")}>
                       <BarChart3 className="mr-2 h-4 w-4" />
-                      Abrir Dashboard de Sponsor
+                      {t('dashboard.openSponsorDashboard')}
                     </Button>
                   </div>
                 </RiftCardContent>
@@ -312,40 +314,40 @@ const Dashboard = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <Shield className="h-5 w-5 text-destructive" />
-                    Admin Panel
+                    {t('dashboard.adminPanel')}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
                   <div className="grid gap-4 md:grid-cols-4">
                     <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/admin/users")}>
                       <div className="text-left">
-                        <p className="font-display uppercase tracking-wider">User Management</p>
+                        <p className="font-display uppercase tracking-wider">{t('dashboard.userManagement')}</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
-                          Manage roles and accounts
+                          {t('dashboard.userManagementDesc')}
                         </p>
                       </div>
                     </Button>
                     <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/tournaments")}>
                       <div className="text-left">
-                        <p className="font-display uppercase tracking-wider">All Tournaments</p>
+                        <p className="font-display uppercase tracking-wider">{t('dashboard.allTournaments')}</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
-                          Oversee all competitions
+                          {t('dashboard.allTournamentsDesc')}
                         </p>
                       </div>
                     </Button>
                     <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/sponsors")}>
                       <div className="text-left">
-                        <p className="font-display uppercase tracking-wider">Sponsor Management</p>
+                        <p className="font-display uppercase tracking-wider">{t('dashboard.sponsorManagement')}</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
-                          Manage brand partnerships
+                          {t('dashboard.sponsorManagementDesc')}
                         </p>
                       </div>
                     </Button>
                     <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/rankings")}>
                       <div className="text-left">
-                        <p className="font-display uppercase tracking-wider">Platform Analytics</p>
+                        <p className="font-display uppercase tracking-wider">{t('dashboard.platformAnalytics')}</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
-                          Overview of all metrics
+                          {t('dashboard.platformAnalyticsDesc')}
                         </p>
                       </div>
                     </Button>

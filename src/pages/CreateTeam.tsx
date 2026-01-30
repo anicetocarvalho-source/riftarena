@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/layout/Navbar";
@@ -15,6 +16,7 @@ import { useCreateTeam } from "@/hooks/useTeams";
 import { ArrowLeft, Users, Loader2 } from "lucide-react";
 
 const CreateTeam = () => {
+  const { t } = useTranslation();
   const { user, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const createTeam = useCreateTeam();
@@ -71,14 +73,14 @@ const CreateTeam = () => {
               onClick={() => navigate("/teams")}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Teams
+              {t('createTeam.backToTeams')}
             </Button>
-            <Badge variant="default" className="mb-4">Create Team</Badge>
+            <Badge variant="default" className="mb-4">{t('createTeam.badge')}</Badge>
             <h1 className="font-display text-3xl font-bold uppercase tracking-wide mb-2">
-              Create Your Team
+              {t('createTeam.title')}
             </h1>
             <p className="text-muted-foreground">
-              Build your roster and compete in team-based tournaments.
+              {t('createTeam.subtitle')}
             </p>
           </motion.div>
 
@@ -93,16 +95,16 @@ const CreateTeam = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <Users className="h-5 w-5 text-primary" />
-                    Team Information
+                    {t('createTeam.teamInfo')}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Team Name *</Label>
+                      <Label htmlFor="name">{t('createTeam.teamName')} *</Label>
                       <Input
                         id="name"
-                        placeholder="Enter team name"
+                        placeholder={t('createTeam.teamNamePlaceholder')}
                         value={formData.name}
                         onChange={(e) => handleChange("name", e.target.value)}
                         maxLength={50}
@@ -110,23 +112,23 @@ const CreateTeam = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="tag">Team Tag *</Label>
+                      <Label htmlFor="tag">{t('createTeam.teamTag')} *</Label>
                       <Input
                         id="tag"
-                        placeholder="e.g., TSM, FNC"
+                        placeholder={t('createTeam.teamTagPlaceholder')}
                         value={formData.tag}
                         onChange={(e) => handleChange("tag", e.target.value.toUpperCase())}
                         maxLength={5}
                         required
                       />
                       <p className="text-xs text-muted-foreground">
-                        2-5 characters, will be displayed in brackets
+                        {t('createTeam.teamTagHint')}
                       </p>
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="max_members">Max Team Size</Label>
+                    <Label htmlFor="max_members">{t('createTeam.maxTeamSize')}</Label>
                     <Select
                       value={String(formData.max_members)}
                       onValueChange={(value) => handleChange("max_members", parseInt(value))}
@@ -137,7 +139,7 @@ const CreateTeam = () => {
                       <SelectContent>
                         {[3, 4, 5, 6, 7, 8, 10].map((num) => (
                           <SelectItem key={num} value={String(num)}>
-                            {num} members
+                            {num} {t('createTeam.members')}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -145,10 +147,10 @@ const CreateTeam = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
+                    <Label htmlFor="description">{t('createTeam.description')}</Label>
                     <Textarea
                       id="description"
-                      placeholder="Tell us about your team..."
+                      placeholder={t('createTeam.descriptionPlaceholder')}
                       value={formData.description}
                       onChange={(e) => handleChange("description", e.target.value)}
                       rows={4}
@@ -171,7 +173,7 @@ const CreateTeam = () => {
                 variant="rift-outline"
                 onClick={() => navigate("/teams")}
               >
-                Cancel
+                {t('createTeam.cancel')}
               </Button>
               <Button
                 type="submit"
@@ -181,12 +183,12 @@ const CreateTeam = () => {
                 {createTeam.isPending ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creating...
+                    {t('createTeam.creating')}
                   </>
                 ) : (
                   <>
                     <Users className="mr-2 h-4 w-4" />
-                    Create Team
+                    {t('createTeam.create')}
                   </>
                 )}
               </Button>
