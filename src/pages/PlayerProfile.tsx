@@ -24,6 +24,7 @@ import {
 } from "@/hooks/usePlayerProfile";
 import { useEloHistory, getRankTier, getWinRate } from "@/hooks/useRankings";
 import { EloProgressionChart } from "@/components/profile/EloProgressionChart";
+import { GlossaryTerm } from "@/components/ui/glossary-term";
 
 const PlayerProfile = () => {
   const { id } = useParams<{ id: string }>();
@@ -212,7 +213,9 @@ const PlayerProfile = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-display font-bold">{bestRanking?.elo_rating || 1200}</p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">Current ELO</p>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                    <GlossaryTerm term="elo" showIcon={false}>Current ELO</GlossaryTerm>
+                  </p>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -224,7 +227,9 @@ const PlayerProfile = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-display font-bold">{winRate}%</p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">Win Rate</p>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                    <GlossaryTerm term="winRate" showIcon={false}>Win Rate</GlossaryTerm>
+                  </p>
                 </div>
               </RiftCardContent>
             </RiftCard>

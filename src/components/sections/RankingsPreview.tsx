@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { GlossaryTerm } from "@/components/ui/glossary-term";
 
 export function RankingsPreview() {
   const navigate = useNavigate();
@@ -187,7 +188,7 @@ export function RankingsPreview() {
                         {ranking.elo_rating}
                       </p>
                       <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                        ELO
+                        <GlossaryTerm term="elo" showIcon={false}>ELO</GlossaryTerm>
                       </p>
                     </div>
                     <div className="bg-secondary/50 rounded-sm p-2">

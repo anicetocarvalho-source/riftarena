@@ -2,6 +2,7 @@ import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/comp
 import { Button } from "@/components/ui/button";
 import { TournamentMatch, TournamentRegistration, TournamentStatus } from "@/types/tournament";
 import { Loader2, GitBranch, RefreshCw } from "lucide-react";
+import { GlossaryTerm } from "@/components/ui/glossary-term";
 
 interface BracketTabProps {
   matches: TournamentMatch[];
@@ -45,7 +46,7 @@ export const BracketTab = ({
       <RiftCardHeader className="flex flex-row items-center justify-between">
         <RiftCardTitle className="flex items-center gap-2">
           <GitBranch className="h-5 w-5 text-primary" />
-          Tournament Bracket
+          <GlossaryTerm term="bracket" showIcon={false}>Tournament Bracket</GlossaryTerm>
         </RiftCardTitle>
         {(tournamentStatus === "registration" || tournamentStatus === "live") && (
           <Button
