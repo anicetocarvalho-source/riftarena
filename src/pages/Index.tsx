@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { PlatformMetrics } from "@/components/sections/PlatformMetrics";
 import { FeaturedTournaments } from "@/components/sections/FeaturedTournaments";
 import { RankingsPreview } from "@/components/sections/RankingsPreview";
 import { GamesSection } from "@/components/sections/GamesSection";
@@ -13,6 +14,7 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroSection />
+        <PlatformMetrics />
         <SponsorsSection />
         <FeaturedTournaments />
         <RankingsPreview />
