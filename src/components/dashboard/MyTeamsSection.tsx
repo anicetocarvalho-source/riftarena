@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Users, UserPlus, LogOut, Eye, Crown, Loader2 } from "lucide-react";
+import { Users, UserPlus, LogOut, Eye, Crown, Loader2, UsersRound, Trophy } from "lucide-react";
 import { useUserTeams, useUserInvites, useRespondToInvite, useLeaveTeam } from "@/hooks/useTeams";
 import { useAuth } from "@/contexts/AuthContext";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -204,20 +205,26 @@ export const MyTeamsSection = () => {
                 </div>
               ) : (
                 !invites?.length && (
-                  <div className="flex flex-col items-center justify-center py-8 text-center">
-                    <Users className="h-12 w-12 text-muted-foreground/50 mb-4" />
-                    <p className="text-muted-foreground mb-4">
-                      You're not a member of any teams yet.
-                    </p>
-                    <div className="flex gap-3">
-                      <Button variant="rift" onClick={() => navigate("/teams/create")}>
-                        Create a Team
-                      </Button>
-                      <Button variant="rift-outline" onClick={() => navigate("/teams")}>
-                        Browse Teams
-                      </Button>
-                    </div>
-                  </div>
+                  <EmptyState
+                    icon={UsersRound}
+                    title="Ainda não tens equipa"
+                    description="Junta-te a uma equipa existente ou cria a tua própria para competir em torneios de equipa."
+                    tip="Equipas permitem-te participar em torneios team-based com prémios maiores!"
+                    actions={[
+                      {
+                        label: "Criar Equipa",
+                        onClick: () => navigate("/teams/create"),
+                        icon: UserPlus,
+                      },
+                      {
+                        label: "Explorar Equipas",
+                        onClick: () => navigate("/teams"),
+                        variant: "rift-outline",
+                        icon: Users,
+                      },
+                    ]}
+                    compact
+                  />
                 )
               )}
             </div>

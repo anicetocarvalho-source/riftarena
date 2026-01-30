@@ -12,8 +12,9 @@ import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { 
   Trophy, Users, Gamepad2, Calendar, TrendingUp, Settings, 
-  Shield, BarChart3, DollarSign, Bell, ChevronRight, Loader2
+  Shield, BarChart3, DollarSign, Bell, ChevronRight, Loader2, Search
 } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
 
 const Dashboard = () => {
   const { user, profile, roles, isLoading, isAdmin, isOrganizer, isSponsor, signOut } = useAuth();
@@ -176,16 +177,20 @@ const Dashboard = () => {
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
-                  <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <Calendar className="h-12 w-12 text-muted-foreground/50 mb-4" />
-                    <p className="text-muted-foreground mb-4">
-                      You haven't joined any tournaments yet.
-                    </p>
-                    <Button variant="rift" onClick={() => navigate("/tournaments")}>
-                      Browse Tournaments
-                      <ChevronRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </div>
+                  <EmptyState
+                    icon={Trophy}
+                    title="Ainda não participaste em torneios"
+                    description="Explora os torneios disponíveis e inscreve-te para começar a competir e subir no ranking!"
+                    tip="Torneios gratuitos são uma ótima forma de começar."
+                    actions={[
+                      {
+                        label: "Explorar Torneios",
+                        onClick: () => navigate("/tournaments"),
+                        icon: Search,
+                      },
+                    ]}
+                    compact
+                  />
                 </RiftCardContent>
               </RiftCard>
             </motion.div>

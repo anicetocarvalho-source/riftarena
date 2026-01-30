@@ -6,7 +6,8 @@ import { motion } from "framer-motion";
 import { TournamentCard } from "@/components/tournaments/TournamentCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Search, Plus, X, ArrowUpDown } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Calendar, Search, Plus, X, ArrowUpDown, Trophy, Gamepad2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useTournaments, useGames } from "@/hooks/useTournaments";
 import { useAuth } from "@/contexts/AuthContext";
@@ -243,14 +244,44 @@ const Tournaments = () => {
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           ) : transformedTournaments.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground mb-4">No tournaments found</p>
-              {(isOrganizer || isAdmin) && (
-                <Button variant="rift" onClick={() => navigate("/tournaments/create")}>
-                  Create Your First Tournament
-                </Button>
-              )}
-            </div>
+            hasActiveFilters ? (
+              <EmptyState
+                icon={Search}
+                title="Nenhum torneio encontrado"
+                description="Não há torneios que correspondam aos teus filtros. Tenta ajustar os critérios de pesquisa."
+                actions={[
+                  {
+                    label: "Limpar Filtros",
+                    onClick: clearFilters,
+                    icon: X,
+                  },
+                ]}
+              />
+            ) : (
+              <EmptyState
+                icon={Trophy}
+                title="Ainda não há torneios"
+                description="Sê o primeiro a criar um torneio e atrair competidores de todo o mundo!"
+                tip="Torneios com prémios atraem mais participantes."
+                actions={
+                  (isOrganizer || isAdmin)
+                    ? [
+                        {
+                          label: "Criar Torneio",
+                          onClick: () => navigate("/tournaments/create"),
+                          icon: Plus,
+                        },
+                      ]
+                    : [
+                        {
+                          label: "Explorar Jogos",
+                          onClick: () => navigate("/games"),
+                          icon: Gamepad2,
+                        },
+                      ]
+                }
+              />
+            )
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {transformedTournaments.map((tournament, index) => (
