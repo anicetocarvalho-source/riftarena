@@ -23,6 +23,7 @@ import CreateTeam from "@/pages/CreateTeam";
 import TeamDetail from "@/pages/TeamDetail";
 import PlayerProfile from "@/pages/PlayerProfile";
 import EditProfile from "@/pages/EditProfile";
+import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 
 export function AnimatedRoutes() {
@@ -54,6 +55,7 @@ export function AnimatedRoutes() {
         <Route path="/tournaments/manage/:id" element={<PageTransition><ManageTournament /></PageTransition>} />
         <Route path="/player/:id" element={<PageTransition><PlayerProfile /></PageTransition>} />
         <Route path="/profile/edit" element={<PageTransition><EditProfile /></PageTransition>} />
+        <Route path="/settings" element={<PageTransition><Settings /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>
