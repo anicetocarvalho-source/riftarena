@@ -90,6 +90,48 @@ export type Database = {
           },
         ]
       }
+      partnership_inquiries: {
+        Row: {
+          company_name: string
+          contact_name: string
+          created_at: string
+          email: string
+          id: string
+          message: string
+          phone: string | null
+          preferred_tier: string | null
+          status: string
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          company_name: string
+          contact_name: string
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          phone?: string | null
+          preferred_tier?: string | null
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          company_name?: string
+          contact_name?: string
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          phone?: string | null
+          preferred_tier?: string | null
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       player_rankings: {
         Row: {
           best_win_streak: number
