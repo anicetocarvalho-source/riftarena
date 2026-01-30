@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +28,7 @@ export const MatchesTab = ({
   isUpdating,
   tournamentStatus,
 }: MatchesTabProps) => {
+  const { t } = useTranslation();
   const [selectedMatch, setSelectedMatch] = useState<TournamentMatch | null>(null);
   const [p1Score, setP1Score] = useState("");
   const [p2Score, setP2Score] = useState("");
@@ -47,13 +49,13 @@ export const MatchesTab = ({
   const getStatusBadge = (status: MatchStatus) => {
     switch (status) {
       case "completed":
-        return <Badge variant="diamond">Completed</Badge>;
+        return <Badge variant="diamond">{t('matchesTab.completed')}</Badge>;
       case "in_progress":
-        return <Badge variant="gold">In Progress</Badge>;
+        return <Badge variant="gold">{t('matchesTab.inProgress')}</Badge>;
       case "disputed":
-        return <Badge variant="destructive">Disputed</Badge>;
+        return <Badge variant="destructive">{t('matchesTab.disputed')}</Badge>;
       default:
-        return <Badge variant="secondary">Pending</Badge>;
+        return <Badge variant="secondary">{t('matchesTab.pendingStatus')}</Badge>;
     }
   };
 
@@ -89,13 +91,13 @@ export const MatchesTab = ({
           <RiftCardHeader>
             <RiftCardTitle className="flex items-center gap-2">
               <Trophy className="h-5 w-5 text-primary" />
-              Matches Awaiting Results ({pendingMatches.length})
+              {t('matchesTab.matchesAwaiting')} ({pendingMatches.length})
             </RiftCardTitle>
           </RiftCardHeader>
           <RiftCardContent>
             {pendingMatches.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
-                No matches awaiting results
+                {t('matchesTab.noMatchesAwaiting')}
               </div>
             ) : (
               <div className="space-y-3">
@@ -106,11 +108,11 @@ export const MatchesTab = ({
                   >
                     <div className="flex items-center gap-4">
                       <div className="text-sm text-muted-foreground">
-                        Round {match.round}, Match {match.match_number}
+                        {t('matchesTab.round')} {match.round}, {t('matchesTab.match')} {match.match_number}
                       </div>
                       <div className="font-medium">
                         {match.participant1?.username || "TBD"} 
-                        <span className="text-muted-foreground mx-2">vs</span>
+                        <span className="text-muted-foreground mx-2">{t('matchesTab.vs')}</span>
                         {match.participant2?.username || "TBD"}
                       </div>
                     </div>
@@ -122,7 +124,7 @@ export const MatchesTab = ({
                           variant="rift"
                           onClick={() => openResultDialog(match)}
                         >
-                          Submit Result
+                          {t('matchesTab.submitResult')}
                         </Button>
                       )}
                     </div>
@@ -139,7 +141,7 @@ export const MatchesTab = ({
             <RiftCardHeader>
               <RiftCardTitle className="flex items-center gap-2">
                 <Check className="h-5 w-5 text-success" />
-                Completed Matches ({completedMatches.length})
+                {t('matchesTab.completedMatches')} ({completedMatches.length})
               </RiftCardTitle>
             </RiftCardHeader>
             <RiftCardContent>
@@ -151,7 +153,7 @@ export const MatchesTab = ({
                   >
                     <div className="flex items-center gap-4">
                       <div className="text-sm text-muted-foreground">
-                        Round {match.round}, Match {match.match_number}
+                        {t('matchesTab.round')} {match.round}, {t('matchesTab.match')} {match.match_number}
                       </div>
                       <div className="font-medium">
                         <span className={match.winner_id === match.participant1_id ? "text-primary" : ""}>
@@ -167,7 +169,7 @@ export const MatchesTab = ({
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge variant="gold">
-                        Winner: {match.winner?.username}
+                        {t('matchesTab.winner')}: {match.winner?.username}
                       </Badge>
                     </div>
                   </div>
@@ -182,7 +184,7 @@ export const MatchesTab = ({
       <Dialog open={!!selectedMatch} onOpenChange={() => setSelectedMatch(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Submit Match Result</DialogTitle>
+            <DialogTitle>{t('matchesTab.submitMatchResult')}</DialogTitle>
           </DialogHeader>
           {selectedMatch && (
             <div className="space-y-4 py-4">
@@ -194,7 +196,7 @@ export const MatchesTab = ({
                     min="0"
                     value={p1Score}
                     onChange={(e) => setP1Score(e.target.value)}
-                    placeholder="Score"
+                    placeholder={t('matchesTab.score')}
                   />
                 </div>
                 <div className="space-y-2">
@@ -204,13 +206,13 @@ export const MatchesTab = ({
                     min="0"
                     value={p2Score}
                     onChange={(e) => setP2Score(e.target.value)}
-                    placeholder="Score"
+                    placeholder={t('matchesTab.score')}
                   />
                 </div>
               </div>
               {p1Score && p2Score && p1Score !== p2Score && (
                 <p className="text-sm text-muted-foreground">
-                  Winner: <span className="text-primary font-medium">
+                  {t('matchesTab.winner')}: <span className="text-primary font-medium">
                     {parseInt(p1Score) > parseInt(p2Score) 
                       ? selectedMatch.participant1?.username 
                       : selectedMatch.participant2?.username}
@@ -221,7 +223,7 @@ export const MatchesTab = ({
           )}
           <DialogFooter>
             <Button variant="ghost" onClick={() => setSelectedMatch(null)}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button 
               variant="rift" 
@@ -229,7 +231,7 @@ export const MatchesTab = ({
               disabled={isUpdating || !p1Score || !p2Score || p1Score === p2Score}
             >
               {isUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              Confirm Result
+              {t('matchesTab.confirmResult')}
             </Button>
           </DialogFooter>
         </DialogContent>
