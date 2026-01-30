@@ -395,7 +395,53 @@
     "platinum": "Platinum",
     "gold": "Gold",
     "silver": "Silver",
-    "trustedBy": "Trusted by Global Brands"
+    "trustedBy": "Trusted by Global Brands",
+    "hero": {
+      "badge": "Brand Partnerships",
+      "title": "Connect Your Brand to the Future of Esports",
+      "description": "Join leading brands shaping the competitive gaming ecosystem. Reach millions of passionate players through tournaments, live streams, and custom integrations.",
+      "cta": "Contact Partnership Team",
+      "viewTiers": "View Partnership Plans",
+      "emailOpening": "Opening email client...",
+      "stats": {
+        "reach": "Monthly Reach",
+        "satisfaction": "Partner Satisfaction",
+        "partners": "Active Partners"
+      }
+    },
+    "tiers": {
+      "badge": "Partnership Plans",
+      "title": "Choose Your Partnership Level",
+      "description": "We offer flexible plans for brands of all sizes. From startups to global enterprises, we have the right solution for you.",
+      "mostPopular": "Most Popular"
+    },
+    "caseStudies": {
+      "badge": "Success Stories",
+      "title": "Proven Results",
+      "description": "Discover how partner brands achieved exceptional results through RIFT campaigns.",
+      "results": "Campaign Results"
+    },
+    "mediaKit": {
+      "badge": "Media Kit",
+      "title": "Partner Resources",
+      "description": "Download our official resources to create campaigns aligned with the RIFT brand.",
+      "brandGuidelines": "Brand Guidelines",
+      "brandGuidelinesDesc": "Complete visual identity guide",
+      "logoAssets": "Logo Assets",
+      "logoAssetsDesc": "SVG, PNG in multiple resolutions",
+      "promoVideos": "Promo Videos",
+      "promoVideosDesc": "Tournament clips and highlights",
+      "partnershipDeck": "Partnership Deck",
+      "partnershipDeckDesc": "Full deck with metrics and plans",
+      "downloadAll": "Download Full Kit",
+      "downloadStarting": "Starting download of {{asset}}...",
+      "fullKit": "Full Kit"
+    },
+    "currentPartners": {
+      "badge": "Current Partners",
+      "title": "Brands That Trust Us",
+      "description": "Join these leading brands in the competitive esports ecosystem."
+    }
   },
   "language": {
     "select": "Language",
