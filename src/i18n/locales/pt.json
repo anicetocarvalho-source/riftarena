@@ -484,7 +484,20 @@
     "usernamePlaceholder": "Introduz o nome do jogador",
     "sendInvite": "Enviar Convite",
     "confirmRemove": "Remover este membro da equipa?",
-    "confirmLeave": "Tens a certeza que queres sair desta equipa?"
+    "confirmLeave": "Tens a certeza que queres sair desta equipa?",
+    "rosterHistory": "Histórico do Roster",
+    "noRosterHistory": "Ainda não há alterações de roster registadas",
+    "actionJoined": "Entrou",
+    "actionLeft": "Saiu",
+    "actionRemoved": "Removido",
+    "actionPromoted": "Promovido",
+    "actionDemoted": "Despromovido",
+    "editTeamTitle": "Editar Detalhes da Equipa",
+    "teamName": "Nome da Equipa",
+    "teamNamePlaceholder": "Introduz o nome da equipa",
+    "description": "Descrição",
+    "descriptionPlaceholder": "Conta-nos sobre a tua equipa...",
+    "saveChanges": "Guardar Alterações"
   },
   "manageTournament": {
     "openRegistration": "Abrir Inscrições",

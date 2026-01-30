@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
@@ -10,40 +11,40 @@ interface TeamRosterHistoryProps {
   teamId: string;
 }
 
-const getActionConfig = (action: TeamMemberHistory["action"]) => {
+const getActionConfig = (action: TeamMemberHistory["action"], t: (key: string) => string) => {
   switch (action) {
     case "joined":
       return { 
         icon: UserPlus, 
-        label: "Joined", 
+        label: t('teamDetail.actionJoined'), 
         color: "text-success",
         bgColor: "bg-success/10"
       };
     case "left":
       return { 
         icon: LogOut, 
-        label: "Left", 
+        label: t('teamDetail.actionLeft'), 
         color: "text-muted-foreground",
         bgColor: "bg-muted/50"
       };
     case "removed":
       return { 
         icon: UserMinus, 
-        label: "Removed", 
+        label: t('teamDetail.actionRemoved'), 
         color: "text-destructive",
         bgColor: "bg-destructive/10"
       };
     case "promoted":
       return { 
         icon: ArrowUp, 
-        label: "Promoted", 
+        label: t('teamDetail.actionPromoted'), 
         color: "text-warning",
         bgColor: "bg-warning/10"
       };
     case "demoted":
       return { 
         icon: ArrowDown, 
-        label: "Demoted", 
+        label: t('teamDetail.actionDemoted'), 
         color: "text-orange-400",
         bgColor: "bg-orange-400/10"
       };
@@ -58,6 +59,7 @@ const getActionConfig = (action: TeamMemberHistory["action"]) => {
 };
 
 export const TeamRosterHistory = ({ teamId }: TeamRosterHistoryProps) => {
+  const { t } = useTranslation();
   const { data: history, isLoading } = useTeamHistory(teamId);
 
   if (isLoading) {
@@ -66,7 +68,7 @@ export const TeamRosterHistory = ({ teamId }: TeamRosterHistoryProps) => {
         <RiftCardHeader>
           <RiftCardTitle className="flex items-center gap-2">
             <History className="h-5 w-5 text-primary" />
-            Roster History
+            {t('teamDetail.rosterHistory')}
           </RiftCardTitle>
         </RiftCardHeader>
         <RiftCardContent>
@@ -85,18 +87,18 @@ export const TeamRosterHistory = ({ teamId }: TeamRosterHistoryProps) => {
       <RiftCardHeader>
         <RiftCardTitle className="flex items-center gap-2">
           <History className="h-5 w-5 text-primary" />
-          Roster History
+          {t('teamDetail.rosterHistory')}
         </RiftCardTitle>
       </RiftCardHeader>
       <RiftCardContent>
         {!history || history.length === 0 ? (
           <p className="text-center text-muted-foreground py-6">
-            No roster changes recorded yet
+            {t('teamDetail.noRosterHistory')}
           </p>
         ) : (
           <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
             {history.map((entry) => {
-              const config = getActionConfig(entry.action);
+              const config = getActionConfig(entry.action, t);
               const Icon = config.icon;
               
               return (
