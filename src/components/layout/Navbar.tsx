@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { RiftLogo } from "@/components/brand/RiftLogo";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, Shield, Users, Trophy, DollarSign, BarChart3, ChevronDown, Gamepad2 } from "lucide-react";
+import { Menu, X, User, Shield, Users, Trophy, DollarSign, BarChart3, ChevronDown, Gamepad2, MessageSquare } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -36,6 +36,7 @@ export function Navbar() {
     { href: "/admin/users", label: t("nav.userManagement"), icon: Users, description: t("nav.userManagementDesc") },
     { href: "/admin/games", label: t("nav.gameManagement"), icon: Gamepad2, description: t("nav.gameManagementDesc") },
     { href: "/admin/sponsors", label: t("nav.sponsorManagement"), icon: DollarSign, description: t("nav.sponsorManagementDesc") },
+    { href: "/admin/partnerships", label: t("nav.partnershipInquiries"), icon: MessageSquare, description: t("nav.partnershipInquiriesDesc") },
     { href: "/admin/analytics", label: t("nav.platformAnalytics"), icon: BarChart3, description: t("nav.platformAnalyticsDesc") },
     { href: "/tournaments", label: t("nav.allTournaments"), icon: Trophy, description: t("nav.allTournamentsDesc") },
   ];
