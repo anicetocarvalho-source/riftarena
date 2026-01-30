@@ -1,14 +1,22 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { 
+  SiSamsung, 
+  SiRedbull, 
+  SiNike, 
+  SiIntel, 
+  SiMonster, 
+  SiRazer 
+} from "@icons-pack/react-simple-icons";
 
 const sponsors = [
-  { name: "Samsung", logo: "SAMSUNG" },
-  { name: "Red Bull", logo: "REDBULL" },
-  { name: "Nike", logo: "NIKE" },
-  { name: "Intel", logo: "INTEL" },
-  { name: "Monster", logo: "MONSTER" },
-  { name: "Razer", logo: "RAZER" },
+  { name: "Samsung", Icon: SiSamsung },
+  { name: "Red Bull", Icon: SiRedbull },
+  { name: "Nike", Icon: SiNike },
+  { name: "Intel", Icon: SiIntel },
+  { name: "Monster", Icon: SiMonster },
+  { name: "Razer", Icon: SiRazer },
 ];
 
 export function SponsorsSection() {
@@ -37,9 +45,9 @@ export function SponsorsSection() {
                 transition={{ delay: index * 0.1 }}
                 className="group"
               >
-                <span className="font-display text-xl md:text-2xl font-bold tracking-[0.2em] text-muted-foreground/50 group-hover:text-muted-foreground transition-colors cursor-pointer">
-                  {sponsor.logo}
-                </span>
+                <sponsor.Icon 
+                  className="h-8 w-auto md:h-10 text-muted-foreground/50 group-hover:text-muted-foreground transition-colors cursor-pointer"
+                />
               </motion.div>
             ))}
           </div>
