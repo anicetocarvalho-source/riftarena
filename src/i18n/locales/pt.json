@@ -17,6 +17,8 @@
     "sponsorManagementDesc": "Parcerias e métricas",
     "platformAnalytics": "Analíticas da Plataforma",
     "platformAnalyticsDesc": "Métricas e estatísticas",
+    "partnershipInquiries": "Pedidos de Parceria",
+    "partnershipInquiriesDesc": "Gerir pedidos de contacto",
     "allTournaments": "Todos os Torneios",
     "allTournamentsDesc": "Supervisionar todas as competições"
   },
@@ -845,5 +847,28 @@
       "successToast": "Pedido de parceria enviado com sucesso!",
       "errorToast": "Erro ao enviar pedido. Tenta novamente."
     }
+  },
+  "adminPartnerships": {
+    "title": "Pedidos de Parceria",
+    "description": "Visualiza e gere os pedidos de parceria recebidos através do formulário de contacto.",
+    "pending": "Pendentes",
+    "contacted": "Contactados",
+    "approved": "Aprovados",
+    "allInquiries": "Todos os Pedidos",
+    "company": "Empresa",
+    "contact": "Contacto",
+    "tier": "Tier",
+    "date": "Data",
+    "status": "Estado",
+    "actions": "Ações",
+    "viewDetails": "Ver Detalhes",
+    "noInquiries": "Ainda não há pedidos de parceria.",
+    "inquiryDetails": "Detalhes do pedido de parceria",
+    "phone": "Telefone",
+    "message": "Mensagem",
+    "submittedOn": "Submetido em",
+    "reply": "Responder",
+    "statusUpdated": "Estado atualizado com sucesso",
+    "statusError": "Erro ao atualizar estado"
   }
 }

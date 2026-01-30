@@ -17,6 +17,8 @@
     "sponsorManagementDesc": "Partnerships and metrics",
     "platformAnalytics": "Platform Analytics",
     "platformAnalyticsDesc": "Metrics and statistics",
+    "partnershipInquiries": "Partnership Inquiries",
+    "partnershipInquiriesDesc": "Manage contact requests",
     "allTournaments": "All Tournaments",
     "allTournamentsDesc": "Oversee all competitions"
   },
@@ -845,5 +847,28 @@
       "successToast": "Partnership inquiry submitted successfully!",
       "errorToast": "Error submitting inquiry. Please try again."
     }
+  },
+  "adminPartnerships": {
+    "title": "Partnership Inquiries",
+    "description": "View and manage partnership inquiries received through the contact form.",
+    "pending": "Pending",
+    "contacted": "Contacted",
+    "approved": "Approved",
+    "allInquiries": "All Inquiries",
+    "company": "Company",
+    "contact": "Contact",
+    "tier": "Tier",
+    "date": "Date",
+    "status": "Status",
+    "actions": "Actions",
+    "viewDetails": "View Details",
+    "noInquiries": "No partnership inquiries yet.",
+    "inquiryDetails": "Partnership inquiry details",
+    "phone": "Phone",
+    "message": "Message",
+    "submittedOn": "Submitted on",
+    "reply": "Reply",
+    "statusUpdated": "Status updated successfully",
+    "statusError": "Error updating status"
   }
 }
