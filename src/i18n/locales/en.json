@@ -771,5 +771,11 @@
   "breadcrumbs": {
     "dashboard": "Dashboard",
     "tournaments": "Tournaments"
+  },
+  "platformMetrics": {
+    "activePlayers": "Active Players",
+    "tournamentsHosted": "Tournaments Hosted",
+    "prizeDistributed": "Prize Distributed",
+    "activeTeams": "Active Teams"
   }
 }
