@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/layout/Navbar";
@@ -15,6 +16,7 @@ import { useGames, useCreateTournament } from "@/hooks/useTournaments";
 import { ArrowLeft, Trophy, Calendar, DollarSign, Users, Loader2 } from "lucide-react";
 
 const CreateTournament = () => {
+  const { t } = useTranslation();
   const { user, isOrganizer, isAdmin, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { data: games, isLoading: gamesLoading } = useGames();
@@ -88,14 +90,14 @@ const CreateTournament = () => {
               onClick={() => navigate("/dashboard")}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Dashboard
+              {t('createTournament.backToDashboard')}
             </Button>
-            <Badge variant="default" className="mb-4">Organizer</Badge>
+            <Badge variant="default" className="mb-4">{t('createTournament.badge')}</Badge>
             <h1 className="font-display text-3xl font-bold uppercase tracking-wide mb-2">
-              Create Tournament
+              {t('createTournament.title')}
             </h1>
             <p className="text-muted-foreground">
-              Set up a new competitive tournament for players to join.
+              {t('createTournament.subtitle')}
             </p>
           </motion.div>
 
@@ -111,30 +113,30 @@ const CreateTournament = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <Trophy className="h-5 w-5 text-primary" />
-                    Basic Information
+                    {t('createTournament.basicInfo')}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Tournament Name *</Label>
+                      <Label htmlFor="name">{t('createTournament.tournamentName')} *</Label>
                       <Input
                         id="name"
-                        placeholder="Enter tournament name"
+                        placeholder={t('createTournament.tournamentNamePlaceholder')}
                         value={formData.name}
                         onChange={(e) => handleChange("name", e.target.value)}
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="game">Game *</Label>
+                      <Label htmlFor="game">{t('createTournament.game')} *</Label>
                       <Select
                         value={formData.game_id}
                         onValueChange={(value) => handleChange("game_id", value)}
                         required
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder={gamesLoading ? "Loading..." : "Select a game"} />
+                          <SelectValue placeholder={gamesLoading ? t('createTournament.loadingGames') : t('createTournament.selectGame')} />
                         </SelectTrigger>
                         <SelectContent>
                           {games?.map((game) => (
@@ -147,10 +149,10 @@ const CreateTournament = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
+                    <Label htmlFor="description">{t('createTournament.description')}</Label>
                     <Textarea
                       id="description"
-                      placeholder="Describe your tournament..."
+                      placeholder={t('createTournament.descriptionPlaceholder')}
                       value={formData.description}
                       onChange={(e) => handleChange("description", e.target.value)}
                       rows={3}
@@ -171,13 +173,13 @@ const CreateTournament = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <Users className="h-5 w-5 text-primary" />
-                    Tournament Settings
+                    {t('createTournament.tournamentSettings')}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="max_participants">Max Participants *</Label>
+                      <Label htmlFor="max_participants">{t('createTournament.maxParticipants')} *</Label>
                       <Select
                         value={String(formData.max_participants)}
                         onValueChange={(value) => handleChange("max_participants", value)}
@@ -188,14 +190,14 @@ const CreateTournament = () => {
                         <SelectContent>
                           {[8, 16, 32, 64, 128, 256].map((num) => (
                             <SelectItem key={num} value={String(num)}>
-                              {num} participants
+                              {num} {t('createTournament.participants')}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="bracket_type">Bracket Type *</Label>
+                      <Label htmlFor="bracket_type">{t('createTournament.bracketType')} *</Label>
                       <Select
                         value={formData.bracket_type}
                         onValueChange={(value) => handleChange("bracket_type", value)}
@@ -204,9 +206,9 @@ const CreateTournament = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="single_elimination">Single Elimination</SelectItem>
-                          <SelectItem value="double_elimination">Double Elimination</SelectItem>
-                          <SelectItem value="round_robin">Round Robin</SelectItem>
+                          <SelectItem value="single_elimination">{t('createTournament.singleElimination')}</SelectItem>
+                          <SelectItem value="double_elimination">{t('createTournament.doubleElimination')}</SelectItem>
+                          <SelectItem value="round_robin">{t('createTournament.roundRobin')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -226,13 +228,13 @@ const CreateTournament = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <DollarSign className="h-5 w-5 text-primary" />
-                    Prize & Fees
+                    {t('createTournament.prizeFees')}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="prize_pool">Prize Pool ($)</Label>
+                      <Label htmlFor="prize_pool">{t('createTournament.prizePool')}</Label>
                       <Input
                         id="prize_pool"
                         type="number"
@@ -243,7 +245,7 @@ const CreateTournament = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="registration_fee">Registration Fee ($)</Label>
+                      <Label htmlFor="registration_fee">{t('createTournament.registrationFee')}</Label>
                       <Input
                         id="registration_fee"
                         type="number"
@@ -269,13 +271,13 @@ const CreateTournament = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <Calendar className="h-5 w-5 text-primary" />
-                    Schedule
+                    {t('createTournament.schedule')}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="start_date">Start Date *</Label>
+                      <Label htmlFor="start_date">{t('createTournament.startDate')} *</Label>
                       <Input
                         id="start_date"
                         type="datetime-local"
@@ -285,7 +287,7 @@ const CreateTournament = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="end_date">End Date</Label>
+                      <Label htmlFor="end_date">{t('createTournament.endDate')}</Label>
                       <Input
                         id="end_date"
                         type="datetime-local"
@@ -294,7 +296,7 @@ const CreateTournament = () => {
                       />
                     </div>
                     <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="registration_deadline">Registration Deadline</Label>
+                      <Label htmlFor="registration_deadline">{t('createTournament.registrationDeadline')}</Label>
                       <Input
                         id="registration_deadline"
                         type="datetime-local"
@@ -316,14 +318,14 @@ const CreateTournament = () => {
             >
               <RiftCard>
                 <RiftCardHeader>
-                  <RiftCardTitle>Rules & Guidelines</RiftCardTitle>
+                  <RiftCardTitle>{t('createTournament.rulesGuidelines')}</RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
                   <div className="space-y-2">
-                    <Label htmlFor="rules">Tournament Rules</Label>
+                    <Label htmlFor="rules">{t('createTournament.rules')}</Label>
                     <Textarea
                       id="rules"
-                      placeholder="Enter tournament rules and guidelines..."
+                      placeholder={t('createTournament.rulesPlaceholder')}
                       value={formData.rules}
                       onChange={(e) => handleChange("rules", e.target.value)}
                       rows={6}
@@ -345,7 +347,7 @@ const CreateTournament = () => {
                 variant="rift-outline"
                 onClick={() => navigate("/dashboard")}
               >
-                Cancel
+                {t('createTournament.cancel')}
               </Button>
               <Button
                 type="submit"
@@ -355,12 +357,12 @@ const CreateTournament = () => {
                 {createTournament.isPending ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creating...
+                    {t('createTournament.creating')}
                   </>
                 ) : (
                   <>
                     <Trophy className="mr-2 h-4 w-4" />
-                    Create Tournament
+                    {t('createTournament.create')}
                   </>
                 )}
               </Button>

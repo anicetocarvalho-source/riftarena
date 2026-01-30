@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,7 +9,6 @@ import { Footer } from "@/components/layout/Footer";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle, RiftCardDescription } from "@/components/ui/rift-card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { 
   Loader2, ArrowLeft, Settings as SettingsIcon, 
@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const Settings = () => {
+  const { t } = useTranslation();
   const { user, profile, isLoading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
   const [isResettingOnboarding, setIsResettingOnboarding] = useState(false);
@@ -47,13 +48,13 @@ const Settings = () => {
 
       if (error) throw error;
 
-      toast.success("Onboarding reiniciado! Redirecionando...");
+      toast.success(t('settings.onboardingReset'));
       setTimeout(() => {
         navigate("/dashboard");
       }, 1000);
     } catch (error) {
       console.error("Error resetting onboarding:", error);
-      toast.error("Erro ao reiniciar onboarding");
+      toast.error(t('settings.onboardingResetError'));
     } finally {
       setIsResettingOnboarding(false);
     }
@@ -93,7 +94,7 @@ const Settings = () => {
               className="mb-6"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Voltar
+              {t('settings.back')}
             </Button>
 
             <div className="flex items-center gap-3 mb-8">
@@ -101,9 +102,9 @@ const Settings = () => {
                 <SettingsIcon className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h1 className="font-display text-2xl font-bold">Configurações</h1>
+                <h1 className="font-display text-2xl font-bold">{t('settings.title')}</h1>
                 <p className="text-sm text-muted-foreground">
-                  Gerir as tuas preferências e conta
+                  {t('settings.subtitle')}
                 </p>
               </div>
             </div>
@@ -114,18 +115,18 @@ const Settings = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2 text-lg">
                     <User className="h-5 w-5 text-primary" />
-                    Conta
+                    {t('settings.account')}
                   </RiftCardTitle>
                   <RiftCardDescription>
-                    Gerir informações da conta e perfil
+                    {t('settings.accountDesc')}
                   </RiftCardDescription>
                 </RiftCardHeader>
                 <RiftCardContent className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">Editar Perfil</p>
+                      <p className="font-medium">{t('settings.editProfile')}</p>
                       <p className="text-sm text-muted-foreground">
-                        Alterar avatar, bio, e redes sociais
+                        {t('settings.editProfileDesc')}
                       </p>
                     </div>
                     <Button 
@@ -133,7 +134,7 @@ const Settings = () => {
                       size="sm"
                       onClick={() => navigate("/profile/edit")}
                     >
-                      Editar
+                      {t('settings.edit')}
                     </Button>
                   </div>
                   
@@ -141,9 +142,9 @@ const Settings = () => {
                   
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">Ver Perfil Público</p>
+                      <p className="font-medium">{t('settings.viewPublicProfile')}</p>
                       <p className="text-sm text-muted-foreground">
-                        Visualizar como outros te veem
+                        {t('settings.viewPublicProfileDesc')}
                       </p>
                     </div>
                     <Button 
@@ -151,7 +152,7 @@ const Settings = () => {
                       size="sm"
                       onClick={() => navigate(`/player/${user.id}`)}
                     >
-                      Ver Perfil
+                      {t('settings.viewProfile')}
                     </Button>
                   </div>
                 </RiftCardContent>
@@ -162,18 +163,18 @@ const Settings = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2 text-lg">
                     <Sparkles className="h-5 w-5 text-warning" />
-                    Introdução à Plataforma
+                    {t('settings.onboarding')}
                   </RiftCardTitle>
                   <RiftCardDescription>
-                    Rever o wizard de boas-vindas e funcionalidades
+                    {t('settings.onboardingDesc')}
                   </RiftCardDescription>
                 </RiftCardHeader>
                 <RiftCardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">Repetir Onboarding</p>
+                      <p className="font-medium">{t('settings.repeatOnboarding')}</p>
                       <p className="text-sm text-muted-foreground">
-                        Rever a introdução às funcionalidades da plataforma
+                        {t('settings.repeatOnboardingDesc')}
                       </p>
                     </div>
                     <AlertDialog>
@@ -188,21 +189,20 @@ const Settings = () => {
                           ) : (
                             <RefreshCw className="mr-2 h-4 w-4" />
                           )}
-                          Repetir
+                          {t('settings.repeat')}
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>Repetir Onboarding?</AlertDialogTitle>
+                          <AlertDialogTitle>{t('settings.repeatOnboardingConfirm')}</AlertDialogTitle>
                           <AlertDialogDescription>
-                            O wizard de introdução será mostrado novamente quando acederes ao Dashboard.
-                            Podes sempre saltar se mudares de ideias.
+                            {t('settings.repeatOnboardingMessage')}
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
                           <AlertDialogAction onClick={handleResetOnboarding}>
-                            Confirmar
+                            {t('settings.confirm')}
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
@@ -212,7 +212,7 @@ const Settings = () => {
                   {profile?.onboarding_completed && (
                     <div className="mt-4 flex items-center gap-2 text-sm text-success">
                       <div className="h-2 w-2 rounded-full bg-success" />
-                      Onboarding concluído
+                      {t('settings.onboardingCompleted')}
                     </div>
                   )}
                 </RiftCardContent>
@@ -223,18 +223,18 @@ const Settings = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2 text-lg">
                     <Bell className="h-5 w-5 text-primary" />
-                    Notificações
+                    {t('settings.notifications')}
                   </RiftCardTitle>
                   <RiftCardDescription>
-                    Configurar preferências de notificação
+                    {t('settings.notificationsDesc')}
                   </RiftCardDescription>
                 </RiftCardHeader>
                 <RiftCardContent className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">Notificações por Email</p>
+                      <p className="font-medium">{t('settings.emailNotifications')}</p>
                       <p className="text-sm text-muted-foreground">
-                        Receber atualizações sobre torneios e equipas
+                        {t('settings.emailNotificationsDesc')}
                       </p>
                     </div>
                     <Switch defaultChecked />
@@ -244,9 +244,9 @@ const Settings = () => {
                   
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">Lembretes de Partidas</p>
+                      <p className="font-medium">{t('settings.matchReminders')}</p>
                       <p className="text-sm text-muted-foreground">
-                        Ser notificado antes das partidas começarem
+                        {t('settings.matchRemindersDesc')}
                       </p>
                     </div>
                     <Switch defaultChecked />
@@ -256,9 +256,9 @@ const Settings = () => {
                   
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">Convites de Equipa</p>
+                      <p className="font-medium">{t('settings.teamInvites')}</p>
                       <p className="text-sm text-muted-foreground">
-                        Notificações sobre novos convites
+                        {t('settings.teamInvitesDesc')}
                       </p>
                     </div>
                     <Switch defaultChecked />
@@ -271,18 +271,18 @@ const Settings = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2 text-lg">
                     <Shield className="h-5 w-5 text-primary" />
-                    Privacidade
+                    {t('settings.privacy')}
                   </RiftCardTitle>
                   <RiftCardDescription>
-                    Controlar visibilidade do perfil
+                    {t('settings.privacyDesc')}
                   </RiftCardDescription>
                 </RiftCardHeader>
                 <RiftCardContent className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">Perfil Público</p>
+                      <p className="font-medium">{t('settings.publicProfile')}</p>
                       <p className="text-sm text-muted-foreground">
-                        Permitir que outros vejam o teu perfil
+                        {t('settings.publicProfileDesc')}
                       </p>
                     </div>
                     <Switch defaultChecked />
@@ -292,9 +292,9 @@ const Settings = () => {
                   
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">Mostrar Estatísticas</p>
+                      <p className="font-medium">{t('settings.showStats')}</p>
                       <p className="text-sm text-muted-foreground">
-                        Exibir ELO e histórico de partidas
+                        {t('settings.showStatsDesc')}
                       </p>
                     </div>
                     <Switch defaultChecked />
@@ -307,15 +307,15 @@ const Settings = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2 text-lg text-destructive">
                     <LogOut className="h-5 w-5" />
-                    Sessão
+                    {t('settings.session')}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">Terminar Sessão</p>
+                      <p className="font-medium">{t('settings.endSession')}</p>
                       <p className="text-sm text-muted-foreground">
-                        Sair da tua conta neste dispositivo
+                        {t('settings.endSessionDesc')}
                       </p>
                     </div>
                     <Button 
@@ -324,7 +324,7 @@ const Settings = () => {
                       onClick={handleSignOut}
                     >
                       <LogOut className="mr-2 h-4 w-4" />
-                      Sair
+                      {t('settings.signOut')}
                     </Button>
                   </div>
                 </RiftCardContent>

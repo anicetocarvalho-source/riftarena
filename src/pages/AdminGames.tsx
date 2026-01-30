@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/layout/Navbar";
@@ -45,6 +46,7 @@ interface GameFormData {
 const POPULAR_ICONS = ["🎮", "⚔️", "🔫", "⚽", "🏎️", "🎯", "🏀", "🎲", "👾", "🕹️", "🏈", "⛳"];
 
 const AdminGames = () => {
+  const { t } = useTranslation();
   const { isAdmin, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { data: games, isLoading } = useGames();
@@ -135,14 +137,14 @@ const AdminGames = () => {
                 <div className="flex items-center gap-3 mb-4">
                   <Badge variant="diamond" className="gap-1">
                     <Shield className="h-3 w-3" />
-                    Admin Only
+                    {t('admin.badge')}
                   </Badge>
                 </div>
                 <h1 className="font-display text-4xl font-bold uppercase tracking-wide mb-4">
-                  Game Management
+                  {t('admin.gameManagement')}
                 </h1>
                 <p className="text-muted-foreground max-w-2xl">
-                  Adiciona, edita e remove jogos suportados na plataforma RIFT Arena.
+                  {t('admin.gameManagementDesc')}
                 </p>
               </div>
               
@@ -150,28 +152,28 @@ const AdminGames = () => {
                 <DialogTrigger asChild>
                   <Button variant="rift" className="gap-2">
                     <Plus className="h-4 w-4" />
-                    Add Game
+                    {t('admin.addGame')}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
                   <DialogHeader>
-                    <DialogTitle>Add New Game</DialogTitle>
+                    <DialogTitle>{t('admin.addNewGame')}</DialogTitle>
                     <DialogDescription>
-                      Adiciona um novo jogo à plataforma.
+                      {t('admin.addNewGameDesc')}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4 py-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Game Name</Label>
+                      <Label htmlFor="name">{t('admin.gameName')}</Label>
                       <Input
                         id="name"
-                        placeholder="e.g. Free Fire"
+                        placeholder={t('admin.gameNamePlaceholder')}
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Icon</Label>
+                      <Label>{t('admin.icon')}</Label>
                       <div className="flex gap-2 flex-wrap">
                         {POPULAR_ICONS.map((icon) => (
                           <button
@@ -189,17 +191,17 @@ const AdminGames = () => {
                         ))}
                       </div>
                       <Input
-                        placeholder="Or paste custom emoji..."
+                        placeholder={t('admin.customEmoji')}
                         value={formData.icon}
                         onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
                         className="mt-2"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="description">Description (optional)</Label>
+                      <Label htmlFor="description">{t('admin.descriptionOptional')}</Label>
                       <Textarea
                         id="description"
-                        placeholder="Brief description of the game..."
+                        placeholder={t('admin.descriptionPlaceholder')}
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         rows={3}
@@ -208,7 +210,7 @@ const AdminGames = () => {
                   </div>
                   <DialogFooter>
                     <Button variant="ghost" onClick={() => setIsCreateOpen(false)}>
-                      Cancel
+                      {t('common.cancel')}
                     </Button>
                     <Button 
                       variant="rift" 
@@ -218,7 +220,7 @@ const AdminGames = () => {
                       {createGame.isPending ? (
                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
                       ) : null}
-                      Create Game
+                      {t('admin.createGame')}
                     </Button>
                   </DialogFooter>
                 </DialogContent>
@@ -236,7 +238,7 @@ const AdminGames = () => {
             <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Search games..." 
+                placeholder={t('teams.searchPlaceholder')}
                 className="pl-10 bg-secondary border-border"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -255,12 +257,12 @@ const AdminGames = () => {
                 <RiftCardContent className="py-12 text-center">
                   <Gamepad2 className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
                   <p className="text-muted-foreground mb-4">
-                    {searchTerm ? "No games found matching your search." : "No games added yet."}
+                    {searchTerm ? t('admin.noGamesFound') : t('admin.noGamesYet')}
                   </p>
                   {!searchTerm && (
                     <Button variant="rift" onClick={() => setIsCreateOpen(true)}>
                       <Plus className="h-4 w-4 mr-2" />
-                      Add First Game
+                      {t('admin.addFirstGame')}
                     </Button>
                   )}
                 </RiftCardContent>
@@ -279,10 +281,10 @@ const AdminGames = () => {
                             {game.name}
                           </h3>
                           <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
-                            {game.description || "No description"}
+                            {game.description || t('admin.noDescription')}
                           </p>
                           <p className="text-xs text-muted-foreground mt-2">
-                            Added {new Date(game.created_at).toLocaleDateString("pt-PT")}
+                            {t('admin.added')} {new Date(game.created_at).toLocaleDateString("pt-PT")}
                           </p>
                         </div>
                       </div>
@@ -296,19 +298,19 @@ const AdminGames = () => {
                               onClick={() => openEditDialog(game)}
                             >
                               <Pencil className="h-4 w-4 mr-2" />
-                              Edit
+                              {t('common.edit')}
                             </Button>
                           </DialogTrigger>
                           <DialogContent className="sm:max-w-md">
                             <DialogHeader>
-                              <DialogTitle>Edit Game</DialogTitle>
+                              <DialogTitle>{t('admin.editGame')}</DialogTitle>
                               <DialogDescription>
-                                Atualiza as informações do jogo.
+                                {t('admin.editGameDesc')}
                               </DialogDescription>
                             </DialogHeader>
                             <div className="space-y-4 py-4">
                               <div className="space-y-2">
-                                <Label htmlFor="edit-name">Game Name</Label>
+                                <Label htmlFor="edit-name">{t('admin.gameName')}</Label>
                                 <Input
                                   id="edit-name"
                                   value={formData.name}
@@ -316,7 +318,7 @@ const AdminGames = () => {
                                 />
                               </div>
                               <div className="space-y-2">
-                                <Label>Icon</Label>
+                                <Label>{t('admin.icon')}</Label>
                                 <div className="flex gap-2 flex-wrap">
                                   {POPULAR_ICONS.map((icon) => (
                                     <button
@@ -340,7 +342,7 @@ const AdminGames = () => {
                                 />
                               </div>
                               <div className="space-y-2">
-                                <Label htmlFor="edit-description">Description</Label>
+                                <Label htmlFor="edit-description">{t('createTeam.description')}</Label>
                                 <Textarea
                                   id="edit-description"
                                   value={formData.description}
@@ -351,7 +353,7 @@ const AdminGames = () => {
                             </div>
                             <DialogFooter>
                               <Button variant="ghost" onClick={() => setEditingGame(null)}>
-                                Cancel
+                                {t('common.cancel')}
                               </Button>
                               <Button 
                                 variant="rift" 
@@ -361,7 +363,7 @@ const AdminGames = () => {
                                 {updateGame.isPending ? (
                                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
                                 ) : null}
-                                Save Changes
+                                {t('admin.saveChanges')}
                               </Button>
                             </DialogFooter>
                           </DialogContent>
@@ -375,14 +377,14 @@ const AdminGames = () => {
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>Delete Game</AlertDialogTitle>
+                              <AlertDialogTitle>{t('admin.deleteGame')}</AlertDialogTitle>
                               <AlertDialogDescription>
-                                Tens a certeza que queres eliminar <strong>{game.name}</strong>? 
-                                Esta ação não pode ser revertida e irá afetar todos os torneios associados.
+                                {t('admin.deleteGameConfirm')} <strong>{game.name}</strong>? 
+                                {t('admin.deleteGameWarning')}
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
                               <AlertDialogAction
                                 onClick={() => handleDelete(game.id)}
                                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -390,7 +392,7 @@ const AdminGames = () => {
                                 {deleteGame.isPending ? (
                                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
                                 ) : null}
-                                Delete
+                                {t('common.delete')}
                               </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
@@ -412,15 +414,13 @@ const AdminGames = () => {
               className="mt-8"
             >
               <p className="text-sm text-muted-foreground text-center">
-                {filteredGames.length} game{filteredGames.length !== 1 ? "s" : ""} registered on the platform
+                {filteredGames.length} {t('admin.gamesRegistered')}
               </p>
             </motion.div>
           )}
         </div>
       </main>
       <Footer />
-
-      {/* Edit Dialog outside of map to prevent re-render issues */}
     </div>
   );
 };
