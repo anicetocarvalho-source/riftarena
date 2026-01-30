@@ -1,4 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { RiftLogo } from "@/components/brand/RiftLogo";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Menu, X, User, Shield, Users, Trophy, DollarSign, BarChart3, ChevronDow
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,26 +17,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const navLinks = [
-  { href: "/tournaments", label: "Tournaments" },
-  { href: "/rankings", label: "Rankings" },
-  { href: "/games", label: "Games" },
-  { href: "/teams", label: "Teams" },
-  { href: "/sponsors", label: "Sponsors" },
-];
-
 export function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, profile, isLoading, isAdmin } = useAuth();
 
+  const navLinks = [
+    { href: "/tournaments", label: t("nav.tournaments") },
+    { href: "/rankings", label: t("nav.rankings") },
+    { href: "/games", label: t("nav.games") },
+    { href: "/teams", label: t("nav.teams") },
+    { href: "/sponsors", label: t("nav.sponsors") },
+  ];
+
   const adminMenuItems = [
-    { href: "/admin/users", label: "User Management", icon: Users, description: "Manage roles and accounts" },
-    { href: "/admin/games", label: "Game Management", icon: Gamepad2, description: "Add, edit, remove games" },
-    { href: "/admin/sponsors", label: "Sponsor Management", icon: DollarSign, description: "Partnerships and metrics" },
-    { href: "/admin/analytics", label: "Platform Analytics", icon: BarChart3, description: "Metrics and statistics" },
-    { href: "/tournaments", label: "All Tournaments", icon: Trophy, description: "Oversee all competitions" },
+    { href: "/admin/users", label: t("nav.userManagement"), icon: Users, description: t("nav.userManagementDesc") },
+    { href: "/admin/games", label: t("nav.gameManagement"), icon: Gamepad2, description: t("nav.gameManagementDesc") },
+    { href: "/admin/sponsors", label: t("nav.sponsorManagement"), icon: DollarSign, description: t("nav.sponsorManagementDesc") },
+    { href: "/admin/analytics", label: t("nav.platformAnalytics"), icon: BarChart3, description: t("nav.platformAnalyticsDesc") },
+    { href: "/tournaments", label: t("nav.allTournaments"), icon: Trophy, description: t("nav.allTournamentsDesc") },
   ];
 
   return (
@@ -65,6 +68,7 @@ export function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden lg:flex items-center gap-4">
+          <LanguageSwitcher />
           {!isLoading && (
             <>
               {isAdmin && (
@@ -72,14 +76,14 @@ export function Navbar() {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm" className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10">
                       <Shield className="h-4 w-4" />
-                      Admin
+                      {t("nav.admin")}
                       <ChevronDown className="h-3 w-3" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 bg-background border-border">
                     <DropdownMenuLabel className="flex items-center gap-2">
                       <Shield className="h-4 w-4 text-destructive" />
-                      Admin Panel
+                      {t("nav.adminPanel")}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {adminMenuItems.map((item) => (
@@ -108,10 +112,10 @@ export function Navbar() {
               ) : (
                 <>
                   <Link to="/auth">
-                    <Button variant="ghost">Sign In</Button>
+                    <Button variant="ghost">{t("nav.signIn")}</Button>
                   </Link>
                   <Link to="/auth">
-                    <Button variant="rift">Join RIFT</Button>
+                    <Button variant="rift">{t("nav.joinRift")}</Button>
                   </Link>
                 </>
               )}
@@ -120,14 +124,16 @@ export function Navbar() {
         </div>
 
         {/* Mobile Menu Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="lg:hidden"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <LanguageSwitcher />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -160,7 +166,7 @@ export function Navbar() {
                   <div className="border-b border-border pb-3 mb-3">
                     <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-2">
                       <Shield className="h-3 w-3 text-destructive" />
-                      Admin Panel
+                      {t("nav.adminPanel")}
                     </p>
                     {adminMenuItems.map((item) => (
                       <Link 
@@ -186,10 +192,10 @@ export function Navbar() {
                 ) : (
                   <>
                     <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="rift-outline" className="w-full">Sign In</Button>
+                      <Button variant="rift-outline" className="w-full">{t("nav.signIn")}</Button>
                     </Link>
                     <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="rift" className="w-full">Join RIFT</Button>
+                      <Button variant="rift" className="w-full">{t("nav.joinRift")}</Button>
                     </Link>
                   </>
                 )}
