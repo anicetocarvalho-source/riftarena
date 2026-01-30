@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Crown, Medal, Award, Trophy, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { GlossaryTerm } from "@/components/ui/glossary-term";
 
 export function RankingsPreview() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [selectedGameId, setSelectedGameId] = useState<string | undefined>(undefined);
   
@@ -64,7 +66,7 @@ export function RankingsPreview() {
               viewport={{ once: true }}
               className="text-sm uppercase tracking-widest text-primary mb-2"
             >
-              Global Leaderboard
+              {t("rankingsPreview.badge")}
             </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 10 }}
@@ -73,7 +75,7 @@ export function RankingsPreview() {
               transition={{ delay: 0.1 }}
               className="font-display text-3xl font-bold uppercase tracking-wide"
             >
-              Top Players
+              {t("rankingsPreview.title")}
             </motion.h2>
           </div>
           <motion.div
@@ -82,7 +84,7 @@ export function RankingsPreview() {
             viewport={{ once: true }}
           >
             <Button variant="rift-outline" onClick={() => navigate("/rankings")}>
-              Full Rankings
+              {t("rankingsPreview.fullRankings")}
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </motion.div>
@@ -104,7 +106,7 @@ export function RankingsPreview() {
                 : "bg-transparent text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
             )}
           >
-            All Games
+            {t("rankingsPreview.allGames")}
           </button>
           {games?.map((game) => (
             <button
@@ -196,7 +198,7 @@ export function RankingsPreview() {
                         {ranking.wins}
                       </p>
                       <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                        Wins
+                        {t("rankingsPreview.wins")}
                       </p>
                     </div>
                     <div className="bg-secondary/50 rounded-sm p-2">
@@ -204,7 +206,7 @@ export function RankingsPreview() {
                         {winRate}%
                       </p>
                       <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                        Win Rate
+                        {t("rankingsPreview.winRate")}
                       </p>
                     </div>
                   </div>
@@ -222,9 +224,9 @@ export function RankingsPreview() {
           ) : (
             <div className="col-span-3 text-center py-12">
               <Trophy className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
-              <p className="text-muted-foreground">No rankings yet. Be the first to compete!</p>
+              <p className="text-muted-foreground">{t("rankingsPreview.noRankings")}</p>
               <Button variant="rift" className="mt-4" onClick={() => navigate("/tournaments")}>
-                Join a Tournament
+                {t("rankingsPreview.joinTournament")}
               </Button>
             </div>
           )}

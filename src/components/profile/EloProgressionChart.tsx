@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { TrendingUp, TrendingDown, Minus, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -49,34 +50,36 @@ interface ChartDataPoint {
   tierIcon: string;
 }
 
-// Custom tooltip component
-const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
-  if (!active || !payload || payload.length === 0) return null;
-  
-  const data = payload[0].payload as ChartDataPoint;
-  const changeColor = data.change > 0 ? "text-success" : data.change < 0 ? "text-destructive" : "text-muted-foreground";
-  const ChangeIcon = data.change > 0 ? TrendingUp : data.change < 0 ? TrendingDown : Minus;
-  
-  return (
-    <div className="bg-card border border-border rounded-md shadow-lg p-3 min-w-[180px]">
-      <div className="flex items-center justify-between gap-4 mb-2">
-        <span className="text-xs text-muted-foreground">{data.fullDate}</span>
-        <Badge variant="outline" className="text-xs">
-          {data.tierIcon} {data.tier}
-        </Badge>
+// Custom tooltip component - needs t function passed via closure
+const createCustomTooltip = (t: (key: string) => string) => {
+  return ({ active, payload, label }: TooltipProps<number, string>) => {
+    if (!active || !payload || payload.length === 0) return null;
+    
+    const data = payload[0].payload as ChartDataPoint;
+    const changeColor = data.change > 0 ? "text-success" : data.change < 0 ? "text-destructive" : "text-muted-foreground";
+    const ChangeIcon = data.change > 0 ? TrendingUp : data.change < 0 ? TrendingDown : Minus;
+    
+    return (
+      <div className="bg-card border border-border rounded-md shadow-lg p-3 min-w-[180px]">
+        <div className="flex items-center justify-between gap-4 mb-2">
+          <span className="text-xs text-muted-foreground">{data.fullDate}</span>
+          <Badge variant="outline" className="text-xs">
+            {data.tierIcon} {data.tier}
+          </Badge>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-display text-xl font-bold">{data.elo}</span>
+          <span className={cn("flex items-center gap-1 text-sm font-medium", changeColor)}>
+            <ChangeIcon className="h-3 w-3" />
+            {data.change > 0 ? "+" : ""}{data.change}
+          </span>
+        </div>
+        <div className="mt-1 text-xs text-muted-foreground">
+          {t("eloChart.match")} #{data.index} • {data.isWin ? t("eloChart.victory") : t("eloChart.defeat")}
+        </div>
       </div>
-      <div className="flex items-center gap-2">
-        <span className="font-display text-xl font-bold">{data.elo}</span>
-        <span className={cn("flex items-center gap-1 text-sm font-medium", changeColor)}>
-          <ChangeIcon className="h-3 w-3" />
-          {data.change > 0 ? "+" : ""}{data.change}
-        </span>
-      </div>
-      <div className="mt-1 text-xs text-muted-foreground">
-        Match #{data.index} • {data.isWin ? "Victory" : "Defeat"}
-      </div>
-    </div>
-  );
+    );
+  };
 };
 
 export const EloProgressionChart = ({ 
@@ -85,6 +88,9 @@ export const EloProgressionChart = ({
   peakElo,
   className 
 }: EloProgressionChartProps) => {
+  const { t } = useTranslation();
+  const CustomTooltip = useMemo(() => createCustomTooltip(t), [t]);
+  
   const chartData = useMemo(() => {
     if (!eloHistory || eloHistory.length === 0) return [];
     
@@ -153,7 +159,7 @@ export const EloProgressionChart = ({
         <RiftCardHeader>
           <RiftCardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-primary" />
-            ELO Progression
+            {t("eloChart.title")}
           </RiftCardTitle>
         </RiftCardHeader>
         <RiftCardContent>
@@ -161,9 +167,9 @@ export const EloProgressionChart = ({
             <div className="h-16 w-16 rounded-full bg-muted/50 flex items-center justify-center mb-4">
               <TrendingUp className="h-8 w-8 text-muted-foreground/50" />
             </div>
-            <p className="text-muted-foreground font-medium">No match history yet</p>
+            <p className="text-muted-foreground font-medium">{t("eloChart.noHistoryTitle")}</p>
             <p className="text-sm text-muted-foreground mt-1 max-w-[280px]">
-              Complete matches in tournaments to see your ELO progression over time
+              {t("eloChart.noHistoryDesc")}
             </p>
           </div>
         </RiftCardContent>
@@ -179,7 +185,7 @@ export const EloProgressionChart = ({
         <div className="flex items-center justify-between">
           <RiftCardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-primary" />
-            ELO Progression
+            {t("eloChart.title")}
           </RiftCardTitle>
           <div className="flex items-center gap-3">
             <div className="text-right">
@@ -190,7 +196,7 @@ export const EloProgressionChart = ({
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground">
-                Peak: {peakElo} • {chartData.length} matches tracked
+                {t("eloChart.peak")}: {peakElo} • {t("eloChart.matchesTracked", { count: chartData.length })}
               </p>
             </div>
           </div>
@@ -202,11 +208,11 @@ export const EloProgressionChart = ({
           <div className="grid grid-cols-4 gap-4 mb-6 p-4 rounded-md bg-secondary/30 border border-border">
             <div className="text-center">
               <p className="text-lg font-display font-bold text-success">{stats.wins}</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Wins</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">{t("eloChart.wins")}</p>
             </div>
             <div className="text-center">
               <p className="text-lg font-display font-bold text-destructive">{stats.losses}</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Losses</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">{t("eloChart.losses")}</p>
             </div>
             <div className="text-center">
               <p className={cn(
@@ -215,11 +221,11 @@ export const EloProgressionChart = ({
               )}>
                 {stats.totalChange > 0 ? "+" : ""}{stats.totalChange}
               </p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Net Change</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">{t("eloChart.netChange")}</p>
             </div>
             <div className="text-center">
               <p className="text-lg font-display font-bold">{stats.maxElo}</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Peak</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">{t("eloChart.peak")}</p>
             </div>
           </div>
         )}
@@ -333,15 +339,15 @@ export const EloProgressionChart = ({
         <div className="flex items-center justify-center gap-6 mt-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-success" />
-            <span>Victory</span>
+            <span>{t("eloChart.victory")}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-destructive" />
-            <span>Defeat</span>
+            <span>{t("eloChart.defeat")}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="h-0.5 w-4 border-t-2 border-dashed border-muted-foreground/40" />
-            <span>Rank Thresholds</span>
+            <span>{t("eloChart.rankThresholds")}</span>
           </div>
         </div>
       </RiftCardContent>

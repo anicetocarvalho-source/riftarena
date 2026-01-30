@@ -592,5 +592,47 @@
     "semiFinals": "Semifinais",
     "quarterFinals": "Quartos de Final",
     "round": "Ronda"
+  },
+  "myTeams": {
+    "title": "Minhas Equipas",
+    "createTeam": "Criar Equipa",
+    "pendingInvites": "Convites Pendentes",
+    "yourTeams": "As Tuas Equipas",
+    "captain": "Capitão",
+    "maxMembers": "{{count}} membros máx",
+    "viewTeam": "Ver Equipa",
+    "leaveTeam": "Sair da Equipa",
+    "leaveConfirmTitle": "Sair de {{team}}?",
+    "leaveConfirmDesc": "Tens a certeza que queres sair desta equipa? Vais precisar de um novo convite para voltar.",
+    "accept": "Aceitar",
+    "decline": "Recusar",
+    "noTeamsTitle": "Ainda não tens equipa",
+    "noTeamsDesc": "Junta-te a uma equipa existente ou cria a tua própria para competir em torneios de equipa.",
+    "noTeamsTip": "Equipas permitem-te participar em torneios team-based com prémios maiores!",
+    "exploreTeams": "Explorar Equipas"
+  },
+  "eloChart": {
+    "title": "Progressão ELO",
+    "noHistoryTitle": "Ainda não há histórico de partidas",
+    "noHistoryDesc": "Completa partidas em torneios para veres a tua progressão ELO ao longo do tempo",
+    "peak": "Pico",
+    "matchesTracked": "{{count}} partidas registadas",
+    "wins": "Vitórias",
+    "losses": "Derrotas",
+    "netChange": "Variação",
+    "victory": "Vitória",
+    "defeat": "Derrota",
+    "rankThresholds": "Limites de Rank",
+    "match": "Partida"
+  },
+  "rankingsPreview": {
+    "badge": "Leaderboard Global",
+    "title": "Melhores Jogadores",
+    "fullRankings": "Rankings Completos",
+    "allGames": "Todos os Jogos",
+    "wins": "Vitórias",
+    "winRate": "Taxa Vitória",
+    "noRankings": "Ainda não há rankings. Sê o primeiro a competir!",
+    "joinTournament": "Entrar num Torneio"
   }
 }

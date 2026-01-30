@@ -592,5 +592,47 @@
     "semiFinals": "Semi-Finals",
     "quarterFinals": "Quarter-Finals",
     "round": "Round"
+  },
+  "myTeams": {
+    "title": "My Teams",
+    "createTeam": "Create Team",
+    "pendingInvites": "Pending Invites",
+    "yourTeams": "Your Teams",
+    "captain": "Captain",
+    "maxMembers": "{{count}} max members",
+    "viewTeam": "View Team",
+    "leaveTeam": "Leave Team",
+    "leaveConfirmTitle": "Leave {{team}}?",
+    "leaveConfirmDesc": "Are you sure you want to leave this team? You'll need a new invite to rejoin.",
+    "accept": "Accept",
+    "decline": "Decline",
+    "noTeamsTitle": "No teams yet",
+    "noTeamsDesc": "Join an existing team or create your own to compete in team-based tournaments.",
+    "noTeamsTip": "Teams allow you to participate in team-based tournaments with bigger prizes!",
+    "exploreTeams": "Explore Teams"
+  },
+  "eloChart": {
+    "title": "ELO Progression",
+    "noHistoryTitle": "No match history yet",
+    "noHistoryDesc": "Complete matches in tournaments to see your ELO progression over time",
+    "peak": "Peak",
+    "matchesTracked": "{{count}} matches tracked",
+    "wins": "Wins",
+    "losses": "Losses",
+    "netChange": "Net Change",
+    "victory": "Victory",
+    "defeat": "Defeat",
+    "rankThresholds": "Rank Thresholds",
+    "match": "Match"
+  },
+  "rankingsPreview": {
+    "badge": "Global Leaderboard",
+    "title": "Top Players",
+    "fullRankings": "Full Rankings",
+    "allGames": "All Games",
+    "wins": "Wins",
+    "winRate": "Win Rate",
+    "noRankings": "No rankings yet. Be the first to compete!",
+    "joinTournament": "Join a Tournament"
   }
 }

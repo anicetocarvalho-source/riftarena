@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Users, UserPlus, LogOut, Eye, Crown, Loader2, UsersRound, Trophy } from "lucide-react";
 import { useUserTeams, useUserInvites, useRespondToInvite, useLeaveTeam } from "@/hooks/useTeams";
@@ -21,6 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export const MyTeamsSection = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data: teams, isLoading: teamsLoading } = useUserTeams();
@@ -54,11 +56,11 @@ export const MyTeamsSection = () => {
           <div className="flex items-center justify-between">
             <RiftCardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5 text-primary" />
-              My Teams
+              {t("myTeams.title")}
             </RiftCardTitle>
             <Button variant="rift-outline" size="sm" onClick={() => navigate("/teams/create")}>
               <UserPlus className="mr-2 h-4 w-4" />
-              Create Team
+              {t("myTeams.createTeam")}
             </Button>
           </div>
         </RiftCardHeader>
@@ -73,7 +75,7 @@ export const MyTeamsSection = () => {
               {invites && invites.length > 0 && (
                 <div className="space-y-3">
                   <h3 className="text-sm font-display uppercase tracking-wider text-muted-foreground">
-                    Pending Invites
+                    {t("myTeams.pendingInvites")}
                   </h3>
                   <div className="space-y-2">
                     {invites.map((invite) => (
@@ -91,7 +93,7 @@ export const MyTeamsSection = () => {
                           <div>
                             <p className="font-medium">{invite.team?.name}</p>
                             <p className="text-xs text-muted-foreground">
-                              [{invite.team?.tag}] • Captain: {invite.team?.captain?.username}
+                              [{invite.team?.tag}] • {t("myTeams.captain")}: {invite.team?.captain?.username}
                             </p>
                           </div>
                         </div>
@@ -102,7 +104,7 @@ export const MyTeamsSection = () => {
                             onClick={() => handleAcceptInvite(invite.id, invite.team_id)}
                             disabled={respondToInvite.isPending}
                           >
-                            Accept
+                            {t("myTeams.accept")}
                           </Button>
                           <Button
                             variant="outline"
@@ -110,7 +112,7 @@ export const MyTeamsSection = () => {
                             onClick={() => handleDeclineInvite(invite.id, invite.team_id)}
                             disabled={respondToInvite.isPending}
                           >
-                            Decline
+                            {t("myTeams.decline")}
                           </Button>
                         </div>
                       </div>
@@ -124,7 +126,7 @@ export const MyTeamsSection = () => {
                 <div className="space-y-3">
                   {invites && invites.length > 0 && (
                     <h3 className="text-sm font-display uppercase tracking-wider text-muted-foreground">
-                      Your Teams
+                      {t("myTeams.yourTeams")}
                     </h3>
                   )}
                   <div className="grid gap-3 md:grid-cols-2">
@@ -148,12 +150,12 @@ export const MyTeamsSection = () => {
                                 {isCaptain && (
                                   <Badge variant="gold" className="text-xs">
                                     <Crown className="mr-1 h-3 w-3" />
-                                    Captain
+                                    {t("myTeams.captain")}
                                   </Badge>
                                 )}
                               </div>
                               <p className="text-xs text-muted-foreground">
-                                [{team.tag}] • {team.max_members} max members
+                                [{team.tag}] • {t("myTeams.maxMembers", { count: team.max_members })}
                               </p>
                             </div>
                           </div>
@@ -162,7 +164,7 @@ export const MyTeamsSection = () => {
                               variant="ghost"
                               size="icon"
                               onClick={() => navigate(`/teams/${team.id}`)}
-                              title="View Team"
+                              title={t("myTeams.viewTeam")}
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
@@ -173,25 +175,25 @@ export const MyTeamsSection = () => {
                                     variant="ghost"
                                     size="icon"
                                     className="text-destructive hover:text-destructive"
-                                    title="Leave Team"
+                                    title={t("myTeams.leaveTeam")}
                                   >
                                     <LogOut className="h-4 w-4" />
                                   </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                   <AlertDialogHeader>
-                                    <AlertDialogTitle>Leave {team.name}?</AlertDialogTitle>
+                                    <AlertDialogTitle>{t("myTeams.leaveConfirmTitle", { team: team.name })}</AlertDialogTitle>
                                     <AlertDialogDescription>
-                                      Are you sure you want to leave this team? You'll need a new invite to rejoin.
+                                      {t("myTeams.leaveConfirmDesc")}
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
                                     <AlertDialogAction
                                       onClick={() => handleLeaveTeam(team.id)}
                                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                     >
-                                      Leave Team
+                                      {t("myTeams.leaveTeam")}
                                     </AlertDialogAction>
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
@@ -207,17 +209,17 @@ export const MyTeamsSection = () => {
                 !invites?.length && (
                   <EmptyState
                     icon={UsersRound}
-                    title="Ainda não tens equipa"
-                    description="Junta-te a uma equipa existente ou cria a tua própria para competir em torneios de equipa."
-                    tip="Equipas permitem-te participar em torneios team-based com prémios maiores!"
+                    title={t("myTeams.noTeamsTitle")}
+                    description={t("myTeams.noTeamsDesc")}
+                    tip={t("myTeams.noTeamsTip")}
                     actions={[
                       {
-                        label: "Criar Equipa",
+                        label: t("myTeams.createTeam"),
                         onClick: () => navigate("/teams/create"),
                         icon: UserPlus,
                       },
                       {
-                        label: "Explorar Equipas",
+                        label: t("myTeams.exploreTeams"),
                         onClick: () => navigate("/teams"),
                         variant: "rift-outline",
                         icon: Users,
