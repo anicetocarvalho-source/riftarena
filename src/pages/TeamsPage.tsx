@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -10,10 +11,11 @@ import { Input } from "@/components/ui/input";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useTeams, useUserTeams, useUserInvites, useRespondToInvite } from "@/hooks/useTeams";
 import { useAuth } from "@/contexts/AuthContext";
-import { Users, Search, Plus, Loader2, Check, X, Crown, UserPlus, UsersRound, Trophy } from "lucide-react";
+import { Users, Search, Plus, Loader2, Check, X, Crown, UserPlus, UsersRound } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const TeamsPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data: allTeams, isLoading } = useTeams();
@@ -40,19 +42,18 @@ const TeamsPage = () => {
           >
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
               <div>
-                <Badge variant="default" className="mb-4">Teams</Badge>
+                <Badge variant="default" className="mb-4">{t('teams.badge')}</Badge>
                 <h1 className="font-display text-4xl font-bold uppercase tracking-wide mb-4">
-                  Teams
+                  {t('teams.title')}
                 </h1>
                 <p className="text-muted-foreground max-w-2xl">
-                  Join or create a team to compete in team-based tournaments. 
-                  Build your roster and dominate the competition together.
+                  {t('teams.subtitle')}
                 </p>
               </div>
               {user && (
                 <Button variant="rift" onClick={() => navigate("/teams/create")}>
                   <Plus className="mr-2 h-4 w-4" />
-                  Create Team
+                  {t('teams.createTeam')}
                 </Button>
               )}
             </div>
@@ -68,7 +69,7 @@ const TeamsPage = () => {
             >
               <RiftCard glow>
                 <RiftCardHeader>
-                  <RiftCardTitle>Pending Invites ({invites.length})</RiftCardTitle>
+                  <RiftCardTitle>{t('teams.pendingInvites')} ({invites.length})</RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
                   <div className="space-y-3">
@@ -84,7 +85,7 @@ const TeamsPage = () => {
                           <div>
                             <p className="font-medium">{invite.team?.name}</p>
                             <p className="text-xs text-muted-foreground">
-                              Captain: {invite.team?.captain?.username}
+                              {t('teams.captain')}: {invite.team?.captain?.username}
                             </p>
                           </div>
                         </div>
@@ -130,7 +131,7 @@ const TeamsPage = () => {
               transition={{ delay: 0.1 }}
               className="mb-8"
             >
-              <h2 className="font-display text-xl uppercase tracking-wider mb-4">My Teams</h2>
+              <h2 className="font-display text-xl uppercase tracking-wider mb-4">{t('teams.myTeams')}</h2>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {userTeams.map((team) => (
                   <RiftCard 
@@ -152,7 +153,7 @@ const TeamsPage = () => {
                           </div>
                           <p className="text-sm text-muted-foreground">[{team.tag}]</p>
                         </div>
-                        <Badge variant="secondary">{team.max_members} max</Badge>
+                        <Badge variant="secondary">{team.max_members} {t('teams.max')}</Badge>
                       </div>
                     </RiftCardContent>
                   </RiftCard>
@@ -168,11 +169,11 @@ const TeamsPage = () => {
             transition={{ delay: 0.15 }}
             className="mb-8"
           >
-            <h2 className="font-display text-xl uppercase tracking-wider mb-4">All Teams</h2>
+            <h2 className="font-display text-xl uppercase tracking-wider mb-4">{t('teams.allTeams')}</h2>
             <div className="relative max-w-md mb-6">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Search teams..." 
+                placeholder={t('teams.searchPlaceholder')}
                 className="pl-10 bg-secondary border-border"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -189,11 +190,11 @@ const TeamsPage = () => {
             searchTerm ? (
               <EmptyState
                 icon={Search}
-                title="Nenhuma equipa encontrada"
-                description={`Não encontrámos equipas com "${searchTerm}". Tenta outro termo de pesquisa.`}
+                title={t('teams.noTeamsSearch')}
+                description={t('teams.noTeamsSearchDesc')}
                 actions={[
                   {
-                    label: "Limpar Pesquisa",
+                    label: t('teams.clearSearch'),
                     onClick: () => setSearchTerm(""),
                     icon: X,
                   },
@@ -202,21 +203,21 @@ const TeamsPage = () => {
             ) : (
               <EmptyState
                 icon={UsersRound}
-                title="Ainda não há equipas"
-                description="Sê o primeiro a criar uma equipa e recruta os melhores jogadores para a tua roster!"
-                tip="Equipas podem competir em torneios team-based com prémios maiores."
+                title={t('teams.noTeams')}
+                description={t('teams.noTeamsDesc')}
+                tip={t('teams.noTeamsTip')}
                 actions={
                   user
                     ? [
                         {
-                          label: "Criar Primeira Equipa",
+                          label: t('teams.createFirst'),
                           onClick: () => navigate("/teams/create"),
                           icon: UserPlus,
                         },
                       ]
                     : [
                         {
-                          label: "Entrar para Criar",
+                          label: t('teams.signInToCreate'),
                           onClick: () => navigate("/auth"),
                           icon: Users,
                         },

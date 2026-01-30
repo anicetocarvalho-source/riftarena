@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
@@ -10,6 +11,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 
 const Games = () => {
+  const { t } = useTranslation();
+
   // Fetch games from database
   const { data: games, isLoading, error } = useQuery({
     queryKey: ["games"],
@@ -86,13 +89,12 @@ const Games = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-12"
           >
-            <Badge variant="default" className="mb-4">Títulos Suportados</Badge>
+            <Badge variant="default" className="mb-4">{t('games.badge')}</Badge>
             <h1 className="font-display text-4xl font-bold uppercase tracking-wide mb-4">
-              Games
+              {t('games.title')}
             </h1>
             <p className="text-muted-foreground max-w-2xl">
-              Explore todos os jogos suportados na RIFT Arena. Cada título possui 
-              rankings dedicados, torneios e formatos competitivos.
+              {t('games.subtitle')}
             </p>
           </motion.div>
 
@@ -106,14 +108,14 @@ const Games = () => {
           {/* Error State */}
           {error && (
             <div className="text-center py-20">
-              <p className="text-destructive">Erro ao carregar jogos. Tente novamente.</p>
+              <p className="text-destructive">{t('games.error')}</p>
             </div>
           )}
 
           {/* Empty State */}
           {!isLoading && !error && games?.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-muted-foreground">Nenhum jogo disponível no momento.</p>
+              <p className="text-muted-foreground">{t('games.empty')}</p>
             </div>
           )}
 
@@ -147,7 +149,7 @@ const Games = () => {
                               </h2>
                               {stats.active > 0 && (
                                 <Badge variant="live" size="sm">
-                                  {stats.active} Ativos
+                                  {stats.active} {t('games.active')}
                                 </Badge>
                               )}
                             </div>
@@ -164,19 +166,19 @@ const Games = () => {
                                 <span className="font-display text-lg font-bold text-primary">
                                   {formatPlayerCount(playerCount)}
                                 </span>
-                                <p className="text-xs text-muted-foreground">Jogadores</p>
+                                <p className="text-xs text-muted-foreground">{t('games.players')}</p>
                               </div>
                               <div>
                                 <span className="font-display text-lg font-bold text-primary">
                                   {stats.total}
                                 </span>
-                                <p className="text-xs text-muted-foreground">Torneios</p>
+                                <p className="text-xs text-muted-foreground">{t('games.tournaments')}</p>
                               </div>
                             </div>
 
                             <Link to={`/tournaments?game=${game.id}`}>
                               <Button variant="rift-outline" size="sm">
-                                Ver Torneios
+                                {t('games.viewTournaments')}
                                 <ChevronRight className="ml-2 h-4 w-4" />
                               </Button>
                             </Link>

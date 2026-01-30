@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -54,6 +55,7 @@ const signInSchema = z.object({
 });
 
 const Auth = () => {
+  const { t } = useTranslation();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -91,7 +93,7 @@ const Auth = () => {
         const { error } = await signUp(email, password, username, country);
         if (error) {
           if (error.message.includes("already registered")) {
-            toast.error("This email is already registered. Please sign in instead.");
+            toast.error(t('auth.emailRegistered'));
           } else {
             toast.error(error.message);
           }
@@ -99,7 +101,7 @@ const Auth = () => {
           return;
         }
 
-        toast.success("Account created successfully! Welcome to RIFT.");
+        toast.success(t('auth.accountCreated'));
         navigate("/dashboard");
       } else {
         const validation = signInSchema.safeParse({ email, password });
@@ -118,7 +120,7 @@ const Auth = () => {
         const { error } = await signIn(email, password);
         if (error) {
           if (error.message.includes("Invalid login credentials")) {
-            toast.error("Invalid email or password. Please try again.");
+            toast.error(t('auth.invalidCredentials'));
           } else {
             toast.error(error.message);
           }
@@ -126,11 +128,11 @@ const Auth = () => {
           return;
         }
 
-        toast.success("Welcome back to RIFT!");
+        toast.success(t('auth.welcomeBack'));
         navigate("/dashboard");
       }
     } catch (err) {
-      toast.error("An unexpected error occurred. Please try again.");
+      toast.error(t('auth.unexpectedError'));
       setIsLoading(false);
     }
   };
@@ -147,7 +149,7 @@ const Auth = () => {
         className="absolute top-8 left-8 flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
-        <span className="font-display text-sm uppercase tracking-wider">Back to Home</span>
+        <span className="font-display text-sm uppercase tracking-wider">{t('auth.backToHome')}</span>
       </Link>
 
       {/* Auth Card */}
@@ -172,7 +174,7 @@ const Auth = () => {
                   : "bg-transparent text-muted-foreground border-border hover:border-primary/50"
               }`}
             >
-              Sign In
+              {t('auth.signIn')}
             </button>
             <button
               onClick={() => setMode("signup")}
@@ -182,7 +184,7 @@ const Auth = () => {
                   : "bg-transparent text-muted-foreground border-border hover:border-primary/50"
               }`}
             >
-              Sign Up
+              {t('auth.signUp')}
             </button>
           </div>
 
@@ -195,7 +197,7 @@ const Auth = () => {
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       type="text"
-                      placeholder="Username"
+                      placeholder={t('auth.usernamePlaceholder')}
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       className="pl-10 bg-secondary border-border"
@@ -211,7 +213,7 @@ const Auth = () => {
                     <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
                     <Select value={country} onValueChange={setCountry}>
                       <SelectTrigger className="pl-10 bg-secondary border-border">
-                        <SelectValue placeholder="Select your country" />
+                        <SelectValue placeholder={t('auth.selectCountry')} />
                       </SelectTrigger>
                       <SelectContent className="max-h-[300px] bg-card border-border">
                         {COUNTRIES.map((c) => (
@@ -234,7 +236,7 @@ const Auth = () => {
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="email"
-                  placeholder="Email"
+                  placeholder={t('auth.email')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 bg-secondary border-border"
@@ -250,7 +252,7 @@ const Auth = () => {
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Password"
+                  placeholder={t('auth.password')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10 pr-10 bg-secondary border-border"
@@ -277,7 +279,7 @@ const Auth = () => {
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm Password"
+                    placeholder={t('auth.confirmPassword')}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="pl-10 pr-10 bg-secondary border-border"
@@ -306,12 +308,12 @@ const Auth = () => {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {mode === "signup" ? "Creating Account..." : "Signing In..."}
+                  {mode === "signup" ? t('auth.creatingAccount') : t('auth.signingIn')}
                 </>
               ) : mode === "signup" ? (
-                "Create Account"
+                t('auth.createAccount')
               ) : (
-                "Sign In"
+                t('auth.signIn')
               )}
             </Button>
           </form>
@@ -320,10 +322,10 @@ const Auth = () => {
           {mode === "signup" && (
             <div className="mt-6 p-4 rounded-sm bg-secondary/50 border border-border">
               <p className="text-xs text-muted-foreground mb-2">
-                New accounts start as <Badge variant="default" size="sm">Player</Badge>
+                {t('auth.newAccountInfo')} <Badge variant="default" size="sm">{t('common.player')}</Badge>
               </p>
               <p className="text-xs text-muted-foreground">
-                Organizer and Sponsor roles are assigned by admins.
+                {t('auth.roleAssignment')}
               </p>
             </div>
           )}
@@ -332,7 +334,7 @@ const Auth = () => {
           {mode === "signin" && (
             <div className="mt-6 p-4 rounded-sm bg-secondary/50 border border-border">
               <p className="text-xs text-muted-foreground mb-3 font-display uppercase tracking-wider">
-                Quick Access (Test Accounts)
+                {t('auth.quickAccess')}
               </p>
               <div className="space-y-2">
                 <button

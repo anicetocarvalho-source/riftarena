@@ -54,42 +54,95 @@
   "tournaments": {
     "title": "Torneios",
     "subtitle": "Compete nos melhores torneios de esports",
+    "badge": "Explorar Torneios",
+    "description": "Encontra e participa em torneios competitivos de todos os jogos suportados. Compete por prémios em dinheiro, recompensas de patrocinadores e reconhecimento global.",
     "all": "Todos",
     "registration": "Inscrições",
     "live": "Ao Vivo",
     "completed": "Terminados",
+    "upcoming": "Próximos",
+    "cancelled": "Cancelados",
+    "draft": "Rascunho",
     "createTournament": "Criar Torneio",
     "noTournaments": "Sem torneios disponíveis",
     "noTournamentsDesc": "Não há torneios nesta categoria de momento.",
+    "noTournamentsEmpty": "Ainda não há torneios",
+    "noTournamentsEmptyDesc": "Sê o primeiro a criar um torneio e atrair competidores de todo o mundo!",
+    "noTournamentsTip": "Torneios com prémios atraem mais participantes.",
+    "noTournamentsSearch": "Nenhum torneio encontrado",
+    "noTournamentsSearchDesc": "Não há torneios que correspondam aos teus filtros. Tenta ajustar os critérios de pesquisa.",
     "register": "Inscrever",
     "viewDetails": "Ver Detalhes",
+    "viewTournament": "Ver Torneio",
+    "manageTournament": "Gerir Torneio",
     "prizePool": "Prémio",
     "participants": "Participantes",
-    "startDate": "Data de Início"
+    "startDate": "Data de Início",
+    "searchPlaceholder": "Pesquisar torneios...",
+    "allGames": "Todos os Jogos",
+    "allStatus": "Todos os Estados",
+    "sortBy": "Ordenar por",
+    "dateNewest": "Data (Recente)",
+    "dateOldest": "Data (Antigo)",
+    "prizeHigh": "Prémio (Alto→Baixo)",
+    "prizeLow": "Prémio (Baixo→Alto)",
+    "sizeLarge": "Tamanho (Grande→Pequeno)",
+    "sizeSmall": "Tamanho (Pequeno→Grande)",
+    "date": "Data",
+    "clearFilters": "Limpar",
+    "exploreGames": "Explorar Jogos",
+    "poweredBy": "Patrocinado por"
   },
   "rankings": {
     "title": "Rankings",
-    "subtitle": "Os melhores jogadores do mundo",
+    "subtitle": "Acompanha o teu progresso contra os melhores jogadores do mundo. Sobe nos rankings, ganha reconhecimento e prova o teu domínio.",
+    "badge": "Leaderboard Global",
     "rank": "Posição",
     "player": "Jogador",
     "elo": "ELO",
     "winRate": "Taxa Vitória",
-    "matches": "Partidas"
+    "matches": "Partidas",
+    "tier": "Tier",
+    "wl": "V/D",
+    "game": "Jogo",
+    "allGames": "Todos os Jogos",
+    "noRankings": "Ainda não há rankings",
+    "noRankingsDesc": "Completa partidas em torneios para aparecer no leaderboard",
+    "streak": "série"
   },
   "teams": {
     "title": "Equipas",
-    "subtitle": "Descobre as melhores equipas competitivas",
+    "subtitle": "Junta-te ou cria uma equipa para competir em torneios por equipas. Constrói a tua roster e domina a competição juntos.",
+    "badge": "Equipas",
     "createTeam": "Criar Equipa",
     "members": "Membros",
     "captain": "Capitão",
-    "noTeams": "Sem equipas",
-    "noTeamsDesc": "Ainda não existem equipas registadas."
+    "noTeams": "Ainda não há equipas",
+    "noTeamsDesc": "Sê o primeiro a criar uma equipa e recruta os melhores jogadores para a tua roster!",
+    "noTeamsTip": "Equipas podem competir em torneios team-based com prémios maiores.",
+    "noTeamsSearch": "Nenhuma equipa encontrada",
+    "noTeamsSearchDesc": "Não encontrámos equipas com esse termo. Tenta outro termo de pesquisa.",
+    "pendingInvites": "Convites Pendentes",
+    "myTeams": "Minhas Equipas",
+    "allTeams": "Todas as Equipas",
+    "searchPlaceholder": "Pesquisar equipas...",
+    "clearSearch": "Limpar Pesquisa",
+    "createFirst": "Criar Primeira Equipa",
+    "signInToCreate": "Entrar para Criar",
+    "max": "máx"
   },
   "games": {
     "title": "Jogos",
-    "subtitle": "Títulos de esports suportados",
+    "subtitle": "Explora todos os jogos suportados na RIFT Arena. Cada título possui rankings dedicados, torneios e formatos competitivos.",
+    "badge": "Títulos Suportados",
     "viewRankings": "Ver Rankings",
-    "viewTournaments": "Ver Torneios"
+    "viewTournaments": "Ver Torneios",
+    "players": "Jogadores",
+    "tournaments": "Torneios",
+    "active": "Ativos",
+    "loading": "A carregar jogos...",
+    "error": "Erro ao carregar jogos. Tente novamente.",
+    "empty": "Nenhum jogo disponível no momento."
   },
   "auth": {
     "signIn": "Entrar",
@@ -98,10 +151,24 @@
     "password": "Palavra-passe",
     "confirmPassword": "Confirmar Palavra-passe",
     "username": "Nome de utilizador",
+    "usernamePlaceholder": "Nome de utilizador",
+    "selectCountry": "Seleciona o teu país",
     "forgotPassword": "Esqueceste a palavra-passe?",
     "noAccount": "Não tens conta?",
     "hasAccount": "Já tens conta?",
-    "signInWith": "Ou entra com"
+    "signInWith": "Ou entra com",
+    "backToHome": "Voltar à Home",
+    "createAccount": "Criar Conta",
+    "creatingAccount": "A criar conta...",
+    "signingIn": "A entrar...",
+    "newAccountInfo": "Novas contas começam como",
+    "roleAssignment": "Funções de Organizador e Sponsor são atribuídas por admins.",
+    "quickAccess": "Acesso Rápido (Contas de Teste)",
+    "welcomeBack": "Bem-vindo de volta ao RIFT!",
+    "accountCreated": "Conta criada com sucesso! Bem-vindo ao RIFT.",
+    "emailRegistered": "Este email já está registado. Por favor, entra na tua conta.",
+    "invalidCredentials": "Email ou palavra-passe inválidos. Tenta novamente.",
+    "unexpectedError": "Ocorreu um erro inesperado. Tenta novamente."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -128,7 +195,8 @@
     "search": "Pesquisar",
     "filter": "Filtrar",
     "noResults": "Sem resultados",
-    "confirmDelete": "Tens a certeza que queres eliminar?"
+    "confirmDelete": "Tens a certeza que queres eliminar?",
+    "player": "Jogador"
   },
   "sponsors": {
     "title": "Parceiros",
@@ -140,11 +208,24 @@
     "campaigns": "Campanhas Ativas",
     "platinum": "Platinum",
     "gold": "Gold",
-    "silver": "Silver"
+    "silver": "Silver",
+    "trustedBy": "Marcas de Confiança Global"
   },
   "language": {
     "select": "Idioma",
     "pt": "Português",
     "en": "English"
+  },
+  "featured": {
+    "badge": "Ao Vivo & Próximos",
+    "title": "Torneios em Destaque",
+    "viewAll": "Ver Todos"
+  },
+  "cta": {
+    "ready": "Preparado para",
+    "compete": "Competir",
+    "description": "Junta-te a milhares de jogadores que já encontraram o seu campo de batalha competitivo. Cria o teu perfil e começa a subir nos rankings hoje.",
+    "joinNow": "Juntar-me Agora",
+    "learnMore": "Saber Mais"
   }
 }

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
@@ -26,6 +27,7 @@ interface TournamentCardProps {
 }
 
 export function TournamentCard({ tournament, index = 0, onManage }: TournamentCardProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const displayStatus = tournament.status === "registration" ? "upcoming" : tournament.status;
   
@@ -63,7 +65,7 @@ export function TournamentCard({ tournament, index = 0, onManage }: TournamentCa
           <div className="flex items-center justify-between border-b border-border pb-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Trophy className="h-4 w-4" />
-              <span className="text-sm">Prize Pool</span>
+              <span className="text-sm">{t('tournaments.prizePool')}</span>
             </div>
             <span className="font-display text-lg font-semibold text-primary">
               {tournament.prizePool}
@@ -87,7 +89,7 @@ export function TournamentCard({ tournament, index = 0, onManage }: TournamentCa
           {/* Sponsor */}
           {tournament.sponsor && (
             <div className="pt-2 text-xs text-muted-foreground">
-              Powered by <span className="text-foreground">{tournament.sponsor}</span>
+              {t('tournaments.poweredBy')} <span className="text-foreground">{tournament.sponsor}</span>
             </div>
           )}
 
@@ -98,12 +100,12 @@ export function TournamentCard({ tournament, index = 0, onManage }: TournamentCa
               className="w-full group-hover:bg-primary group-hover:text-primary-foreground"
               onClick={() => navigate(`/tournaments/${tournament.id}`)}
             >
-              View Tournament
+              {t('tournaments.viewTournament')}
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
             {onManage && (
               <Button variant="rift" className="w-full" onClick={onManage}>
-                Manage Tournament
+                {t('tournaments.manageTournament')}
                 <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             )}
