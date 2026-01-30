@@ -8,12 +8,31 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight, TrendingUp, Users, Trophy, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { 
+  SiSamsung, 
+  SiRedbull, 
+  SiIntel, 
+  SiRazer, 
+  SiMonster, 
+  SiNike 
+} from "@icons-pack/react-simple-icons";
+import { ComponentType } from "react";
 
-const sponsors = [
+interface Sponsor {
+  id: string;
+  name: string;
+  Icon: ComponentType<{ className?: string }>;
+  tier: string;
+  activeCampaigns: number;
+  descriptionKey: string;
+  stats: { impressions: string; tournaments: number; engagement: string };
+}
+
+const sponsors: Sponsor[] = [
   {
     id: "1",
     name: "Samsung",
-    logo: "SAMSUNG",
+    Icon: SiSamsung,
     tier: "Platinum",
     activeCampaigns: 3,
     descriptionKey: "Official mobile device partner of RIFT Championship Series.",
@@ -22,7 +41,7 @@ const sponsors = [
   {
     id: "2",
     name: "Red Bull",
-    logo: "REDBULL",
+    Icon: SiRedbull,
     tier: "Platinum",
     activeCampaigns: 2,
     descriptionKey: "Energy partner fueling champions across all RIFT tournaments.",
@@ -31,7 +50,7 @@ const sponsors = [
   {
     id: "3",
     name: "Intel",
-    logo: "INTEL",
+    Icon: SiIntel,
     tier: "Gold",
     activeCampaigns: 1,
     descriptionKey: "Technology partner powering the RIFT gaming infrastructure.",
@@ -40,7 +59,7 @@ const sponsors = [
   {
     id: "4",
     name: "Razer",
-    logo: "RAZER",
+    Icon: SiRazer,
     tier: "Gold",
     activeCampaigns: 2,
     descriptionKey: "Official gaming peripherals partner for RIFT pro players.",
@@ -49,7 +68,7 @@ const sponsors = [
   {
     id: "5",
     name: "Monster Energy",
-    logo: "MONSTER",
+    Icon: SiMonster,
     tier: "Silver",
     activeCampaigns: 1,
     descriptionKey: "Energy drink partner for select regional tournaments.",
@@ -58,7 +77,7 @@ const sponsors = [
   {
     id: "6",
     name: "Nike",
-    logo: "NIKE",
+    Icon: SiNike,
     tier: "Silver",
     activeCampaigns: 1,
     descriptionKey: "Apparel partner for RIFT team merchandise.",
@@ -141,9 +160,7 @@ const Sponsors = () => {
                   <RiftCardContent>
                     {/* Sponsor Header */}
                     <div className="flex items-center justify-between mb-4">
-                      <span className="font-display text-2xl font-bold tracking-[0.15em] text-muted-foreground">
-                        {sponsor.logo}
-                      </span>
+                      <sponsor.Icon className="h-8 w-auto text-muted-foreground" />
                       <Badge variant={getTierColor(sponsor.tier) as any}>
                         {t(`sponsors.${sponsor.tier.toLowerCase()}`)}
                       </Badge>
