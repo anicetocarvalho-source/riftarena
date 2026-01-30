@@ -568,5 +568,29 @@
     "cancelling": "Cancelling...",
     "bracketType": "Bracket Type",
     "status": "Status"
+  },
+  "registrationsTab": {
+    "title": "Registrations",
+    "teamTitle": "Team Registrations",
+    "noRegistrations": "No registrations yet",
+    "registered": "Registered",
+    "confirmed": "Confirmed",
+    "pending": "Pending",
+    "rejected": "Rejected",
+    "undo": "Undo"
+  },
+  "bracketTab": {
+    "title": "Tournament Bracket",
+    "generateBracket": "Generate Bracket",
+    "regenerateBracket": "Regenerate Bracket",
+    "noBracket": "No bracket generated yet",
+    "needParticipants": "Need at least 2 confirmed participants (currently {{count}})",
+    "match": "Match",
+    "tbd": "TBD",
+    "vs": "vs",
+    "finals": "Finals",
+    "semiFinals": "Semi-Finals",
+    "quarterFinals": "Quarter-Finals",
+    "round": "Round"
   }
 }
