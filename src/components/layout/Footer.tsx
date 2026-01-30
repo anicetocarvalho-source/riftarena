@@ -33,9 +33,9 @@ export function Footer() {
       <div className="container py-16">
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
           {/* Brand */}
-          <div className="col-span-2">
+          <div className="col-span-2 flex flex-col items-start">
             <RiftLogo showTagline />
-            <p className="mt-6 text-sm text-muted-foreground max-w-xs">
+            <p className="mt-6 text-sm text-muted-foreground max-w-xs text-left">
               The premier esports competition platform. Where champions are born and legends compete.
             </p>
           </div>
