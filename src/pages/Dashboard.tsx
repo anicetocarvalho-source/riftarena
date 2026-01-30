@@ -93,9 +93,9 @@ const Dashboard = () => {
                   <Users className="mr-2 h-4 w-4" />
                   View Profile
                 </Button>
-                <Button variant="rift-outline" size="sm" onClick={() => navigate("/profile/edit")}>
+                <Button variant="rift-outline" size="sm" onClick={() => navigate("/settings")}>
                   <Settings className="mr-2 h-4 w-4" />
-                  Edit Profile
+                  Configurações
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => signOut()}>
                   Sign Out
