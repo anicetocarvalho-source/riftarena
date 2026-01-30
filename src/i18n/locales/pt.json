@@ -723,5 +723,38 @@
     "cancel": "Cancelar",
     "saveChanges": "Guardar Alterações",
     "saving": "A guardar..."
+  },
+  "sponsorDashboard": {
+    "title": "Sponsor Dashboard",
+    "description": "Acompanha o desempenho das tuas campanhas e métricas de engajamento.",
+    "backToDashboard": "Voltar ao Dashboard",
+    "totalImpressions": "Total Impressões",
+    "ctr": "Taxa de Cliques (CTR)",
+    "activeTournaments": "Torneios Ativos",
+    "playerReach": "Alcance de Jogadores",
+    "tournamentsTotal": "torneios no total",
+    "vsLastMonth": "vs mês anterior",
+    "engagementOverTime": "Engajamento ao Longo do Tempo",
+    "audienceByGame": "Audiência por Jogo",
+    "sponsoredTournaments": "Torneios Patrocinados",
+    "viewAll": "Ver Todos",
+    "participants": "Participantes",
+    "prizePool": "Prize Pool",
+    "noTournaments": "Ainda não patrocinas nenhum torneio.",
+    "noTournamentsHint": "Contacta organizadores para patrocinar eventos.",
+    "conversionMetrics": "Métricas de Conversão",
+    "totalClicks": "Total de Cliques",
+    "conversions": "Conversões",
+    "conversionRate": "Taxa de Conversão",
+    "costPerConversion": "Custo por Conversão",
+    "impressionsLabel": "Impressões",
+    "clicksLabel": "Cliques",
+    "audienceLabel": "Audiência",
+    "status": {
+      "live": "Ao Vivo",
+      "registration": "Inscrições",
+      "completed": "Finalizado",
+      "draft": "Rascunho"
+    }
   }
 }
