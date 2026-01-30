@@ -5,6 +5,7 @@ import { TournamentRegistration } from "@/types/tournament";
 import { Loader2, Check, X, Users, UsersRound } from "lucide-react";
 import { format } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useTranslation } from "react-i18next";
 
 interface RegistrationsTabProps {
   registrations: TournamentRegistration[];
@@ -23,6 +24,8 @@ export const RegistrationsTab = ({
   isUpdating,
   isTeamBased = false,
 }: RegistrationsTabProps) => {
+  const { t } = useTranslation();
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -34,11 +37,11 @@ export const RegistrationsTab = ({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "confirmed":
-        return <Badge variant="diamond">Confirmed</Badge>;
+        return <Badge variant="diamond">{t("registrationsTab.confirmed")}</Badge>;
       case "pending":
-        return <Badge variant="default">Pending</Badge>;
+        return <Badge variant="default">{t("registrationsTab.pending")}</Badge>;
       case "rejected":
-        return <Badge variant="destructive">Rejected</Badge>;
+        return <Badge variant="destructive">{t("registrationsTab.rejected")}</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -69,7 +72,7 @@ export const RegistrationsTab = ({
                   </Badge>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Registered {format(new Date(registration.created_at), "PPp")}
+                  {t("registrationsTab.registered")} {format(new Date(registration.created_at), "PPp")}
                 </p>
               </div>
             </>
@@ -84,7 +87,7 @@ export const RegistrationsTab = ({
               <div>
                 <p className="font-medium">{registration.user?.username || "Unknown"}</p>
                 <p className="text-xs text-muted-foreground">
-                  Registered {format(new Date(registration.created_at), "PPp")}
+                  {t("registrationsTab.registered")} {format(new Date(registration.created_at), "PPp")}
                 </p>
               </div>
             </>
@@ -119,7 +122,7 @@ export const RegistrationsTab = ({
               onClick={() => onUpdateStatus(registration.id, "pending")}
               disabled={isUpdating}
             >
-              Undo
+              {t("registrationsTab.undo")}
             </Button>
           )}
         </div>
@@ -136,13 +139,13 @@ export const RegistrationsTab = ({
           ) : (
             <Users className="h-5 w-5 text-primary" />
           )}
-          {isTeamBased ? "Team Registrations" : "Registrations"} ({registrations.length})
+          {isTeamBased ? t("registrationsTab.teamTitle") : t("registrationsTab.title")} ({registrations.length})
         </RiftCardTitle>
       </RiftCardHeader>
       <RiftCardContent>
         {registrations.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
-            No registrations yet
+            {t("registrationsTab.noRegistrations")}
           </div>
         ) : (
           <div className="space-y-3">
