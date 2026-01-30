@@ -169,6 +169,8 @@ export type Database = {
           created_at: string
           discord_username: string | null
           id: string
+          onboarding_completed: boolean | null
+          onboarding_step: number | null
           twitch_username: string | null
           twitter_username: string | null
           updated_at: string
@@ -182,6 +184,8 @@ export type Database = {
           created_at?: string
           discord_username?: string | null
           id: string
+          onboarding_completed?: boolean | null
+          onboarding_step?: number | null
           twitch_username?: string | null
           twitter_username?: string | null
           updated_at?: string
@@ -195,6 +199,8 @@ export type Database = {
           created_at?: string
           discord_username?: string | null
           id?: string
+          onboarding_completed?: boolean | null
+          onboarding_step?: number | null
           twitch_username?: string | null
           twitter_username?: string | null
           updated_at?: string

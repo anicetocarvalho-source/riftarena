@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -8,6 +8,8 @@ import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/comp
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MyTeamsSection } from "@/components/dashboard/MyTeamsSection";
+import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
+import { useOnboarding } from "@/hooks/useOnboarding";
 import { 
   Trophy, Users, Gamepad2, Calendar, TrendingUp, Settings, 
   Shield, BarChart3, DollarSign, Bell, ChevronRight, Loader2
@@ -15,6 +17,7 @@ import {
 
 const Dashboard = () => {
   const { user, profile, roles, isLoading, isAdmin, isOrganizer, isSponsor, signOut } = useAuth();
+  const { showOnboarding, isLoading: onboardingLoading, completeOnboarding, skipOnboarding } = useOnboarding();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +26,7 @@ const Dashboard = () => {
     }
   }, [user, isLoading, navigate]);
 
-  if (isLoading) {
+  if (isLoading || onboardingLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -46,6 +49,16 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/* Onboarding Wizard */}
+      <AnimatePresence>
+        {showOnboarding && (
+          <OnboardingWizard 
+            onComplete={completeOnboarding} 
+            onSkip={skipOnboarding} 
+          />
+        )}
+      </AnimatePresence>
+
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">
