@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { TournamentCard } from "@/components/tournaments/TournamentCard";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
@@ -42,6 +43,8 @@ const featuredTournaments = [
 ];
 
 export function FeaturedTournaments() {
+  const { t } = useTranslation();
+
   return (
     <section className="py-24 bg-gradient-to-b from-background to-card">
       <div className="container">
@@ -54,7 +57,7 @@ export function FeaturedTournaments() {
               viewport={{ once: true }}
               className="text-sm uppercase tracking-widest text-primary mb-2"
             >
-              Live & Upcoming
+              {t('featured.badge')}
             </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 10 }}
@@ -63,7 +66,7 @@ export function FeaturedTournaments() {
               transition={{ delay: 0.1 }}
               className="font-display text-3xl font-bold uppercase tracking-wide"
             >
-              Featured Tournaments
+              {t('featured.title')}
             </motion.h2>
           </div>
           <motion.div
@@ -72,7 +75,7 @@ export function FeaturedTournaments() {
             viewport={{ once: true }}
           >
             <Button variant="rift-outline">
-              View All
+              {t('featured.viewAll')}
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </motion.div>

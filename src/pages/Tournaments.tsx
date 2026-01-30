@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
@@ -21,6 +22,7 @@ import {
 } from "@/components/ui/select";
 
 const Tournaments = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { isOrganizer, isAdmin, user } = useAuth();
@@ -150,19 +152,18 @@ const Tournaments = () => {
           >
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
               <div>
-                <Badge variant="default" className="mb-4">Browse Tournaments</Badge>
+                <Badge variant="default" className="mb-4">{t('tournaments.badge')}</Badge>
                 <h1 className="font-display text-4xl font-bold uppercase tracking-wide mb-4">
-                  Tournaments
+                  {t('tournaments.title')}
                 </h1>
                 <p className="text-muted-foreground max-w-2xl">
-                  Find and join competitive tournaments across all supported games. 
-                  Compete for cash prizes, sponsor rewards, and global recognition.
+                  {t('tournaments.description')}
                 </p>
               </div>
               {(isOrganizer || isAdmin) && (
                 <Button variant="rift" onClick={() => navigate("/tournaments/create")}>
                   <Plus className="mr-2 h-4 w-4" />
-                  Create Tournament
+                  {t('tournaments.createTournament')}
                 </Button>
               )}
             </div>
@@ -178,7 +179,7 @@ const Tournaments = () => {
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Search tournaments..." 
+                placeholder={t('tournaments.searchPlaceholder')}
                 className="pl-10 bg-secondary border-border"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -187,10 +188,10 @@ const Tournaments = () => {
             <div className="flex gap-2 flex-wrap">
               <Select value={selectedGame} onValueChange={handleGameChange}>
                 <SelectTrigger className="w-[180px] bg-secondary border-border">
-                  <SelectValue placeholder="All Games" />
+                  <SelectValue placeholder={t('tournaments.allGames')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Games</SelectItem>
+                  <SelectItem value="all">{t('tournaments.allGames')}</SelectItem>
                   {games?.map((game) => (
                     <SelectItem key={game.id} value={game.id}>
                       {game.icon} {game.name}
@@ -200,39 +201,39 @@ const Tournaments = () => {
               </Select>
               <Select value={selectedStatus} onValueChange={handleStatusChange}>
                 <SelectTrigger className="w-[150px] bg-secondary border-border">
-                  <SelectValue placeholder="All Status" />
+                  <SelectValue placeholder={t('tournaments.allStatus')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="live">🔴 Live</SelectItem>
-                  <SelectItem value="registration">📝 Registration</SelectItem>
-                  <SelectItem value="upcoming">📅 Upcoming</SelectItem>
-                  <SelectItem value="completed">✅ Completed</SelectItem>
-                  <SelectItem value="cancelled">❌ Cancelled</SelectItem>
+                  <SelectItem value="all">{t('tournaments.allStatus')}</SelectItem>
+                  <SelectItem value="live">🔴 {t('tournaments.live')}</SelectItem>
+                  <SelectItem value="registration">📝 {t('tournaments.registration')}</SelectItem>
+                  <SelectItem value="upcoming">📅 {t('tournaments.upcoming')}</SelectItem>
+                  <SelectItem value="completed">✅ {t('tournaments.completed')}</SelectItem>
+                  <SelectItem value="cancelled">❌ {t('tournaments.cancelled')}</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={sortBy} onValueChange={handleSortChange}>
                 <SelectTrigger className="w-[180px] bg-secondary border-border">
                   <ArrowUpDown className="mr-2 h-4 w-4" />
-                  <SelectValue placeholder="Sort by" />
+                  <SelectValue placeholder={t('tournaments.sortBy')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="date_desc">📅 Date (Newest)</SelectItem>
-                  <SelectItem value="date_asc">📅 Date (Oldest)</SelectItem>
-                  <SelectItem value="prize_desc">💰 Prize (High→Low)</SelectItem>
-                  <SelectItem value="prize_asc">💰 Prize (Low→High)</SelectItem>
-                  <SelectItem value="participants_desc">👥 Size (Large→Small)</SelectItem>
-                  <SelectItem value="participants_asc">👥 Size (Small→Large)</SelectItem>
+                  <SelectItem value="date_desc">📅 {t('tournaments.dateNewest')}</SelectItem>
+                  <SelectItem value="date_asc">📅 {t('tournaments.dateOldest')}</SelectItem>
+                  <SelectItem value="prize_desc">💰 {t('tournaments.prizeHigh')}</SelectItem>
+                  <SelectItem value="prize_asc">💰 {t('tournaments.prizeLow')}</SelectItem>
+                  <SelectItem value="participants_desc">👥 {t('tournaments.sizeLarge')}</SelectItem>
+                  <SelectItem value="participants_asc">👥 {t('tournaments.sizeSmall')}</SelectItem>
                 </SelectContent>
               </Select>
               <Button variant="rift-outline" size="default">
                 <Calendar className="mr-2 h-4 w-4" />
-                Date
+                {t('tournaments.date')}
               </Button>
               {hasActiveFilters && (
                 <Button variant="ghost" size="default" onClick={clearFilters}>
                   <X className="mr-2 h-4 w-4" />
-                  Clear
+                  {t('tournaments.clearFilters')}
                 </Button>
               )}
             </div>
@@ -247,11 +248,11 @@ const Tournaments = () => {
             hasActiveFilters ? (
               <EmptyState
                 icon={Search}
-                title="Nenhum torneio encontrado"
-                description="Não há torneios que correspondam aos teus filtros. Tenta ajustar os critérios de pesquisa."
+                title={t('tournaments.noTournamentsSearch')}
+                description={t('tournaments.noTournamentsSearchDesc')}
                 actions={[
                   {
-                    label: "Limpar Filtros",
+                    label: t('tournaments.clearFilters'),
                     onClick: clearFilters,
                     icon: X,
                   },
@@ -260,21 +261,21 @@ const Tournaments = () => {
             ) : (
               <EmptyState
                 icon={Trophy}
-                title="Ainda não há torneios"
-                description="Sê o primeiro a criar um torneio e atrair competidores de todo o mundo!"
-                tip="Torneios com prémios atraem mais participantes."
+                title={t('tournaments.noTournamentsEmpty')}
+                description={t('tournaments.noTournamentsEmptyDesc')}
+                tip={t('tournaments.noTournamentsTip')}
                 actions={
                   (isOrganizer || isAdmin)
                     ? [
                         {
-                          label: "Criar Torneio",
+                          label: t('tournaments.createTournament'),
                           onClick: () => navigate("/tournaments/create"),
                           icon: Plus,
                         },
                       ]
                     : [
                         {
-                          label: "Explorar Jogos",
+                          label: t('tournaments.exploreGames'),
                           onClick: () => navigate("/games"),
                           icon: Gamepad2,
                         },

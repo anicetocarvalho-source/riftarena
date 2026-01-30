@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 const sponsors = [
@@ -11,6 +12,8 @@ const sponsors = [
 ];
 
 export function SponsorsSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="py-16 border-y border-border bg-secondary/30">
       <div className="container">
@@ -20,7 +23,7 @@ export function SponsorsSection() {
           viewport={{ once: true }}
           className="text-center text-xs uppercase tracking-widest text-muted-foreground mb-8"
         >
-          Trusted by Global Brands
+          {t('sponsors.trustedBy')}
         </motion.p>
 
         <Link to="/sponsors">

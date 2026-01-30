@@ -54,42 +54,95 @@
   "tournaments": {
     "title": "Tournaments",
     "subtitle": "Compete in the best esports tournaments",
+    "badge": "Browse Tournaments",
+    "description": "Find and join competitive tournaments across all supported games. Compete for cash prizes, sponsor rewards, and global recognition.",
     "all": "All",
     "registration": "Registration",
     "live": "Live",
     "completed": "Completed",
+    "upcoming": "Upcoming",
+    "cancelled": "Cancelled",
+    "draft": "Draft",
     "createTournament": "Create Tournament",
     "noTournaments": "No tournaments available",
     "noTournamentsDesc": "There are no tournaments in this category at the moment.",
+    "noTournamentsEmpty": "No tournaments yet",
+    "noTournamentsEmptyDesc": "Be the first to create a tournament and attract competitors from around the world!",
+    "noTournamentsTip": "Tournaments with prizes attract more participants.",
+    "noTournamentsSearch": "No tournaments found",
+    "noTournamentsSearchDesc": "No tournaments match your filters. Try adjusting your search criteria.",
     "register": "Register",
     "viewDetails": "View Details",
+    "viewTournament": "View Tournament",
+    "manageTournament": "Manage Tournament",
     "prizePool": "Prize Pool",
     "participants": "Participants",
-    "startDate": "Start Date"
+    "startDate": "Start Date",
+    "searchPlaceholder": "Search tournaments...",
+    "allGames": "All Games",
+    "allStatus": "All Status",
+    "sortBy": "Sort by",
+    "dateNewest": "Date (Newest)",
+    "dateOldest": "Date (Oldest)",
+    "prizeHigh": "Prize (High→Low)",
+    "prizeLow": "Prize (Low→High)",
+    "sizeLarge": "Size (Large→Small)",
+    "sizeSmall": "Size (Small→Large)",
+    "date": "Date",
+    "clearFilters": "Clear",
+    "exploreGames": "Explore Games",
+    "poweredBy": "Powered by"
   },
   "rankings": {
     "title": "Rankings",
-    "subtitle": "The world's best players",
+    "subtitle": "Track your progress against the best players worldwide. Climb the ranks, earn recognition, and prove your dominance.",
+    "badge": "Global Leaderboard",
     "rank": "Rank",
     "player": "Player",
     "elo": "ELO",
     "winRate": "Win Rate",
-    "matches": "Matches"
+    "matches": "Matches",
+    "tier": "Tier",
+    "wl": "W/L",
+    "game": "Game",
+    "allGames": "All Games",
+    "noRankings": "No rankings yet",
+    "noRankingsDesc": "Complete matches in tournaments to appear on the leaderboard",
+    "streak": "streak"
   },
   "teams": {
     "title": "Teams",
-    "subtitle": "Discover the best competitive teams",
+    "subtitle": "Join or create a team to compete in team-based tournaments. Build your roster and dominate the competition together.",
+    "badge": "Teams",
     "createTeam": "Create Team",
     "members": "Members",
     "captain": "Captain",
-    "noTeams": "No teams",
-    "noTeamsDesc": "There are no registered teams yet."
+    "noTeams": "No teams yet",
+    "noTeamsDesc": "Be the first to create a team and recruit the best players for your roster!",
+    "noTeamsTip": "Teams can compete in team-based tournaments with bigger prizes.",
+    "noTeamsSearch": "No teams found",
+    "noTeamsSearchDesc": "We couldn't find teams matching that search. Try a different term.",
+    "pendingInvites": "Pending Invites",
+    "myTeams": "My Teams",
+    "allTeams": "All Teams",
+    "searchPlaceholder": "Search teams...",
+    "clearSearch": "Clear Search",
+    "createFirst": "Create First Team",
+    "signInToCreate": "Sign In to Create",
+    "max": "max"
   },
   "games": {
     "title": "Games",
-    "subtitle": "Supported esports titles",
+    "subtitle": "Explore all supported games on RIFT Arena. Each title has dedicated rankings, tournaments, and competitive formats.",
+    "badge": "Supported Titles",
     "viewRankings": "View Rankings",
-    "viewTournaments": "View Tournaments"
+    "viewTournaments": "View Tournaments",
+    "players": "Players",
+    "tournaments": "Tournaments",
+    "active": "Active",
+    "loading": "Loading games...",
+    "error": "Error loading games. Please try again.",
+    "empty": "No games available at the moment."
   },
   "auth": {
     "signIn": "Sign In",
@@ -98,10 +151,24 @@
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "username": "Username",
+    "usernamePlaceholder": "Username",
+    "selectCountry": "Select your country",
     "forgotPassword": "Forgot password?",
     "noAccount": "Don't have an account?",
     "hasAccount": "Already have an account?",
-    "signInWith": "Or sign in with"
+    "signInWith": "Or sign in with",
+    "backToHome": "Back to Home",
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating Account...",
+    "signingIn": "Signing In...",
+    "newAccountInfo": "New accounts start as",
+    "roleAssignment": "Organizer and Sponsor roles are assigned by admins.",
+    "quickAccess": "Quick Access (Test Accounts)",
+    "welcomeBack": "Welcome back to RIFT!",
+    "accountCreated": "Account created successfully! Welcome to RIFT.",
+    "emailRegistered": "This email is already registered. Please sign in instead.",
+    "invalidCredentials": "Invalid email or password. Please try again.",
+    "unexpectedError": "An unexpected error occurred. Please try again."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -128,7 +195,8 @@
     "search": "Search",
     "filter": "Filter",
     "noResults": "No results",
-    "confirmDelete": "Are you sure you want to delete?"
+    "confirmDelete": "Are you sure you want to delete?",
+    "player": "Player"
   },
   "sponsors": {
     "title": "Sponsors",
@@ -140,11 +208,24 @@
     "campaigns": "Active Campaigns",
     "platinum": "Platinum",
     "gold": "Gold",
-    "silver": "Silver"
+    "silver": "Silver",
+    "trustedBy": "Trusted by Global Brands"
   },
   "language": {
     "select": "Language",
     "pt": "Português",
     "en": "English"
+  },
+  "featured": {
+    "badge": "Live & Upcoming",
+    "title": "Featured Tournaments",
+    "viewAll": "View All"
+  },
+  "cta": {
+    "ready": "Ready to",
+    "compete": "Compete",
+    "description": "Join thousands of players who have already found their competitive battleground. Create your profile and start climbing the ranks today.",
+    "joinNow": "Join Now",
+    "learnMore": "Learn More"
   }
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
@@ -8,10 +9,11 @@ import { cn } from "@/lib/utils";
 import { useRankings, getRankTier, getWinRate } from "@/hooks/useRankings";
 import { useGames } from "@/hooks/useTournaments";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Loader2, TrendingUp, Trophy, Target } from "lucide-react";
+import { Loader2, TrendingUp, Trophy } from "lucide-react";
 import { GlossaryTerm } from "@/components/ui/glossary-term";
 
 const Rankings = () => {
+  const { t } = useTranslation();
   const [activeGameId, setActiveGameId] = useState<string | undefined>(undefined);
   const { data: games, isLoading: gamesLoading } = useGames();
   const { data: rankings, isLoading: rankingsLoading } = useRankings(activeGameId, 100);
@@ -29,13 +31,12 @@ const Rankings = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-12"
           >
-            <Badge variant="default" className="mb-4">Global Leaderboard</Badge>
+            <Badge variant="default" className="mb-4">{t('rankings.badge')}</Badge>
             <h1 className="font-display text-4xl font-bold uppercase tracking-wide mb-4">
-              Rankings
+              {t('rankings.title')}
             </h1>
             <p className="text-muted-foreground max-w-2xl">
-              Track your progress against the best players worldwide. 
-              Climb the ranks, earn recognition, and prove your dominance.
+              {t('rankings.subtitle')}
             </p>
           </motion.div>
 
@@ -46,7 +47,7 @@ const Rankings = () => {
             transition={{ delay: 0.1 }}
             className="mb-8"
           >
-            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Game</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">{t('rankings.game')}</p>
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setActiveGameId(undefined)}
@@ -57,7 +58,7 @@ const Rankings = () => {
                     : "bg-transparent text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
                 )}
               >
-                All Games
+                {t('rankings.allGames')}
               </button>
               {games?.map((game) => (
                 <button
@@ -87,20 +88,20 @@ const Rankings = () => {
             {/* Table Header */}
             <div className="hidden sm:flex items-center gap-4 border-b border-border px-4 py-3 bg-secondary/50">
               <div className="w-12 text-center text-xs font-display uppercase tracking-wider text-muted-foreground">
-                Rank
+                {t('rankings.rank')}
               </div>
               <div className="flex-1 text-xs font-display uppercase tracking-wider text-muted-foreground">
-                Player
+                {t('rankings.player')}
               </div>
               <div className="hidden md:block w-24 text-center text-xs font-display uppercase tracking-wider text-muted-foreground">
-                Tier
+                {t('rankings.tier')}
               </div>
               <div className="hidden sm:flex items-center gap-6 text-xs font-display uppercase tracking-wider text-muted-foreground">
-                <div className="w-20 text-center">W/L</div>
-                <div className="w-16 text-center">Win Rate</div>
+                <div className="w-20 text-center">{t('rankings.wl')}</div>
+                <div className="w-16 text-center">{t('rankings.winRate')}</div>
               </div>
               <div className="w-20 text-right text-xs font-display uppercase tracking-wider text-muted-foreground">
-                <GlossaryTerm term="elo" showIcon={false}>ELO</GlossaryTerm>
+                <GlossaryTerm term="elo" showIcon={false}>{t('rankings.elo')}</GlossaryTerm>
               </div>
             </div>
 
@@ -112,9 +113,9 @@ const Rankings = () => {
             ) : !rankings || rankings.length === 0 ? (
               <div className="text-center py-12">
                 <Trophy className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
-                <p className="text-muted-foreground">No rankings yet</p>
+                <p className="text-muted-foreground">{t('rankings.noRankings')}</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Complete matches in tournaments to appear on the leaderboard
+                  {t('rankings.noRankingsDesc')}
                 </p>
               </div>
             ) : (
@@ -209,7 +210,7 @@ const Rankings = () => {
                       {ranking.win_streak > 2 && (
                         <div className="flex items-center justify-end gap-1 text-xs text-success">
                           <TrendingUp className="h-3 w-3" />
-                          {ranking.win_streak} streak
+                          {ranking.win_streak} {t('rankings.streak')}
                         </div>
                       )}
                     </div>
