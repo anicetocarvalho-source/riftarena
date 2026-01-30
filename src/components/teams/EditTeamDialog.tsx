@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,7 @@ interface EditTeamDialogProps {
 }
 
 export const EditTeamDialog = ({ team, open, onOpenChange }: EditTeamDialogProps) => {
+  const { t } = useTranslation();
   const [name, setName] = useState(team.name);
   const [description, setDescription] = useState(team.description || "");
   const updateTeam = useUpdateTeam();
@@ -45,24 +47,24 @@ export const EditTeamDialog = ({ team, open, onOpenChange }: EditTeamDialogProps
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Edit Team Details</DialogTitle>
+          <DialogTitle>{t('teamDetail.editTeamTitle')}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="team-name">Team Name</Label>
+            <Label htmlFor="team-name">{t('teamDetail.teamName')}</Label>
             <Input
               id="team-name"
-              placeholder="Enter team name"
+              placeholder={t('teamDetail.teamNamePlaceholder')}
               value={name}
               onChange={(e) => setName(e.target.value)}
               maxLength={50}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="team-description">Description</Label>
+            <Label htmlFor="team-description">{t('teamDetail.description')}</Label>
             <Textarea
               id="team-description"
-              placeholder="Tell us about your team..."
+              placeholder={t('teamDetail.descriptionPlaceholder')}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
@@ -76,7 +78,7 @@ export const EditTeamDialog = ({ team, open, onOpenChange }: EditTeamDialogProps
         </div>
         <DialogFooter>
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button 
             variant="rift" 
@@ -88,7 +90,7 @@ export const EditTeamDialog = ({ team, open, onOpenChange }: EditTeamDialogProps
             ) : (
               <Save className="mr-2 h-4 w-4" />
             )}
-            Save Changes
+            {t('teamDetail.saveChanges')}
           </Button>
         </DialogFooter>
       </DialogContent>

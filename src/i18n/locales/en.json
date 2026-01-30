@@ -484,7 +484,20 @@
     "usernamePlaceholder": "Enter player's username",
     "sendInvite": "Send Invite",
     "confirmRemove": "Remove this member from the team?",
-    "confirmLeave": "Are you sure you want to leave this team?"
+    "confirmLeave": "Are you sure you want to leave this team?",
+    "rosterHistory": "Roster History",
+    "noRosterHistory": "No roster changes recorded yet",
+    "actionJoined": "Joined",
+    "actionLeft": "Left",
+    "actionRemoved": "Removed",
+    "actionPromoted": "Promoted",
+    "actionDemoted": "Demoted",
+    "editTeamTitle": "Edit Team Details",
+    "teamName": "Team Name",
+    "teamNamePlaceholder": "Enter team name",
+    "description": "Description",
+    "descriptionPlaceholder": "Tell us about your team...",
+    "saveChanges": "Save Changes"
   },
   "manageTournament": {
     "openRegistration": "Open Registration",
