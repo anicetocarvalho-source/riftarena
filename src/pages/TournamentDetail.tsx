@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
@@ -29,6 +30,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 
 const TournamentDetail = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -61,9 +63,9 @@ const TournamentDetail = () => {
         <Navbar />
         <main className="pt-24 pb-16">
           <div className="container text-center">
-            <h1 className="text-2xl font-bold mb-4">Tournament not found</h1>
+            <h1 className="text-2xl font-bold mb-4">{t('tournamentDetail.notFound')}</h1>
             <Button variant="rift" onClick={() => navigate("/tournaments")}>
-              Browse Tournaments
+              {t('tournamentDetail.browseTournaments')}
             </Button>
           </div>
         </main>
@@ -136,10 +138,10 @@ const TournamentDetail = () => {
   };
 
   const getRoundName = (round: number, totalRounds: number) => {
-    if (round === totalRounds) return "Finals";
-    if (round === totalRounds - 1) return "Semi-Finals";
-    if (round === totalRounds - 2) return "Quarter-Finals";
-    return `Round ${round}`;
+    if (round === totalRounds) return t('tournamentDetail.finals');
+    if (round === totalRounds - 1) return t('tournamentDetail.semiFinals');
+    if (round === totalRounds - 2) return t('tournamentDetail.quarterFinals');
+    return `${t('playerProfile.round')} ${round}`;
   };
 
   return (
@@ -198,25 +200,25 @@ const TournamentDetail = () => {
                     <p className="text-3xl font-display font-bold text-primary mb-1">
                       ${tournament.prize_pool.toLocaleString()}
                     </p>
-                    <p className="text-sm text-muted-foreground">Prize Pool</p>
+                    <p className="text-sm text-muted-foreground">{t('tournamentDetail.prizePool')}</p>
                   </div>
                   
                   <div className="flex justify-center gap-6 mb-6 text-sm">
                     <div className="text-center">
                       <p className="font-bold">{registrationCount || 0}/{tournament.max_participants}</p>
-                      <p className="text-muted-foreground">{isTeamBased ? "Teams" : "Players"}</p>
+                      <p className="text-muted-foreground">{isTeamBased ? t('tournamentDetail.teams') : t('tournamentDetail.players')}</p>
                     </div>
                     {tournament.registration_fee > 0 && (
                       <div className="text-center">
                         <p className="font-bold">${tournament.registration_fee}</p>
-                        <p className="text-muted-foreground">Entry Fee</p>
+                        <p className="text-muted-foreground">{t('tournamentDetail.entryFee')}</p>
                       </div>
                     )}
                   </div>
 
                   {!user ? (
                     <Button variant="rift" className="w-full" onClick={() => navigate("/auth")}>
-                      Sign In to Register
+                      {t('tournamentDetail.signInToRegister')}
                     </Button>
                   ) : isRegistered ? (
                     <div className="space-y-3">
@@ -224,17 +226,17 @@ const TournamentDetail = () => {
                         {currentRegistration?.status === "confirmed" ? (
                           <>
                             <CheckCircle className="h-4 w-4 text-success" />
-                            <span className="text-success">Registration Confirmed</span>
+                            <span className="text-success">{t('tournamentDetail.registrationConfirmed')}</span>
                           </>
                         ) : currentRegistration?.status === "pending" ? (
                           <>
                             <Clock className="h-4 w-4 text-warning" />
-                            <span className="text-warning">Awaiting Approval</span>
+                            <span className="text-warning">{t('tournamentDetail.awaitingApproval')}</span>
                           </>
                         ) : (
                           <>
                             <XCircle className="h-4 w-4 text-destructive" />
-                            <span className="text-destructive">Registration Rejected</span>
+                            <span className="text-destructive">{t('tournamentDetail.registrationRejected')}</span>
                           </>
                         )}
                       </div>
@@ -248,14 +250,14 @@ const TournamentDetail = () => {
                           {cancelMutation.isPending ? (
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           ) : null}
-                          Cancel Registration
+                          {t('tournamentDetail.cancelRegistration')}
                         </Button>
                       )}
                     </div>
                   ) : tournament.status === "registration" ? (
                     isFull ? (
                       <Button variant="rift-outline" className="w-full" disabled>
-                        Tournament Full
+                        {t('tournamentDetail.tournamentFull')}
                       </Button>
                     ) : isTeamBased ? (
                       eligibleTeams.length > 0 ? (
@@ -270,24 +272,24 @@ const TournamentDetail = () => {
                           ) : (
                             <UsersRound className="mr-2 h-4 w-4" />
                           )}
-                          Register Team
+                          {t('tournamentDetail.registerTeam')}
                         </Button>
                       ) : userTeams && userTeams.length > 0 ? (
                         <div className="text-center space-y-2">
                           <p className="text-sm text-muted-foreground">
-                            You need to be a team captain to register
+                            {t('tournamentDetail.needCaptain')}
                           </p>
                           <Button variant="rift-outline" className="w-full" onClick={() => navigate("/teams/create")}>
-                            Create a Team
+                            {t('tournamentDetail.createTeam')}
                           </Button>
                         </div>
                       ) : (
                         <div className="text-center space-y-2">
                           <p className="text-sm text-muted-foreground">
-                            Create or join a team to register
+                            {t('tournamentDetail.createOrJoinTeam')}
                           </p>
                           <Button variant="rift" className="w-full" onClick={() => navigate("/teams/create")}>
-                            Create a Team
+                            {t('tournamentDetail.createTeam')}
                           </Button>
                         </div>
                       )
@@ -300,19 +302,19 @@ const TournamentDetail = () => {
                       >
                         {registerMutation.isPending ? (
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        ) : (
-                          <Trophy className="mr-2 h-4 w-4" />
-                        )}
-                        Register Now
-                      </Button>
+                          ) : (
+                            <Trophy className="mr-2 h-4 w-4" />
+                          )}
+                          {t('tournamentDetail.registerNow')}
+                        </Button>
                     )
                   ) : tournament.status === "draft" ? (
                     <Button variant="rift-outline" className="w-full" disabled>
-                      Registration Not Open
+                      {t('tournamentDetail.registrationNotOpen')}
                     </Button>
                   ) : (
                     <Button variant="rift-outline" className="w-full" disabled>
-                      Registration Closed
+                      {t('tournamentDetail.registrationClosed')}
                     </Button>
                   )}
                 </RiftCardContent>
@@ -333,7 +335,7 @@ const TournamentDetail = () => {
                   <Calendar className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Start Date</p>
+                  <p className="text-xs text-muted-foreground">{t('tournamentDetail.startDate')}</p>
                   <p className="font-medium">{format(new Date(tournament.start_date), "PPP")}</p>
                 </div>
               </RiftCardContent>
@@ -346,7 +348,7 @@ const TournamentDetail = () => {
                     <Clock className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Reg. Deadline</p>
+                    <p className="text-xs text-muted-foreground">{t('tournamentDetail.regDeadline')}</p>
                     <p className="font-medium">{format(new Date(tournament.registration_deadline), "PPP")}</p>
                   </div>
                 </RiftCardContent>
@@ -356,11 +358,11 @@ const TournamentDetail = () => {
             <RiftCard>
               <RiftCardContent className="flex items-center gap-4 py-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-success/10 text-success">
-                  <Users className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">{isTeamBased ? "Teams" : "Participants"}</p>
-                  <p className="font-medium">{registrationCount || 0} / {tournament.max_participants}</p>
+                    <Users className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">{isTeamBased ? t('tournamentDetail.teams') : t('tournamentDetail.participants')}</p>
+                    <p className="font-medium">{registrationCount || 0} / {tournament.max_participants}</p>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -370,10 +372,10 @@ const TournamentDetail = () => {
                 <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-primary/10 text-primary">
                   <DollarSign className="h-5 w-5" />
                 </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Prize Pool</p>
-                  <p className="font-medium">${tournament.prize_pool.toLocaleString()}</p>
-                </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">{t('tournamentDetail.prizePool')}</p>
+                    <p className="font-medium">${tournament.prize_pool.toLocaleString()}</p>
+                  </div>
               </RiftCardContent>
             </RiftCard>
           </motion.div>
@@ -392,7 +394,7 @@ const TournamentDetail = () => {
                     <RiftCardHeader>
                       <RiftCardTitle className="flex items-center gap-2">
                         <GitBranch className="h-5 w-5 text-primary" />
-                        Tournament Bracket
+                        {t('tournamentDetail.tournamentBracket')}
                       </RiftCardTitle>
                     </RiftCardHeader>
                     <RiftCardContent>
@@ -459,7 +461,7 @@ const TournamentDetail = () => {
                     <RiftCardHeader>
                       <RiftCardTitle className="flex items-center gap-2">
                         <FileText className="h-5 w-5 text-primary" />
-                        Rules & Guidelines
+                        {t('tournamentDetail.rulesGuidelines')}
                       </RiftCardTitle>
                     </RiftCardHeader>
                     <RiftCardContent>
@@ -482,13 +484,13 @@ const TournamentDetail = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <Users className="h-5 w-5 text-primary" />
-                    {isTeamBased ? "Confirmed Teams" : "Confirmed Participants"} ({confirmedParticipants.length})
+                    {isTeamBased ? t('tournamentDetail.confirmedTeams') : t('tournamentDetail.confirmedParticipants')} ({confirmedParticipants.length})
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
                   {confirmedParticipants.length === 0 ? (
                     <p className="text-center text-muted-foreground py-4">
-                      No confirmed {isTeamBased ? "teams" : "participants"} yet
+                      {isTeamBased ? t('tournamentDetail.noConfirmedTeams') : t('tournamentDetail.noConfirmedParticipants')}
                     </p>
                   ) : (
                     <div className="space-y-2 max-h-[400px] overflow-y-auto">
@@ -536,14 +538,14 @@ const TournamentDetail = () => {
       <Dialog open={showTeamDialog} onOpenChange={setShowTeamDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Select Team to Register</DialogTitle>
+            <DialogTitle>{t('tournamentDetail.selectTeamToRegister')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Your Teams</Label>
+              <Label>{t('tournamentDetail.yourTeams')}</Label>
               <Select value={selectedTeamId} onValueChange={setSelectedTeamId}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a team" />
+                  <SelectValue placeholder={t('tournamentDetail.selectTeam')} />
                 </SelectTrigger>
                 <SelectContent>
                   {eligibleTeams.map((team) => (
@@ -554,13 +556,13 @@ const TournamentDetail = () => {
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
-                Only teams where you are the captain can be registered.
+                {t('tournamentDetail.captainOnly')}
               </p>
             </div>
           </div>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setShowTeamDialog(false)}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button 
               variant="rift" 
@@ -572,7 +574,7 @@ const TournamentDetail = () => {
               ) : (
                 <UsersRound className="mr-2 h-4 w-4" />
               )}
-              Register Team
+              {t('tournamentDetail.registerTeam')}
             </Button>
           </DialogFooter>
         </DialogContent>
