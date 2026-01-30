@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEditProfile } from "@/hooks/useEditProfile";
@@ -15,6 +16,7 @@ import { Loader2, Camera, Save, ArrowLeft, User } from "lucide-react";
 import { SiDiscord, SiX, SiTwitch } from "@icons-pack/react-simple-icons";
 
 const EditProfile = () => {
+  const { t } = useTranslation();
   const { user, profile, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -115,14 +117,14 @@ const EditProfile = () => {
               className="mb-6"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
+              {t('editProfile.back')}
             </Button>
 
             <RiftCard>
               <RiftCardHeader>
                 <RiftCardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5 text-primary" />
-                  Edit Profile
+                  {t('editProfile.title')}
                 </RiftCardTitle>
               </RiftCardHeader>
               <RiftCardContent>
@@ -157,18 +159,18 @@ const EditProfile = () => {
                       className="hidden"
                     />
                     <p className="text-xs text-muted-foreground">
-                      Click to upload a new avatar
+                      {t('editProfile.avatarHint')}
                     </p>
                   </div>
 
                   {/* Username */}
                   <div className="space-y-2">
-                    <Label htmlFor="username">Username</Label>
+                    <Label htmlFor="username">{t('editProfile.username')}</Label>
                     <Input
                       id="username"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      placeholder="Enter your username"
+                      placeholder={t('editProfile.usernamePlaceholder')}
                       required
                       maxLength={50}
                     />
@@ -176,12 +178,12 @@ const EditProfile = () => {
 
                   {/* Bio */}
                   <div className="space-y-2">
-                    <Label htmlFor="bio">Bio</Label>
+                    <Label htmlFor="bio">{t('editProfile.bio')}</Label>
                     <Textarea
                       id="bio"
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
-                      placeholder="Tell us about yourself..."
+                      placeholder={t('editProfile.bioPlaceholder')}
                       rows={4}
                       maxLength={500}
                     />
@@ -193,26 +195,37 @@ const EditProfile = () => {
                   {/* Location */}
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="city">City</Label>
+                      <Label htmlFor="city">{t('editProfile.city')}</Label>
                       <Input
                         id="city"
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        placeholder="Your city"
+                        placeholder={t('editProfile.cityPlaceholder')}
                         maxLength={100}
                       />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="country">{t('editProfile.country')}</Label>
+                      <Input
+                        id="country"
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                        placeholder={t('editProfile.countryPlaceholder')}
+                        maxLength={100}
+                      />
+                    </div>
                   </div>
 
                   {/* Social Links */}
                   <div className="space-y-4">
-                    <Label className="text-base">Social Links</Label>
+                    <Label className="text-base">{t('editProfile.socialLinks')}</Label>
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-md bg-[#5865F2]/10">
                           <SiDiscord className="h-5 w-5 text-[#5865F2]" />
                         </div>
                         <Input
-                          placeholder="Discord username"
+                          placeholder={t('editProfile.discordPlaceholder')}
                           value={discordUsername}
                           onChange={(e) => setDiscordUsername(e.target.value)}
                           maxLength={50}
@@ -224,7 +237,7 @@ const EditProfile = () => {
                           <SiX className="h-5 w-5" />
                         </div>
                         <Input
-                          placeholder="X (Twitter) username"
+                          placeholder={t('editProfile.twitterPlaceholder')}
                           value={twitterUsername}
                           onChange={(e) => setTwitterUsername(e.target.value)}
                           maxLength={50}
@@ -236,24 +249,13 @@ const EditProfile = () => {
                           <SiTwitch className="h-5 w-5 text-[#9146FF]" />
                         </div>
                         <Input
-                          placeholder="Twitch username"
+                          placeholder={t('editProfile.twitchPlaceholder')}
                           value={twitchUsername}
                           onChange={(e) => setTwitchUsername(e.target.value)}
                           maxLength={50}
                           className="flex-1"
                         />
                       </div>
-                    </div>
-                  </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="country">Country</Label>
-                      <Input
-                        id="country"
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                        placeholder="Your country"
-                        maxLength={100}
-                      />
                     </div>
                   </div>
 
@@ -264,7 +266,7 @@ const EditProfile = () => {
                       variant="rift-outline"
                       onClick={() => navigate(-1)}
                     >
-                      Cancel
+                      {t('editProfile.cancel')}
                     </Button>
                     <Button
                       type="submit"
@@ -276,7 +278,7 @@ const EditProfile = () => {
                       ) : (
                         <Save className="mr-2 h-4 w-4" />
                       )}
-                      Save Changes
+                      {isLoading ? t('editProfile.saving') : t('editProfile.saveChanges')}
                     </Button>
                   </div>
                 </form>

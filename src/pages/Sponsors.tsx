@@ -1,10 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { RiftCard, RiftCardContent } from "@/components/ui/rift-card";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, ExternalLink, TrendingUp, Users, Trophy, Mail } from "lucide-react";
+import { ChevronRight, TrendingUp, Users, Trophy, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -15,7 +16,7 @@ const sponsors = [
     logo: "SAMSUNG",
     tier: "Platinum",
     activeCampaigns: 3,
-    description: "Official mobile device partner of RIFT Championship Series.",
+    descriptionKey: "Official mobile device partner of RIFT Championship Series.",
     stats: { impressions: "2.4M", tournaments: 12, engagement: "18%" },
   },
   {
@@ -24,7 +25,7 @@ const sponsors = [
     logo: "REDBULL",
     tier: "Platinum",
     activeCampaigns: 2,
-    description: "Energy partner fueling champions across all RIFT tournaments.",
+    descriptionKey: "Energy partner fueling champions across all RIFT tournaments.",
     stats: { impressions: "1.8M", tournaments: 8, engagement: "22%" },
   },
   {
@@ -33,7 +34,7 @@ const sponsors = [
     logo: "INTEL",
     tier: "Gold",
     activeCampaigns: 1,
-    description: "Technology partner powering the RIFT gaming infrastructure.",
+    descriptionKey: "Technology partner powering the RIFT gaming infrastructure.",
     stats: { impressions: "950K", tournaments: 5, engagement: "15%" },
   },
   {
@@ -42,7 +43,7 @@ const sponsors = [
     logo: "RAZER",
     tier: "Gold",
     activeCampaigns: 2,
-    description: "Official gaming peripherals partner for RIFT pro players.",
+    descriptionKey: "Official gaming peripherals partner for RIFT pro players.",
     stats: { impressions: "780K", tournaments: 6, engagement: "21%" },
   },
   {
@@ -51,7 +52,7 @@ const sponsors = [
     logo: "MONSTER",
     tier: "Silver",
     activeCampaigns: 1,
-    description: "Energy drink partner for select regional tournaments.",
+    descriptionKey: "Energy drink partner for select regional tournaments.",
     stats: { impressions: "420K", tournaments: 3, engagement: "16%" },
   },
   {
@@ -60,7 +61,7 @@ const sponsors = [
     logo: "NIKE",
     tier: "Silver",
     activeCampaigns: 1,
-    description: "Apparel partner for RIFT team merchandise.",
+    descriptionKey: "Apparel partner for RIFT team merchandise.",
     stats: { impressions: "380K", tournaments: 2, engagement: "19%" },
   },
 ];
@@ -75,6 +76,8 @@ const getTierColor = (tier: string) => {
 };
 
 const Sponsors = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
@@ -86,13 +89,12 @@ const Sponsors = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-12"
           >
-            <Badge variant="default" className="mb-4">Brand Partners</Badge>
+            <Badge variant="default" className="mb-4">{t('sponsors.badge')}</Badge>
             <h1 className="font-display text-4xl font-bold uppercase tracking-wide mb-4">
-              Sponsors
+              {t('sponsors.title')}
             </h1>
             <p className="text-muted-foreground max-w-2xl">
-              Our partners power the competitive esports ecosystem. 
-              Learn about the brands supporting RIFT tournaments and players.
+              {t('sponsors.description')}
             </p>
           </motion.div>
 
@@ -106,11 +108,10 @@ const Sponsors = () => {
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div>
                 <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-2">
-                  Partner with RIFT
+                  {t('sponsors.partnerWithRift')}
                 </h2>
                 <p className="text-muted-foreground">
-                  Reach millions of engaged esports fans. Get brand visibility across tournaments, 
-                  rankings, and live streams.
+                  {t('sponsors.partnerDescription')}
                 </p>
               </div>
               <Button 
@@ -122,7 +123,7 @@ const Sponsors = () => {
                 }}
               >
                 <Mail className="mr-2 h-4 w-4" />
-                Contact for Partnership
+                {t('sponsors.contactPartnership')}
               </Button>
             </div>
           </motion.div>
@@ -144,7 +145,7 @@ const Sponsors = () => {
                         {sponsor.logo}
                       </span>
                       <Badge variant={getTierColor(sponsor.tier) as any}>
-                        {sponsor.tier}
+                        {t(`sponsors.${sponsor.tier.toLowerCase()}`)}
                       </Badge>
                     </div>
 
@@ -152,7 +153,7 @@ const Sponsors = () => {
                       {sponsor.name}
                     </h2>
                     <p className="text-sm text-muted-foreground mb-4">
-                      {sponsor.description}
+                      {sponsor.descriptionKey}
                     </p>
 
                     {/* Stats */}
@@ -162,31 +163,33 @@ const Sponsors = () => {
                           <TrendingUp className="h-3 w-3" />
                           <span className="font-display text-sm font-bold">{sponsor.stats.impressions}</span>
                         </div>
-                        <p className="text-[10px] text-muted-foreground uppercase">Impressions</p>
+                        <p className="text-[10px] text-muted-foreground uppercase">{t('sponsors.impressions')}</p>
                       </div>
                       <div className="text-center">
                         <div className="flex items-center justify-center gap-1 text-primary">
                           <Trophy className="h-3 w-3" />
                           <span className="font-display text-sm font-bold">{sponsor.stats.tournaments}</span>
                         </div>
-                        <p className="text-[10px] text-muted-foreground uppercase">Tournaments</p>
+                        <p className="text-[10px] text-muted-foreground uppercase">{t('sponsors.tournaments')}</p>
                       </div>
                       <div className="text-center">
                         <div className="flex items-center justify-center gap-1 text-primary">
                           <Users className="h-3 w-3" />
                           <span className="font-display text-sm font-bold">{sponsor.stats.engagement}</span>
                         </div>
-                        <p className="text-[10px] text-muted-foreground uppercase">Engagement</p>
+                        <p className="text-[10px] text-muted-foreground uppercase">{t('sponsors.engagement')}</p>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <Badge variant="outline" size="sm">
-                        {sponsor.activeCampaigns} Active Campaign{sponsor.activeCampaigns > 1 ? 's' : ''}
+                        {sponsor.activeCampaigns} {sponsor.activeCampaigns > 1 
+                          ? t('sponsors.activeCampaigns') 
+                          : t('sponsors.activeCampaign')}
                       </Badge>
                       <Link to={`/tournaments?sponsor=${sponsor.name.toLowerCase()}`}>
                         <Button variant="rift-ghost" size="sm">
-                          Ver Torneios
+                          {t('sponsors.viewTournaments')}
                           <ChevronRight className="ml-1 h-3 w-3" />
                         </Button>
                       </Link>
