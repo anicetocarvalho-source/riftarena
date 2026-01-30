@@ -7,9 +7,10 @@ import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/comp
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { EmptyState } from "@/components/ui/empty-state";
 import { useTeams, useUserTeams, useUserInvites, useRespondToInvite } from "@/hooks/useTeams";
 import { useAuth } from "@/contexts/AuthContext";
-import { Users, Search, Plus, Loader2, Check, X, Crown } from "lucide-react";
+import { Users, Search, Plus, Loader2, Check, X, Crown, UserPlus, UsersRound, Trophy } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const TeamsPage = () => {
@@ -185,15 +186,44 @@ const TeamsPage = () => {
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           ) : filteredTeams.length === 0 ? (
-            <div className="text-center py-12">
-              <Users className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
-              <p className="text-muted-foreground mb-4">No teams found</p>
-              {user && (
-                <Button variant="rift" onClick={() => navigate("/teams/create")}>
-                  Create Your First Team
-                </Button>
-              )}
-            </div>
+            searchTerm ? (
+              <EmptyState
+                icon={Search}
+                title="Nenhuma equipa encontrada"
+                description={`Não encontrámos equipas com "${searchTerm}". Tenta outro termo de pesquisa.`}
+                actions={[
+                  {
+                    label: "Limpar Pesquisa",
+                    onClick: () => setSearchTerm(""),
+                    icon: X,
+                  },
+                ]}
+              />
+            ) : (
+              <EmptyState
+                icon={UsersRound}
+                title="Ainda não há equipas"
+                description="Sê o primeiro a criar uma equipa e recruta os melhores jogadores para a tua roster!"
+                tip="Equipas podem competir em torneios team-based com prémios maiores."
+                actions={
+                  user
+                    ? [
+                        {
+                          label: "Criar Primeira Equipa",
+                          onClick: () => navigate("/teams/create"),
+                          icon: UserPlus,
+                        },
+                      ]
+                    : [
+                        {
+                          label: "Entrar para Criar",
+                          onClick: () => navigate("/auth"),
+                          icon: Users,
+                        },
+                      ]
+                }
+              />
+            )
           ) : (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
