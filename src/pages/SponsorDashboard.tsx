@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -33,6 +34,7 @@ const audienceData = [
 ];
 
 const SponsorDashboard = () => {
+  const { t } = useTranslation();
   const { user, profile, isSponsor, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
 
@@ -122,10 +124,10 @@ const SponsorDashboard = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "live": return <Badge variant="live">Ao Vivo</Badge>;
-      case "registration": return <Badge variant="success">Inscrições</Badge>;
-      case "completed": return <Badge variant="secondary">Finalizado</Badge>;
-      case "draft": return <Badge variant="outline">Rascunho</Badge>;
+      case "live": return <Badge variant="live">{t("sponsorDashboard.status.live")}</Badge>;
+      case "registration": return <Badge variant="success">{t("sponsorDashboard.status.registration")}</Badge>;
+      case "completed": return <Badge variant="secondary">{t("sponsorDashboard.status.completed")}</Badge>;
+      case "draft": return <Badge variant="outline">{t("sponsorDashboard.status.draft")}</Badge>;
       default: return <Badge variant="outline">{status}</Badge>;
     }
   };
@@ -146,16 +148,16 @@ const SponsorDashboard = () => {
                 <div className="flex items-center gap-3 mb-2">
                   <BarChart3 className="h-8 w-8 text-primary" />
                   <h1 className="font-display text-3xl font-bold uppercase tracking-wide">
-                    Sponsor Dashboard
+                    {t("sponsorDashboard.title")}
                   </h1>
                   <Badge variant="platinum">Sponsor</Badge>
                 </div>
                 <p className="text-muted-foreground">
-                  Acompanhe o desempenho das suas campanhas e métricas de engajamento.
+                  {t("sponsorDashboard.description")}
                 </p>
               </div>
               <Button variant="rift" onClick={() => navigate("/dashboard")}>
-                Voltar ao Dashboard
+                {t("sponsorDashboard.backToDashboard")}
               </Button>
             </div>
           </motion.div>
@@ -172,7 +174,7 @@ const SponsorDashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
-                      Total Impressões
+                      {t("sponsorDashboard.totalImpressions")}
                     </p>
                     <p className="text-3xl font-display font-bold">
                       {(totalImpressions / 1000).toFixed(1)}K
@@ -184,7 +186,7 @@ const SponsorDashboard = () => {
                 </div>
                 <div className="flex items-center gap-1 mt-2 text-xs text-success">
                   <ArrowUpRight className="h-3 w-3" />
-                  <span>+24% vs mês anterior</span>
+                  <span>+24% {t("sponsorDashboard.vsLastMonth")}</span>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -194,7 +196,7 @@ const SponsorDashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
-                      Taxa de Cliques (CTR)
+                      {t("sponsorDashboard.ctr")}
                     </p>
                     <p className="text-3xl font-display font-bold">{ctr}%</p>
                   </div>
@@ -204,7 +206,7 @@ const SponsorDashboard = () => {
                 </div>
                 <div className="flex items-center gap-1 mt-2 text-xs text-success">
                   <ArrowUpRight className="h-3 w-3" />
-                  <span>+0.5% vs mês anterior</span>
+                  <span>+0.5% {t("sponsorDashboard.vsLastMonth")}</span>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -214,7 +216,7 @@ const SponsorDashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
-                      Torneios Ativos
+                      {t("sponsorDashboard.activeTournaments")}
                     </p>
                     <p className="text-3xl font-display font-bold">{activeTournaments}</p>
                   </div>
@@ -223,7 +225,7 @@ const SponsorDashboard = () => {
                   </div>
                 </div>
                 <div className="text-xs text-muted-foreground mt-2">
-                  {sponsoredTournaments?.length || 0} torneios no total
+                  {sponsoredTournaments?.length || 0} {t("sponsorDashboard.tournamentsTotal")}
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -233,7 +235,7 @@ const SponsorDashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
-                      Alcance de Jogadores
+                      {t("sponsorDashboard.playerReach")}
                     </p>
                     <p className="text-3xl font-display font-bold">{totalParticipants}</p>
                   </div>
@@ -243,7 +245,7 @@ const SponsorDashboard = () => {
                 </div>
                 <div className="flex items-center gap-1 mt-2 text-xs text-destructive">
                   <ArrowDownRight className="h-3 w-3" />
-                  <span>-5% vs mês anterior</span>
+                  <span>-5% {t("sponsorDashboard.vsLastMonth")}</span>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -262,7 +264,7 @@ const SponsorDashboard = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <TrendingUp className="h-5 w-5 text-primary" />
-                    Engajamento ao Longo do Tempo
+                    {t("sponsorDashboard.engagementOverTime")}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
@@ -302,7 +304,7 @@ const SponsorDashboard = () => {
                           stroke="hsl(var(--primary))" 
                           fillOpacity={1} 
                           fill="url(#colorImpressions)" 
-                          name="Impressões"
+                          name={t("sponsorDashboard.impressionsLabel")}
                         />
                         <Area 
                           type="monotone" 
@@ -310,7 +312,7 @@ const SponsorDashboard = () => {
                           stroke="hsl(var(--success))" 
                           fillOpacity={1} 
                           fill="url(#colorClicks)" 
-                          name="Cliques"
+                          name={t("sponsorDashboard.clicksLabel")}
                         />
                       </AreaChart>
                     </ResponsiveContainer>
@@ -329,7 +331,7 @@ const SponsorDashboard = () => {
                 <RiftCardHeader>
                   <RiftCardTitle className="flex items-center gap-2">
                     <Users className="h-5 w-5 text-primary" />
-                    Audiência por Jogo
+                    {t("sponsorDashboard.audienceByGame")}
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
@@ -356,7 +358,7 @@ const SponsorDashboard = () => {
                             border: "1px solid hsl(var(--border))",
                             borderRadius: "4px"
                           }}
-                          formatter={(value) => [`${value}%`, "Audiência"]}
+                          formatter={(value) => [`${value}%`, t("sponsorDashboard.audienceLabel")]}
                         />
                         <Bar 
                           dataKey="percentage" 
@@ -382,10 +384,10 @@ const SponsorDashboard = () => {
                 <div className="flex items-center justify-between">
                   <RiftCardTitle className="flex items-center gap-2">
                     <Trophy className="h-5 w-5 text-primary" />
-                    Torneios Patrocinados
+                    {t("sponsorDashboard.sponsoredTournaments")}
                   </RiftCardTitle>
                   <Button variant="rift-outline" size="sm" onClick={() => navigate("/tournaments")}>
-                    Ver Todos
+                    {t("sponsorDashboard.viewAll")}
                     <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
@@ -424,13 +426,13 @@ const SponsorDashboard = () => {
                             <p className="font-display font-bold text-primary">
                               {registrationCounts?.[tournament.id] || 0}/{tournament.max_participants}
                             </p>
-                            <p className="text-xs text-muted-foreground">Participantes</p>
+                            <p className="text-xs text-muted-foreground">{t("sponsorDashboard.participants")}</p>
                           </div>
                           <div className="text-right">
                             <p className="font-display font-bold">
                               R$ {Number(tournament.prize_pool).toLocaleString("pt-BR")}
                             </p>
-                            <p className="text-xs text-muted-foreground">Prize Pool</p>
+                            <p className="text-xs text-muted-foreground">{t("sponsorDashboard.prizePool")}</p>
                           </div>
                           {getStatusBadge(tournament.status)}
                         </div>
@@ -441,10 +443,10 @@ const SponsorDashboard = () => {
                   <div className="flex flex-col items-center justify-center py-12 text-center">
                     <Trophy className="h-12 w-12 text-muted-foreground/50 mb-4" />
                     <p className="text-muted-foreground mb-4">
-                      Você ainda não patrocina nenhum torneio.
+                      {t("sponsorDashboard.noTournaments")}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Entre em contato com organizadores para patrocinar eventos.
+                      {t("sponsorDashboard.noTournamentsHint")}
                     </p>
                   </div>
                 )}
@@ -463,7 +465,7 @@ const SponsorDashboard = () => {
               <RiftCardHeader>
                 <RiftCardTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-primary" />
-                  Métricas de Conversão
+                  {t("sponsorDashboard.conversionMetrics")}
                 </RiftCardTitle>
               </RiftCardHeader>
               <RiftCardContent>
@@ -472,25 +474,25 @@ const SponsorDashboard = () => {
                     <p className="text-3xl font-display font-bold text-primary">
                       {totalClicks.toLocaleString("pt-BR")}
                     </p>
-                    <p className="text-sm text-muted-foreground mt-1">Total de Cliques</p>
+                    <p className="text-sm text-muted-foreground mt-1">{t("sponsorDashboard.totalClicks")}</p>
                   </div>
                   <div className="text-center p-4 rounded-sm bg-muted/50">
                     <p className="text-3xl font-display font-bold text-success">
                       {totalConversions}
                     </p>
-                    <p className="text-sm text-muted-foreground mt-1">Conversões</p>
+                    <p className="text-sm text-muted-foreground mt-1">{t("sponsorDashboard.conversions")}</p>
                   </div>
                   <div className="text-center p-4 rounded-sm bg-muted/50">
                     <p className="text-3xl font-display font-bold text-warning">
                       {conversionRate}%
                     </p>
-                    <p className="text-sm text-muted-foreground mt-1">Taxa de Conversão</p>
+                    <p className="text-sm text-muted-foreground mt-1">{t("sponsorDashboard.conversionRate")}</p>
                   </div>
                   <div className="text-center p-4 rounded-sm bg-muted/50">
                     <p className="text-3xl font-display font-bold">
                       R$ 2.45
                     </p>
-                    <p className="text-sm text-muted-foreground mt-1">Custo por Conversão</p>
+                    <p className="text-sm text-muted-foreground mt-1">{t("sponsorDashboard.costPerConversion")}</p>
                   </div>
                 </div>
               </RiftCardContent>
