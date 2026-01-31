@@ -443,6 +443,26 @@
       "badge": "Parceiros Atuais",
       "title": "Marcas que Confiam em Nós",
       "description": "Junta-te a estas marcas líderes no ecossistema de esports competitivo."
+    },
+    "form": {
+      "title": "Pedido de Parceria",
+      "description": "Preenche o formulário abaixo e a nossa equipa entrará em contacto em 24-48 horas.",
+      "companyName": "Nome da Empresa",
+      "contactName": "Nome do Contacto",
+      "email": "Email",
+      "phone": "Telefone",
+      "website": "Website",
+      "preferredTier": "Tier Preferido",
+      "selectTier": "Seleciona um tier...",
+      "undecided": "Ainda não decidi",
+      "message": "Mensagem",
+      "messagePlaceholder": "Conta-nos sobre a tua empresa e o que procuras numa parceria com a Rift Arena...",
+      "submit": "Enviar Pedido",
+      "submitting": "A enviar...",
+      "successTitle": "Pedido Enviado!",
+      "successMessage": "Recebemos o teu pedido de parceria. A nossa equipa entrará em contacto em breve.",
+      "successToast": "Pedido de parceria enviado com sucesso!",
+      "errorToast": "Erro ao enviar pedido. Tenta novamente."
     }
   },
   "language": {
@@ -825,28 +845,6 @@
     "tournamentsHosted": "Torneios Realizados",
     "prizeDistributed": "Prémios Distribuídos",
     "activeTeams": "Equipas Ativas"
-  },
-  "sponsors": {
-    "form": {
-      "title": "Pedido de Parceria",
-      "description": "Preenche o formulário abaixo e a nossa equipa entrará em contacto em 24-48 horas.",
-      "companyName": "Nome da Empresa",
-      "contactName": "Nome do Contacto",
-      "email": "Email",
-      "phone": "Telefone",
-      "website": "Website",
-      "preferredTier": "Tier Preferido",
-      "selectTier": "Seleciona um tier...",
-      "undecided": "Ainda não decidi",
-      "message": "Mensagem",
-      "messagePlaceholder": "Conta-nos sobre a tua empresa e o que procuras numa parceria com a Rift Arena...",
-      "submit": "Enviar Pedido",
-      "submitting": "A enviar...",
-      "successTitle": "Pedido Enviado!",
-      "successMessage": "Recebemos o teu pedido de parceria. A nossa equipa entrará em contacto em breve.",
-      "successToast": "Pedido de parceria enviado com sucesso!",
-      "errorToast": "Erro ao enviar pedido. Tenta novamente."
-    }
   },
   "adminPartnerships": {
     "title": "Pedidos de Parceria",
