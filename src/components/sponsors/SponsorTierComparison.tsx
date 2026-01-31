@@ -1,7 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { Check, X } from "lucide-react";
+import { Check, X, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { PartnershipContactForm } from "./PartnershipContactForm";
 
 const tiers = [
   {
@@ -102,7 +104,7 @@ export function SponsorTierComparison() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
-            className={`relative p-6 rounded-sm border ${
+            className={`relative p-6 rounded-sm border flex flex-col ${
               tier.popular
                 ? "border-primary bg-primary/5 rift-border-glow"
                 : "border-border bg-card"
@@ -143,6 +145,18 @@ export function SponsorTierComparison() {
                   {renderFeatureValue(tier.features[key])}
                 </div>
               ))}
+            </div>
+
+            <div className="pt-6 border-t border-border mt-auto">
+              <PartnershipContactForm defaultTier={tier.nameKey}>
+                <Button 
+                  variant={tier.popular ? "rift" : "outline"} 
+                  className="w-full group"
+                >
+                  {t("sponsors.tiers.cta")}
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </PartnershipContactForm>
             </div>
           </motion.div>
         ))}

@@ -48,9 +48,10 @@ type PartnershipFormData = z.infer<typeof partnershipSchema>;
 
 interface PartnershipContactFormProps {
   children: React.ReactNode;
+  defaultTier?: string;
 }
 
-export function PartnershipContactForm({ children }: PartnershipContactFormProps) {
+export function PartnershipContactForm({ children, defaultTier }: PartnershipContactFormProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -64,7 +65,7 @@ export function PartnershipContactForm({ children }: PartnershipContactFormProps
       email: "",
       phone: "",
       website: "",
-      preferred_tier: "",
+      preferred_tier: defaultTier || "",
       message: "",
     },
   });
@@ -104,7 +105,15 @@ export function PartnershipContactForm({ children }: PartnershipContactFormProps
     setOpen(newOpen);
     if (!newOpen) {
       setIsSuccess(false);
-      form.reset();
+      form.reset({ 
+        company_name: "",
+        contact_name: "",
+        email: "",
+        phone: "",
+        website: "",
+        preferred_tier: defaultTier || "",
+        message: "",
+      });
     }
   };
 
