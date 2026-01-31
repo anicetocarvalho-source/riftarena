@@ -170,7 +170,13 @@
     "accountCreated": "Account created successfully! Welcome to RIFT.",
     "emailRegistered": "This email is already registered. Please sign in instead.",
     "invalidCredentials": "Invalid email or password. Please try again.",
-    "unexpectedError": "An unexpected error occurred. Please try again."
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "newPlayer": "New Player",
+    "welcomeToRift": "Welcome to RIFT!",
+    "yourStartingRank": "Your Starting Rank",
+    "nextRank": "Next Rank",
+    "startJourney": "Start My Journey",
+    "climbRanks": "Win matches to climb the ranks and prove your dominance!"
   },
   "dashboard": {
     "title": "Dashboard",

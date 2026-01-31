@@ -170,7 +170,13 @@
     "accountCreated": "Conta criada com sucesso! Bem-vindo ao RIFT.",
     "emailRegistered": "Este email já está registado. Por favor, entra na tua conta.",
     "invalidCredentials": "Email ou palavra-passe inválidos. Tenta novamente.",
-    "unexpectedError": "Ocorreu um erro inesperado. Tenta novamente."
+    "unexpectedError": "Ocorreu um erro inesperado. Tenta novamente.",
+    "newPlayer": "Novo Jogador",
+    "welcomeToRift": "Bem-vindo ao RIFT!",
+    "yourStartingRank": "O Teu Rank Inicial",
+    "nextRank": "Próximo Rank",
+    "startJourney": "Começar a Jornada",
+    "climbRanks": "Ganha partidas para subir de rank e provar o teu domínio!"
   },
   "dashboard": {
     "title": "Dashboard",

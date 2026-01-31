@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RiftLogo } from "@/components/brand/RiftLogo";
 import { Badge } from "@/components/ui/badge";
 import { PasswordStrengthIndicator } from "@/components/auth/PasswordStrengthIndicator";
+import { WelcomeCelebration } from "@/components/auth/WelcomeCelebration";
 import { Eye, EyeOff, Mail, Lock, User, Globe, ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -66,6 +67,8 @@ const Auth = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [registeredUsername, setRegisteredUsername] = useState("");
 
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
@@ -101,8 +104,10 @@ const Auth = () => {
           return;
         }
 
-        toast.success(t('auth.accountCreated'));
-        navigate("/dashboard");
+        // Show celebration instead of navigating immediately
+        setRegisteredUsername(username);
+        setShowCelebration(true);
+        setIsLoading(false);
       } else {
         const validation = signInSchema.safeParse({ email, password });
         if (!validation.success) {
@@ -137,11 +142,27 @@ const Auth = () => {
     }
   };
 
+  const handleCelebrationComplete = () => {
+    toast.success(t('auth.accountCreated'));
+    navigate("/dashboard");
+  };
+
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-rift opacity-30" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/10 blur-[120px] rounded-full" />
+    <>
+      {/* Welcome Celebration Overlay */}
+      <AnimatePresence>
+        {showCelebration && (
+          <WelcomeCelebration
+            username={registeredUsername}
+            onContinue={handleCelebrationComplete}
+          />
+        )}
+      </AnimatePresence>
+
+      <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-gradient-rift opacity-30" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/10 blur-[120px] rounded-full" />
 
       {/* Back Link */}
       <Link
@@ -382,6 +403,7 @@ const Auth = () => {
         </div>
       </motion.div>
     </div>
+    </>
   );
 };
 
