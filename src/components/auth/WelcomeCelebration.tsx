@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Sparkles, Trophy, Star, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAchievementSound } from "@/hooks/useAchievementSound";
 
 interface WelcomeCelebrationProps {
   username: string;
@@ -31,6 +32,7 @@ export function WelcomeCelebration({ username, onContinue }: WelcomeCelebrationP
   const { t } = useTranslation();
   const [confetti, setConfetti] = useState<ConfettiPiece[]>([]);
   const [showContent, setShowContent] = useState(false);
+  const { playAchievementSound } = useAchievementSound();
 
   // Generate confetti pieces
   useEffect(() => {
@@ -48,10 +50,13 @@ export function WelcomeCelebration({ username, onContinue }: WelcomeCelebrationP
     }
     setConfetti(pieces);
 
-    // Show main content after initial confetti burst
-    const timer = setTimeout(() => setShowContent(true), 300);
+    // Show main content after initial confetti burst and play sound
+    const timer = setTimeout(() => {
+      setShowContent(true);
+      playAchievementSound();
+    }, 300);
     return () => clearTimeout(timer);
-  }, []);
+  }, [playAchievementSound]);
 
   return (
     <motion.div
