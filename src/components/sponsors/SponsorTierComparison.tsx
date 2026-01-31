@@ -102,12 +102,17 @@ export function SponsorTierComparison() {
             key={tier.nameKey}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            whileHover={{ 
+              y: -8, 
+              scale: 1.02,
+              transition: { duration: 0.2, ease: "easeOut" }
+            }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
-            className={`relative p-6 rounded-sm border flex flex-col ${
+            className={`relative p-6 rounded-sm border flex flex-col cursor-pointer transition-shadow duration-300 ${
               tier.popular
-                ? "border-primary bg-primary/5 rift-border-glow"
-                : "border-border bg-card"
+                ? "border-primary bg-primary/5 rift-border-glow hover:shadow-[0_20px_40px_-15px_hsl(262_100%_62%/0.3)]"
+                : "border-border bg-card hover:border-primary/50 hover:shadow-[0_15px_30px_-10px_hsl(0_0%_0%/0.5)]"
             }`}
           >
             {tier.popular && (
