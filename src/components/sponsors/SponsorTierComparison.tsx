@@ -5,9 +5,7 @@ import { Badge } from "@/components/ui/badge";
 
 const tiers = [
   {
-    name: "Silver",
-    price: "$5,000",
-    priceNote: "per quarter",
+    nameKey: "silver",
     features: {
       logoPlacement: true,
       socialMentions: "2/month",
@@ -20,9 +18,7 @@ const tiers = [
     },
   },
   {
-    name: "Gold",
-    price: "$15,000",
-    priceNote: "per quarter",
+    nameKey: "gold",
     popular: true,
     features: {
       logoPlacement: true,
@@ -36,13 +32,11 @@ const tiers = [
     },
   },
   {
-    name: "Platinum",
-    price: "$40,000",
-    priceNote: "per quarter",
+    nameKey: "platinum",
     features: {
       logoPlacement: true,
-      socialMentions: "Unlimited",
-      tournamentSponsorship: "Unlimited",
+      socialMentions: "unlimited",
+      tournamentSponsorship: "unlimited",
       dashboardAccess: true,
       customBranding: true,
       exclusiveEvents: true,
@@ -52,16 +46,16 @@ const tiers = [
   },
 ];
 
-const featureLabels = {
-  logoPlacement: "Logo on homepage & streams",
-  socialMentions: "Social media mentions",
-  tournamentSponsorship: "Tournament sponsorship",
-  dashboardAccess: "Analytics dashboard",
-  customBranding: "Custom tournament branding",
-  exclusiveEvents: "Exclusive partner events",
-  coHosting: "Co-hosting opportunities",
-  prioritySupport: "Priority support",
-};
+const featureKeys = [
+  "logoPlacement",
+  "socialMentions",
+  "tournamentSponsorship",
+  "dashboardAccess",
+  "customBranding",
+  "exclusiveEvents",
+  "coHosting",
+  "prioritySupport",
+] as const;
 
 export function SponsorTierComparison() {
   const { t } = useTranslation();
@@ -73,6 +67,10 @@ export function SponsorTierComparison() {
       ) : (
         <X className="h-5 w-5 text-muted-foreground/30" />
       );
+    }
+    // Translate special values
+    if (value === "unlimited") {
+      return <span className="text-sm font-medium">{t("sponsors.tiers.unlimited")}</span>;
     }
     return <span className="text-sm font-medium">{value}</span>;
   };
@@ -99,7 +97,7 @@ export function SponsorTierComparison() {
       <div className="grid md:grid-cols-3 gap-6">
         {tiers.map((tier, index) => (
           <motion.div
-            key={tier.name}
+            key={tier.nameKey}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -120,27 +118,29 @@ export function SponsorTierComparison() {
 
             <div className="text-center mb-6 pt-2">
               <Badge
-                variant={tier.name.toLowerCase() as "platinum" | "gold" | "silver"}
+                variant={tier.nameKey as "platinum" | "gold" | "silver"}
                 className="mb-3"
               >
-                {t(`sponsors.${tier.name.toLowerCase()}`)}
+                {t(`sponsors.${tier.nameKey}`)}
               </Badge>
-              <div className="font-display text-3xl font-bold">{tier.price}</div>
+              <div className="font-display text-3xl font-bold">
+                {t(`sponsors.tiers.pricing.${tier.nameKey}.price`)}
+              </div>
               <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                {tier.priceNote}
+                {t(`sponsors.tiers.pricing.${tier.nameKey}.period`)}
               </p>
             </div>
 
             <div className="space-y-3 border-t border-border pt-6">
-              {Object.entries(tier.features).map(([key, value]) => (
+              {featureKeys.map((key) => (
                 <div
                   key={key}
                   className="flex items-center justify-between gap-3"
                 >
                   <span className="text-sm text-muted-foreground">
-                    {featureLabels[key as keyof typeof featureLabels]}
+                    {t(`sponsors.tiers.features.${key}`)}
                   </span>
-                  {renderFeatureValue(value)}
+                  {renderFeatureValue(tier.features[key])}
                 </div>
               ))}
             </div>

@@ -415,7 +415,32 @@
       "badge": "Partnership Plans",
       "title": "Choose Your Partnership Level",
       "description": "We offer flexible plans for brands of all sizes. From startups to global enterprises, we have the right solution for you.",
-      "mostPopular": "Most Popular"
+      "mostPopular": "Most Popular",
+      "unlimited": "Unlimited",
+      "pricing": {
+        "silver": {
+          "price": "$5,000",
+          "period": "per quarter"
+        },
+        "gold": {
+          "price": "$15,000",
+          "period": "per quarter"
+        },
+        "platinum": {
+          "price": "$40,000",
+          "period": "per quarter"
+        }
+      },
+      "features": {
+        "logoPlacement": "Logo on homepage & streams",
+        "socialMentions": "Social media mentions",
+        "tournamentSponsorship": "Tournament sponsorship",
+        "dashboardAccess": "Analytics dashboard",
+        "customBranding": "Custom tournament branding",
+        "exclusiveEvents": "Exclusive partner events",
+        "coHosting": "Co-hosting opportunities",
+        "prioritySupport": "Priority support"
+      }
     },
     "caseStudies": {
       "badge": "Success Stories",

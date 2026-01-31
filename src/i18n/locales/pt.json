@@ -415,7 +415,32 @@
       "badge": "Planos de Parceria",
       "title": "Escolhe o Teu Nível de Parceria",
       "description": "Oferecemos planos flexíveis para marcas de todos os tamanhos. Desde startups a empresas globais, temos a solução certa para ti.",
-      "mostPopular": "Mais Popular"
+      "mostPopular": "Mais Popular",
+      "unlimited": "Ilimitado",
+      "pricing": {
+        "silver": {
+          "price": "€4.500",
+          "period": "por trimestre"
+        },
+        "gold": {
+          "price": "€13.500",
+          "period": "por trimestre"
+        },
+        "platinum": {
+          "price": "€36.000",
+          "period": "por trimestre"
+        }
+      },
+      "features": {
+        "logoPlacement": "Logo na homepage e streams",
+        "socialMentions": "Menções nas redes sociais",
+        "tournamentSponsorship": "Patrocínio de torneios",
+        "dashboardAccess": "Dashboard de analytics",
+        "customBranding": "Branding personalizado em torneios",
+        "exclusiveEvents": "Eventos exclusivos para parceiros",
+        "coHosting": "Oportunidades de co-hosting",
+        "prioritySupport": "Suporte prioritário"
+      }
     },
     "caseStudies": {
       "badge": "Casos de Sucesso",
