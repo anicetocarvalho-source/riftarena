@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Tournament, Game, TournamentRegistration, TournamentMatch, CreateTournamentData, TournamentStatus, MatchStatus } from "@/types/tournament";
 import { useToast } from "@/hooks/use-toast";
-
+import { useAchievementSound } from "@/hooks/useAchievementSound";
 export const useGames = () => {
   return useQuery({
     queryKey: ["games"],
@@ -311,6 +311,8 @@ export const useGenerateBracket = () => {
 export const useUpdateMatchResult = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { user } = useAuth();
+  const { playSuccessSound } = useAchievementSound();
 
   return useMutation({
     mutationFn: async ({
@@ -330,6 +332,18 @@ export const useUpdateMatchResult = () => {
       participant1Score: number;
       participant2Score: number;
     }) => {
+      // Get current ELO before update to check for rank up
+      let winnerEloBefore: number | null = null;
+      if (user && winnerId === user.id) {
+        const { data: rankingBefore } = await supabase
+          .from("player_rankings")
+          .select("elo_rating")
+          .eq("user_id", winnerId)
+          .eq("game_id", gameId)
+          .maybeSingle();
+        winnerEloBefore = rankingBefore?.elo_rating ?? null;
+      }
+
       // Update the match
       const { data: match, error } = await supabase
         .from("tournament_matches")
@@ -379,15 +393,50 @@ export const useUpdateMatchResult = () => {
           .eq("id", nextMatch.id);
       }
 
-      return { tournamentId };
+      // Check for rank up if current user was winner
+      let didRankUp = false;
+      if (user && winnerId === user.id && winnerEloBefore !== null) {
+        const { data: rankingAfter } = await supabase
+          .from("player_rankings")
+          .select("elo_rating")
+          .eq("user_id", winnerId)
+          .eq("game_id", gameId)
+          .maybeSingle();
+        
+        if (rankingAfter) {
+          const oldTier = getRankTierFromElo(winnerEloBefore);
+          const newTier = getRankTierFromElo(rankingAfter.elo_rating);
+          didRankUp = newTier > oldTier;
+        }
+      }
+
+      return { tournamentId, isCurrentUserWinner: user?.id === winnerId, didRankUp };
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["tournament-matches", data.tournamentId] });
       queryClient.invalidateQueries({ queryKey: ["rankings"] });
+      
+      // Play success sound if current user won or ranked up
+      if (data.isCurrentUserWinner || data.didRankUp) {
+        playSuccessSound();
+      }
+      
       toast({ title: "Match result saved! ELO updated." });
     },
     onError: (error) => {
       toast({ title: "Error saving result", description: error.message, variant: "destructive" });
     },
   });
+};
+
+// Helper to get rank tier level for comparison
+const getRankTierFromElo = (elo: number): number => {
+  if (elo >= 2400) return 8; // Grandmaster
+  if (elo >= 2200) return 7; // Master
+  if (elo >= 2000) return 6; // Diamond
+  if (elo >= 1800) return 5; // Platinum
+  if (elo >= 1600) return 4; // Gold
+  if (elo >= 1400) return 3; // Silver
+  if (elo >= 1200) return 2; // Bronze
+  return 1; // Iron
 };
