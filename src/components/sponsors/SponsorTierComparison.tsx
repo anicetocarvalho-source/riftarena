@@ -65,16 +65,16 @@ export function SponsorTierComparison() {
   const renderFeatureValue = (value: boolean | string) => {
     if (typeof value === "boolean") {
       return value ? (
-        <Check className="h-5 w-5 text-primary" />
+        <Check className="h-5 w-5 text-primary transition-all duration-300 group-hover:scale-125 group-hover:text-primary group-hover:drop-shadow-[0_0_8px_hsl(262_100%_62%/0.6)]" />
       ) : (
-        <X className="h-5 w-5 text-muted-foreground/30" />
+        <X className="h-5 w-5 text-muted-foreground/30 transition-opacity duration-300 group-hover:opacity-50" />
       );
     }
     // Translate special values
     if (value === "unlimited") {
-      return <span className="text-sm font-medium">{t("sponsors.tiers.unlimited")}</span>;
+      return <span className="text-sm font-medium transition-colors duration-300 group-hover:text-primary">{t("sponsors.tiers.unlimited")}</span>;
     }
-    return <span className="text-sm font-medium">{value}</span>;
+    return <span className="text-sm font-medium transition-colors duration-300 group-hover:text-primary">{value}</span>;
   };
 
   return (
@@ -109,7 +109,7 @@ export function SponsorTierComparison() {
             }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
-            className={`relative p-6 rounded-sm border flex flex-col cursor-pointer transition-shadow duration-300 ${
+            className={`group relative p-6 rounded-sm border flex flex-col cursor-pointer transition-shadow duration-300 ${
               tier.popular
                 ? "border-primary bg-primary/5 rift-border-glow hover:shadow-[0_20px_40px_-15px_hsl(262_100%_62%/0.3)]"
                 : "border-border bg-card hover:border-primary/50 hover:shadow-[0_15px_30px_-10px_hsl(0_0%_0%/0.5)]"
