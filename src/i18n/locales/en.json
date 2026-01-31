@@ -443,6 +443,26 @@
       "badge": "Current Partners",
       "title": "Brands That Trust Us",
       "description": "Join these leading brands in the competitive esports ecosystem."
+    },
+    "form": {
+      "title": "Partnership Inquiry",
+      "description": "Fill out the form below and our team will get back to you within 24-48 hours.",
+      "companyName": "Company Name",
+      "contactName": "Contact Name",
+      "email": "Email",
+      "phone": "Phone",
+      "website": "Website",
+      "preferredTier": "Preferred Tier",
+      "selectTier": "Select a tier...",
+      "undecided": "Not decided yet",
+      "message": "Message",
+      "messagePlaceholder": "Tell us about your company and what you're looking for in a partnership with Rift Arena...",
+      "submit": "Submit Inquiry",
+      "submitting": "Submitting...",
+      "successTitle": "Inquiry Sent!",
+      "successMessage": "We've received your partnership inquiry. Our team will get in touch soon.",
+      "successToast": "Partnership inquiry submitted successfully!",
+      "errorToast": "Error submitting inquiry. Please try again."
     }
   },
   "language": {
@@ -825,28 +845,6 @@
     "tournamentsHosted": "Tournaments Hosted",
     "prizeDistributed": "Prize Distributed",
     "activeTeams": "Active Teams"
-  },
-  "sponsors": {
-    "form": {
-      "title": "Partnership Inquiry",
-      "description": "Fill out the form below and our team will get back to you within 24-48 hours.",
-      "companyName": "Company Name",
-      "contactName": "Contact Name",
-      "email": "Email",
-      "phone": "Phone",
-      "website": "Website",
-      "preferredTier": "Preferred Tier",
-      "selectTier": "Select a tier...",
-      "undecided": "Not decided yet",
-      "message": "Message",
-      "messagePlaceholder": "Tell us about your company and what you're looking for in a partnership with Rift Arena...",
-      "submit": "Submit Inquiry",
-      "submitting": "Submitting...",
-      "successTitle": "Inquiry Sent!",
-      "successMessage": "We've received your partnership inquiry. Our team will get in touch soon.",
-      "successToast": "Partnership inquiry submitted successfully!",
-      "errorToast": "Error submitting inquiry. Please try again."
-    }
   },
   "adminPartnerships": {
     "title": "Partnership Inquiries",
