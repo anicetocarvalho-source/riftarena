@@ -233,10 +233,14 @@ const Auth = () => {
                   <div className="relative">
                     <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
                     <Select value={country} onValueChange={setCountry}>
-                      <SelectTrigger className="pl-10 bg-secondary border-border">
+                      <SelectTrigger className="pl-10 bg-secondary border-border [&>span]:truncate">
                         <SelectValue placeholder={t('auth.selectCountry')} />
                       </SelectTrigger>
-                      <SelectContent className="max-h-[300px] bg-card border-border">
+                      <SelectContent 
+                        className="max-h-[300px] bg-card border-border z-50"
+                        position="popper"
+                        sideOffset={4}
+                      >
                         {COUNTRIES.map((c) => (
                           <SelectItem key={c} value={c}>
                             {c}
