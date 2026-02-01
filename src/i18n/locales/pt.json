@@ -110,7 +110,11 @@
     "allGames": "Todos os Jogos",
     "noRankings": "Ainda não há rankings",
     "noRankingsDesc": "Completa partidas em torneios para aparecer no leaderboard",
-    "streak": "série"
+    "streak": "série",
+    "yourPosition": "A Tua Posição",
+    "rankedOf": "Posição #{{position}} de {{total}} jogadores",
+    "wl": "V/D",
+    "viewProfile": "Ver Perfil"
   },
   "teams": {
     "title": "Equipas",

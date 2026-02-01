@@ -15,9 +15,9 @@ const Index = () => {
       <main>
         <HeroSection />
         <PlatformMetrics />
+        <RankingsPreview />
         <SponsorsSection />
         <FeaturedTournaments />
-        <RankingsPreview />
         <GamesSection />
         <CTASection />
       </main>
