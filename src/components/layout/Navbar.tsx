@@ -8,6 +8,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { NotificationDropdown } from "@/components/notifications/NotificationDropdown";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -72,6 +73,7 @@ export function Navbar() {
           <LanguageSwitcher />
           {!isLoading && (
             <>
+              {user && <NotificationDropdown />}
               {isAdmin && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
