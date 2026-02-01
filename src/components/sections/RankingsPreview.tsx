@@ -10,6 +10,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { GlossaryTerm } from "@/components/ui/glossary-term";
 import { useAuth } from "@/contexts/AuthContext";
+import { DailyChangesCard } from "@/components/rankings/DailyChangesCard";
 
 export function RankingsPreview() {
   const { t } = useTranslation();
@@ -205,6 +206,9 @@ export function RankingsPreview() {
             </div>
           </motion.div>
         )}
+
+        {/* Daily Changes Card */}
+        {user && <DailyChangesCard selectedGameId={selectedGameId} />}
 
         {/* Game Filter */}
         <motion.div

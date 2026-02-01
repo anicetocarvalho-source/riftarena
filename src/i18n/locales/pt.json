@@ -753,7 +753,15 @@
     "wins": "Vitórias",
     "winRate": "Taxa Vitória",
     "noRankings": "Ainda não há rankings. Sê o primeiro a competir!",
-    "joinTournament": "Entrar num Torneio"
+    "joinTournament": "Entrar num Torneio",
+    "dailyChanges": {
+      "title": "Mudanças Desde Ontem",
+      "eloChange": "{{count}} partida(s)",
+      "positions": "posições",
+      "currentRank": "Atual: #{{position}}",
+      "rivals": "Rivais à Frente",
+      "noRivals": "Sem ameaças recentes"
+    }
   },
   "onboarding": {
     "step": "Passo {{current}} de {{total}}",
