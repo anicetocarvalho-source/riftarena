@@ -912,5 +912,14 @@
     "reply": "Responder",
     "statusUpdated": "Estado atualizado com sucesso",
     "statusError": "Erro ao atualizar estado"
+  },
+  "notifications": {
+    "title": "Notificações",
+    "empty": "Ainda não há notificações",
+    "markAllAsRead": "Marcar todas como lidas",
+    "rankOvertake": {
+      "title": "Foste ultrapassado!",
+      "message": "{{username}} passou-te no ranking de {{game}}"
+    }
   }
 }

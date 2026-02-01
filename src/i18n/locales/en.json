@@ -912,5 +912,14 @@
     "reply": "Reply",
     "statusUpdated": "Status updated successfully",
     "statusError": "Error updating status"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications yet",
+    "markAllAsRead": "Mark all as read",
+    "rankOvertake": {
+      "title": "You've been overtaken!",
+      "message": "{{username}} passed you in the {{game}} rankings"
+    }
   }
 }
