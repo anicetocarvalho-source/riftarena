@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { NotificationDropdown } from "@/components/notifications/NotificationDropdown";
+import { PercentileBadge } from "@/components/rankings/PercentileBadge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -73,6 +74,7 @@ export function Navbar() {
           <LanguageSwitcher />
           {!isLoading && (
             <>
+              {user && <PercentileBadge />}
               {user && <NotificationDropdown />}
               {isAdmin && (
                 <DropdownMenu>
@@ -186,12 +188,15 @@ export function Navbar() {
                   </div>
                 )}
                 {user ? (
-                  <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="rift" className="w-full gap-2">
-                      <User className="h-4 w-4" />
-                      {profile?.username || "Dashboard"}
-                    </Button>
-                  </Link>
+                  <>
+                    <PercentileBadge className="w-fit mb-2" />
+                    <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="rift" className="w-full gap-2">
+                        <User className="h-4 w-4" />
+                        {profile?.username || "Dashboard"}
+                      </Button>
+                    </Link>
+                  </>
                 ) : (
                   <>
                     <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
