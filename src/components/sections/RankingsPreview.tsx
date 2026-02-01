@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Crown, Medal, Award, Trophy, Loader2 } from "lucide-react";
+import { ChevronRight, Crown, Medal, Award, Trophy, Loader2, TrendingUp, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useRankings, getRankTier, getWinRate } from "@/hooks/useRankings";
 import { useQuery } from "@tanstack/react-query";
@@ -9,10 +9,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { GlossaryTerm } from "@/components/ui/glossary-term";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function RankingsPreview() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [selectedGameId, setSelectedGameId] = useState<string | undefined>(undefined);
   
   // Fetch games for filter
@@ -27,6 +29,51 @@ export function RankingsPreview() {
 
   // Fetch top 3 rankings
   const { data: rankings, isLoading } = useRankings(selectedGameId, 3);
+
+  // Fetch user's personal ranking position
+  const { data: userRankingData } = useQuery({
+    queryKey: ["user-ranking-position", user?.id, selectedGameId],
+    queryFn: async () => {
+      if (!user) return null;
+
+      // Get all rankings ordered by ELO to find user's position
+      let query = supabase
+        .from("player_rankings")
+        .select(`
+          id,
+          user_id,
+          elo_rating,
+          wins,
+          losses,
+          win_streak,
+          game:games(id, name, icon)
+        `)
+        .order("elo_rating", { ascending: false });
+
+      if (selectedGameId) {
+        query = query.eq("game_id", selectedGameId);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+
+      const userPosition = data.findIndex(r => r.user_id === user.id);
+      const userRanking = data.find(r => r.user_id === user.id);
+
+      if (userPosition === -1 || !userRanking) return null;
+
+      return {
+        position: userPosition + 1,
+        totalPlayers: data.length,
+        elo: userRanking.elo_rating,
+        wins: userRanking.wins,
+        losses: userRanking.losses,
+        winStreak: userRanking.win_streak,
+        game: userRanking.game,
+      };
+    },
+    enabled: !!user,
+  });
 
   const getRankIcon = (rank: number) => {
     switch (rank) {
@@ -89,6 +136,75 @@ export function RankingsPreview() {
             </Button>
           </motion.div>
         </div>
+
+        {/* Personal Rank Indicator for logged-in users */}
+        {user && userRankingData && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-6"
+          >
+            <div 
+              className="relative rounded-sm border border-primary/30 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-4 cursor-pointer hover:border-primary/50 transition-all"
+              onClick={() => navigate(`/player/${user.id}`)}
+            >
+              <div className="flex items-center justify-between flex-wrap gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/20 border-2 border-primary">
+                    <span className="font-display font-bold text-xl text-primary">
+                      #{userRankingData.position}
+                    </span>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <User className="h-4 w-4 text-primary" />
+                      <span className="text-sm uppercase tracking-wider text-muted-foreground">
+                        {t("rankingsPreview.yourPosition")}
+                      </span>
+                    </div>
+                    <p className="font-display text-lg font-bold">
+                      {t("rankingsPreview.rankedOf", { position: userRankingData.position, total: userRankingData.totalPlayers })}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-6">
+                  <div className="text-center">
+                    <p className="font-display font-bold text-2xl text-primary">
+                      {userRankingData.elo}
+                    </p>
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                      <GlossaryTerm term="elo" showIcon={false}>ELO</GlossaryTerm>
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="font-display font-bold text-lg">
+                      <span className="text-success">{userRankingData.wins}</span>
+                      <span className="text-muted-foreground mx-1">/</span>
+                      <span className="text-destructive">{userRankingData.losses}</span>
+                    </p>
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                      {t("rankingsPreview.wl")}
+                    </p>
+                  </div>
+                  {userRankingData.winStreak > 0 && (
+                    <div className="flex items-center gap-1 text-success">
+                      <TrendingUp className="h-4 w-4" />
+                      <span className="font-display font-bold">{userRankingData.winStreak}</span>
+                      <span className="text-xs">{t("rankingsPreview.streak")}</span>
+                    </div>
+                  )}
+                </div>
+
+                <Button variant="rift-outline" size="sm" className="ml-auto">
+                  {t("rankingsPreview.viewProfile")}
+                  <ChevronRight className="ml-1 h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Game Filter */}
         <motion.div

@@ -110,7 +110,11 @@
     "allGames": "All Games",
     "noRankings": "No rankings yet",
     "noRankingsDesc": "Complete matches in tournaments to appear on the leaderboard",
-    "streak": "streak"
+    "streak": "streak",
+    "yourPosition": "Your Position",
+    "rankedOf": "Ranked #{{position}} of {{total}} players",
+    "wl": "W/L",
+    "viewProfile": "View Profile"
   },
   "teams": {
     "title": "Teams",
