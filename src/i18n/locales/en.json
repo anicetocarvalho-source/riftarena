@@ -753,7 +753,15 @@
     "wins": "Wins",
     "winRate": "Win Rate",
     "noRankings": "No rankings yet. Be the first to compete!",
-    "joinTournament": "Join a Tournament"
+    "joinTournament": "Join a Tournament",
+    "dailyChanges": {
+      "title": "Changes Since Yesterday",
+      "eloChange": "{{count}} match(es)",
+      "positions": "positions",
+      "currentRank": "Current: #{{position}}",
+      "rivals": "Rivals Ahead",
+      "noRivals": "No recent threats"
+    }
   },
   "onboarding": {
     "step": "Step {{current}} of {{total}}",
