@@ -9,6 +9,7 @@ import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/comp
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MyTeamsSection } from "@/components/dashboard/MyTeamsSection";
+import { RankProgressCard } from "@/components/dashboard/RankProgressCard";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { 
@@ -106,11 +107,21 @@ const Dashboard = () => {
             </div>
           </motion.div>
 
-          {/* Quick Stats */}
+          {/* Personal Rank Progress - Prominent Position */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
+            className="mb-8"
+          >
+            <RankProgressCard />
+          </motion.div>
+
+          {/* Quick Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
             className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12"
           >
             <RiftCard>
