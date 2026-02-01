@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { MyTeamsSection } from "@/components/dashboard/MyTeamsSection";
 import { RankProgressCard } from "@/components/dashboard/RankProgressCard";
 import { NextRivalCard } from "@/components/dashboard/NextRivalCard";
+import { ActivityUrgencyCard } from "@/components/dashboard/ActivityUrgencyCard";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { 
@@ -108,15 +109,16 @@ const Dashboard = () => {
             </div>
           </motion.div>
 
-          {/* Personal Rank Progress & Next Rival - Prominent Position */}
+          {/* Personal Rank Progress, Next Rival & Activity Urgency - Prominent Position */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-8 grid gap-6 lg:grid-cols-2"
+            className="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
           >
             <RankProgressCard />
             <NextRivalCard />
+            <ActivityUrgencyCard />
           </motion.div>
 
           {/* Quick Stats */}
