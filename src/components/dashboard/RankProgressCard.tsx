@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { TrendingUp, Trophy, Zap } from "lucide-react";
+import { TrendingUp, Trophy, Zap, Users } from "lucide-react";
 import { RiftCard, RiftCardContent } from "@/components/ui/rift-card";
 import { Progress } from "@/components/ui/progress";
 import { useUserRankings, getRankTier, getWinRate } from "@/hooks/useRankings";
+import { usePlayerPercentile } from "@/hooks/usePlayerPercentile";
 import { cn } from "@/lib/utils";
 
 // Tier thresholds for calculating progress
@@ -36,6 +37,7 @@ const getTierProgress = (elo: number) => {
 export const RankProgressCard = () => {
   const { t } = useTranslation();
   const { data: rankings, isLoading } = useUserRankings();
+  const { data: percentileData } = usePlayerPercentile();
 
   // Get the highest ranked game or first available
   const primaryRanking = rankings?.length 
@@ -165,6 +167,19 @@ export const RankProgressCard = () => {
               <Trophy className="h-4 w-4" />
               <span className="font-display uppercase tracking-wider">
                 {t('dashboard.maxRankReached', 'Maximum rank achieved!')}
+              </span>
+            </div>
+          )}
+
+          {/* Social comparison */}
+          {percentileData && (
+            <div className="flex items-center gap-2 pt-2 border-t border-border/50">
+              <Users className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">
+                {t('dashboard.aheadOfPlayers', 'Estás à frente de {{percent}}% dos jogadores', { percent: percentileData.percentile })}
+              </span>
+              <span className="ml-auto text-xs font-mono text-primary">
+                #{percentileData.position}/{percentileData.totalPlayers}
               </span>
             </div>
           )}
