@@ -13,7 +13,9 @@ import { RankProgressCard } from "@/components/dashboard/RankProgressCard";
 import { NextRivalCard } from "@/components/dashboard/NextRivalCard";
 import { ActivityUrgencyCard } from "@/components/dashboard/ActivityUrgencyCard";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
+import { RivalOvertakeCelebration } from "@/components/rankings/RivalOvertakeCelebration";
 import { useOnboarding } from "@/hooks/useOnboarding";
+import { useRivalOvertakeCelebration } from "@/hooks/useRivalOvertakeCelebration";
 import { 
   Trophy, Users, Gamepad2, TrendingUp, Settings, 
   Shield, BarChart3, DollarSign, Bell, Loader2, Search
@@ -24,6 +26,7 @@ const Dashboard = () => {
   const { t } = useTranslation();
   const { user, profile, roles, isLoading, isAdmin, isOrganizer, isSponsor, signOut } = useAuth();
   const { showOnboarding, isLoading: onboardingLoading, completeOnboarding, skipOnboarding } = useOnboarding();
+  const { celebrationData, dismissCelebration } = useRivalOvertakeCelebration();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,6 +64,16 @@ const Dashboard = () => {
           <OnboardingWizard 
             onComplete={completeOnboarding} 
             onSkip={skipOnboarding} 
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Rival Overtake Celebration */}
+      <AnimatePresence>
+        {celebrationData && (
+          <RivalOvertakeCelebration
+            data={celebrationData}
+            onDismiss={dismissCelebration}
           />
         )}
       </AnimatePresence>
