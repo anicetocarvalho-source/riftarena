@@ -921,5 +921,52 @@
       "title": "Foste ultrapassado!",
       "message": "{{username}} passou-te no ranking de {{game}}"
     }
+  },
+  "rulesBuilder": {
+    "title": "Regulamento do Torneio",
+    "builderMode": "Construtor",
+    "rawMode": "Texto Livre",
+    "templateHint": "Usar template profissional baseado no formato do torneio",
+    "applyTemplate": "Aplicar Template",
+    "filled": "Preenchido",
+    "teamBased": "Equipas de",
+    "individual": "Individual",
+    "singleElim": "Eliminatória Simples",
+    "doubleElim": "Eliminatória Dupla",
+    "roundRobin": "Round Robin",
+    "rawPlaceholder": "Escreve as regras do torneio em formato livre...",
+    "rawHint": "Podes usar Markdown para formatação. Usa o modo Construtor para um formato estruturado.",
+    "sections": {
+      "format": {
+        "title": "Formato da Competição",
+        "description": "Define a estrutura de brackets, número de rondas e critérios de qualificação.",
+        "placeholder": "Ex: Bracket de eliminatória simples com 64 participantes..."
+      },
+      "scoring": {
+        "title": "Sistema de Pontuação",
+        "description": "Explica como os pontos são atribuídos e como os resultados são determinados.",
+        "placeholder": "Ex: Best-of-3 para fases iniciais, Best-of-5 para finais..."
+      },
+      "tiebreakers": {
+        "title": "Critérios de Desempate",
+        "description": "Define como os empates são resolvidos em cada fase da competição.",
+        "placeholder": "Ex: 1º Head-to-head, 2º Diferença de pontos, 3º Partida extra..."
+      },
+      "conduct": {
+        "title": "Código de Conduta",
+        "description": "Regras de comportamento, fair play e integridade competitiva.",
+        "placeholder": "Ex: É proibido o uso de linguagem ofensiva, exploits ou cheats..."
+      },
+      "schedule": {
+        "title": "Horários e Prazos",
+        "description": "Define janelas de jogo, tolerância de atrasos e reagendamentos.",
+        "placeholder": "Ex: Check-in obrigatório 15 minutos antes do início..."
+      },
+      "penalties": {
+        "title": "Penalizações",
+        "description": "Consequências para violações de regras e comportamento antidesportivo.",
+        "placeholder": "Ex: Primeira infração: Aviso. Segunda infração: Loss técnico..."
+      }
+    }
   }
 }

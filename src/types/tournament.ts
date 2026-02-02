@@ -25,6 +25,8 @@ export interface Tournament {
   end_date: string | null;
   rules: string | null;
   bracket_type: string;
+  is_team_based: boolean;
+  team_size: number | null;
   created_at: string;
   updated_at: string;
   game?: Game;
