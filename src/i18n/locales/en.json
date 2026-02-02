@@ -921,5 +921,52 @@
       "title": "You've been overtaken!",
       "message": "{{username}} passed you in the {{game}} rankings"
     }
+  },
+  "rulesBuilder": {
+    "title": "Tournament Rules",
+    "builderMode": "Builder",
+    "rawMode": "Raw Text",
+    "templateHint": "Use professional template based on tournament format",
+    "applyTemplate": "Apply Template",
+    "filled": "Filled",
+    "teamBased": "Teams of",
+    "individual": "Individual",
+    "singleElim": "Single Elimination",
+    "doubleElim": "Double Elimination",
+    "roundRobin": "Round Robin",
+    "rawPlaceholder": "Write tournament rules in free format...",
+    "rawHint": "You can use Markdown for formatting. Use Builder mode for a structured format.",
+    "sections": {
+      "format": {
+        "title": "Competition Format",
+        "description": "Define bracket structure, number of rounds and qualification criteria.",
+        "placeholder": "Ex: Single elimination bracket with 64 participants..."
+      },
+      "scoring": {
+        "title": "Scoring System",
+        "description": "Explain how points are awarded and how results are determined.",
+        "placeholder": "Ex: Best-of-3 for early stages, Best-of-5 for finals..."
+      },
+      "tiebreakers": {
+        "title": "Tiebreaker Criteria",
+        "description": "Define how ties are resolved at each stage of the competition.",
+        "placeholder": "Ex: 1st Head-to-head, 2nd Point difference, 3rd Extra match..."
+      },
+      "conduct": {
+        "title": "Code of Conduct",
+        "description": "Behavior rules, fair play and competitive integrity.",
+        "placeholder": "Ex: Use of offensive language, exploits or cheats is prohibited..."
+      },
+      "schedule": {
+        "title": "Schedule & Deadlines",
+        "description": "Define match windows, delay tolerance and rescheduling.",
+        "placeholder": "Ex: Check-in required 15 minutes before start..."
+      },
+      "penalties": {
+        "title": "Penalties",
+        "description": "Consequences for rule violations and unsportsmanlike behavior.",
+        "placeholder": "Ex: First offense: Warning. Second offense: Technical loss..."
+      }
+    }
   }
 }

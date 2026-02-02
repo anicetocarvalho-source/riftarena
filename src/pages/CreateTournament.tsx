@@ -13,7 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useGames, useCreateTournament } from "@/hooks/useTournaments";
-import { ArrowLeft, Trophy, Calendar, DollarSign, Users, Loader2 } from "lucide-react";
+import { TournamentRulesBuilder } from "@/components/tournaments/rules";
+import { ArrowLeft, Trophy, Calendar, DollarSign, Users, Loader2, FileText } from "lucide-react";
 
 const CreateTournament = () => {
   const { t } = useTranslation();
@@ -318,19 +319,19 @@ const CreateTournament = () => {
             >
               <RiftCard>
                 <RiftCardHeader>
-                  <RiftCardTitle>{t('createTournament.rulesGuidelines')}</RiftCardTitle>
+                  <RiftCardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-primary" />
+                    {t('createTournament.rulesGuidelines')}
+                  </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
-                  <div className="space-y-2">
-                    <Label htmlFor="rules">{t('createTournament.rules')}</Label>
-                    <Textarea
-                      id="rules"
-                      placeholder={t('createTournament.rulesPlaceholder')}
-                      value={formData.rules}
-                      onChange={(e) => handleChange("rules", e.target.value)}
-                      rows={6}
-                    />
-                  </div>
+                  <TournamentRulesBuilder
+                    value={formData.rules}
+                    onChange={(value) => handleChange("rules", value)}
+                    bracketType={formData.bracket_type}
+                    isTeamBased={formData.is_team_based}
+                    teamSize={formData.team_size}
+                  />
                 </RiftCardContent>
               </RiftCard>
             </motion.div>

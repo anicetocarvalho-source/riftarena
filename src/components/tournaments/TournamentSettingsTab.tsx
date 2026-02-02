@@ -20,6 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useUpdateTournament, useUpdateTournamentStatus } from "@/hooks/useTournaments";
+import { TournamentRulesBuilder } from "@/components/tournaments/rules";
 import { Settings, Calendar as CalendarIcon, DollarSign, Users, FileText, Save, X, Edit, Ban, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -352,16 +353,13 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
             </RiftCardTitle>
           </RiftCardHeader>
           <RiftCardContent>
-            <div className="space-y-2">
-              <Label htmlFor="rules">{t('tournamentSettings.tournamentRules')}</Label>
-              <Textarea
-                id="rules"
-                value={rules}
-                onChange={(e) => setRules(e.target.value)}
-                placeholder={t('tournamentSettings.enterRules')}
-                rows={6}
-              />
-            </div>
+            <TournamentRulesBuilder
+              value={rules}
+              onChange={setRules}
+              bracketType={tournament.bracket_type}
+              isTeamBased={tournament.is_team_based}
+              teamSize={tournament.team_size || 5}
+            />
           </RiftCardContent>
         </RiftCard>
       </div>
