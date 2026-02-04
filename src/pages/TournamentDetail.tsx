@@ -21,7 +21,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { TournamentStatus } from "@/types/tournament";
 import { 
   Trophy, Users, Calendar, DollarSign, 
-  Loader2, Clock, CheckCircle, XCircle, GitBranch, FileText, UsersRound
+  Loader2, Clock, CheckCircle, XCircle, GitBranch, FileText, UsersRound, Medal, Award
 } from "lucide-react";
 import { format } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -395,6 +395,70 @@ const TournamentDetail = () => {
               </RiftCardContent>
             </RiftCard>
           </motion.div>
+
+          {/* Prize Distribution Section */}
+          {tournament.prize_pool > 0 && tournament.prize_distribution && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className="mb-8"
+            >
+              <RiftCard>
+                <RiftCardHeader>
+                  <RiftCardTitle className="flex items-center gap-2">
+                    <Trophy className="h-5 w-5 text-primary" />
+                    {t('prizeDistribution.title')}
+                  </RiftCardTitle>
+                </RiftCardHeader>
+                <RiftCardContent>
+                  <div className="grid gap-3 md:grid-cols-3">
+                    {/* 1st Place */}
+                    <div className="flex items-center gap-3 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
+                      <div className="p-2 rounded-full bg-yellow-500/10">
+                        <Trophy className="h-6 w-6 text-yellow-500" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-muted-foreground">{t('prizeDistribution.first')}</p>
+                        <p className="text-xl font-bold text-yellow-500">
+                          ${((tournament.prize_pool * tournament.prize_distribution.first) / 100).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-muted-foreground">{tournament.prize_distribution.first}%</p>
+                      </div>
+                    </div>
+                    
+                    {/* 2nd Place */}
+                    <div className="flex items-center gap-3 p-4 rounded-lg bg-gray-400/10 border border-gray-400/30">
+                      <div className="p-2 rounded-full bg-gray-400/10">
+                        <Medal className="h-6 w-6 text-gray-400" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-muted-foreground">{t('prizeDistribution.second')}</p>
+                        <p className="text-xl font-bold text-gray-400">
+                          ${((tournament.prize_pool * tournament.prize_distribution.second) / 100).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-muted-foreground">{tournament.prize_distribution.second}%</p>
+                      </div>
+                    </div>
+                    
+                    {/* 3rd Place */}
+                    <div className="flex items-center gap-3 p-4 rounded-lg bg-amber-600/10 border border-amber-600/30">
+                      <div className="p-2 rounded-full bg-amber-600/10">
+                        <Award className="h-6 w-6 text-amber-600" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-muted-foreground">{t('prizeDistribution.third')}</p>
+                        <p className="text-xl font-bold text-amber-600">
+                          ${((tournament.prize_pool * tournament.prize_distribution.third) / 100).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-muted-foreground">{tournament.prize_distribution.third}%</p>
+                      </div>
+                    </div>
+                  </div>
+                </RiftCardContent>
+              </RiftCard>
+            </motion.div>
+          )}
 
           <div className="grid gap-8 lg:grid-cols-3">
             {/* Main Content */}

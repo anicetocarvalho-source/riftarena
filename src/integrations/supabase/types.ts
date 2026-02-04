@@ -683,6 +683,7 @@ export type Database = {
           max_participants: number
           name: string
           organizer_id: string
+          prize_distribution: Json | null
           prize_pool: number
           registration_deadline: string | null
           registration_fee: number | null
@@ -705,6 +706,7 @@ export type Database = {
           max_participants?: number
           name: string
           organizer_id: string
+          prize_distribution?: Json | null
           prize_pool?: number
           registration_deadline?: string | null
           registration_fee?: number | null
@@ -727,6 +729,7 @@ export type Database = {
           max_participants?: number
           name?: string
           organizer_id?: string
+          prize_distribution?: Json | null
           prize_pool?: number
           registration_deadline?: string | null
           registration_fee?: number | null

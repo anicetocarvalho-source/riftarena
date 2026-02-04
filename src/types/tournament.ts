@@ -1,6 +1,12 @@
 export type TournamentStatus = 'draft' | 'registration' | 'live' | 'completed' | 'cancelled';
 export type MatchStatus = 'pending' | 'in_progress' | 'completed' | 'disputed';
 
+export interface PrizeDistribution {
+  first: number;
+  second: number;
+  third: number;
+}
+
 export interface Game {
   id: string;
   name: string;
@@ -28,6 +34,7 @@ export interface Tournament {
   is_team_based: boolean;
   team_size: number | null;
   banner_url: string | null;
+  prize_distribution: PrizeDistribution | null;
   created_at: string;
   updated_at: string;
   game?: Game;
@@ -81,4 +88,5 @@ export interface CreateTournamentData {
   rules?: string;
   bracket_type: string;
   banner_url?: string;
+  prize_distribution?: PrizeDistribution;
 }

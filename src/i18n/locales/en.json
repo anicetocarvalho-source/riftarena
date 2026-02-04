@@ -981,5 +981,14 @@
     "invalidTypeDesc": "Please select an image (PNG, JPG, WEBP)",
     "tooLarge": "File too large",
     "tooLargeDesc": "Maximum allowed size is 5MB"
+  },
+  "prizeDistribution": {
+    "title": "Prize Distribution",
+    "first": "1st Place",
+    "second": "2nd Place",
+    "third": "3rd Place",
+    "total": "Total",
+    "mustEqual100": "Percentages must add up to 100%",
+    "preview": "Final Amounts"
   }
 }

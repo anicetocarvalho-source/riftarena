@@ -22,7 +22,8 @@ import {
 import { useUpdateTournament, useUpdateTournamentStatus } from "@/hooks/useTournaments";
 import { TournamentRulesBuilder } from "@/components/tournaments/rules";
 import { TournamentBannerUpload } from "@/components/tournaments/TournamentBannerUpload";
-import { Settings, Calendar as CalendarIcon, DollarSign, Users, FileText, Save, X, Edit, Ban, AlertTriangle, Image } from "lucide-react";
+import { PrizeDistributionEditor, PrizeDistribution } from "@/components/tournaments/PrizeDistributionEditor";
+import { Settings, Calendar as CalendarIcon, DollarSign, Users, FileText, Save, X, Edit, Ban, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -51,6 +52,9 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
   const [maxParticipants, setMaxParticipants] = useState(tournament.max_participants.toString());
   const [rules, setRules] = useState(tournament.rules || "");
   const [bannerUrl, setBannerUrl] = useState(tournament.banner_url || "");
+  const [prizeDistribution, setPrizeDistribution] = useState<PrizeDistribution>(
+    tournament.prize_distribution || { first: 50, second: 30, third: 20 }
+  );
   
   // Validation errors
   const [dateErrors, setDateErrors] = useState<{
@@ -111,6 +115,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
       max_participants: parseInt(maxParticipants) || 64,
       rules: rules || null,
       banner_url: bannerUrl || null,
+      prize_distribution: prizeDistribution,
     });
     setIsEditing(false);
   };
@@ -127,6 +132,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
     setMaxParticipants(tournament.max_participants.toString());
     setRules(tournament.rules || "");
     setBannerUrl(tournament.banner_url || "");
+    setPrizeDistribution(tournament.prize_distribution || { first: 50, second: 30, third: 20 });
     setIsEditing(false);
   };
 
@@ -325,12 +331,19 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                   onChange={(e) => setRegistrationFee(e.target.value)}
                   min="0"
                   step="1"
-                />
-              </div>
-            </div>
-          </RiftCardContent>
-        </RiftCard>
-
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Prize Distribution */}
+                  <PrizeDistributionEditor
+                    value={prizeDistribution}
+                    onChange={setPrizeDistribution}
+                    prizePool={parseFloat(prizePool) || 0}
+                  />
+                </RiftCardContent>
+              </RiftCard>
+            
         <RiftCard>
           <RiftCardHeader>
             <RiftCardTitle className="flex items-center gap-2">
