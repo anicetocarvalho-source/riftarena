@@ -1,9 +1,26 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Tournament, Game, TournamentRegistration, TournamentMatch, CreateTournamentData, TournamentStatus, MatchStatus } from "@/types/tournament";
+import { Tournament, Game, TournamentRegistration, TournamentMatch, CreateTournamentData, TournamentStatus, MatchStatus, PrizeDistribution } from "@/types/tournament";
 import { useToast } from "@/hooks/use-toast";
 import { useAchievementSound } from "@/hooks/useAchievementSound";
+import { Json } from "@/integrations/supabase/types";
+
+// Helper to convert Json to PrizeDistribution
+const parsePrizeDistribution = (json: Json | null): PrizeDistribution | null => {
+  if (!json || typeof json !== "object" || Array.isArray(json)) return null;
+  const obj = json as Record<string, unknown>;
+  if (typeof obj.first === "number" && typeof obj.second === "number" && typeof obj.third === "number") {
+    return { first: obj.first, second: obj.second, third: obj.third };
+  }
+  return null;
+};
+
+// Helper to map raw tournament data to Tournament type
+const mapTournament = (data: any): Tournament => ({
+  ...data,
+  prize_distribution: parsePrizeDistribution(data.prize_distribution),
+});
 export const useGames = () => {
   return useQuery({
     queryKey: ["games"],
@@ -38,7 +55,7 @@ export const useTournaments = (organizerId?: string) => {
       
       const { data, error } = await query;
       if (error) throw error;
-      return data as Tournament[];
+      return (data || []).map(mapTournament) as Tournament[];
     },
   });
 };
@@ -58,7 +75,7 @@ export const useTournament = (id: string) => {
         .single();
       
       if (error) throw error;
-      return data as Tournament;
+      return mapTournament(data) as Tournament;
     },
     enabled: !!id,
   });
@@ -117,12 +134,26 @@ export const useCreateTournament = () => {
     mutationFn: async (data: CreateTournamentData) => {
       if (!user) throw new Error("Not authenticated");
       
+      const insertData = {
+        name: data.name,
+        description: data.description,
+        game_id: data.game_id,
+        prize_pool: data.prize_pool,
+        max_participants: data.max_participants,
+        registration_fee: data.registration_fee,
+        registration_deadline: data.registration_deadline,
+        start_date: data.start_date,
+        end_date: data.end_date,
+        rules: data.rules,
+        bracket_type: data.bracket_type,
+        banner_url: data.banner_url,
+        prize_distribution: data.prize_distribution as unknown as Json,
+        organizer_id: user.id,
+      };
+      
       const { data: tournament, error } = await supabase
         .from("tournaments")
-        .insert({
-          ...data,
-          organizer_id: user.id,
-        })
+        .insert(insertData)
         .select()
         .single();
       
@@ -145,9 +176,15 @@ export const useUpdateTournament = () => {
 
   return useMutation({
     mutationFn: async ({ id, ...data }: Partial<Tournament> & { id: string }) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { game, organizer, registrations_count, ...updateData } = data as any;
+      
       const { data: tournament, error } = await supabase
         .from("tournaments")
-        .update(data)
+        .update({
+          ...updateData,
+          prize_distribution: updateData.prize_distribution as unknown as Json,
+        })
         .eq("id", id)
         .select()
         .single();

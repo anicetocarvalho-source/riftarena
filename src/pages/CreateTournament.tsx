@@ -15,7 +15,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useGames, useCreateTournament } from "@/hooks/useTournaments";
 import { TournamentRulesBuilder } from "@/components/tournaments/rules";
 import { TournamentBannerUpload } from "@/components/tournaments/TournamentBannerUpload";
-import { ArrowLeft, Trophy, Calendar, DollarSign, Users, Loader2, FileText, Image } from "lucide-react";
+import { PrizeDistributionEditor, PrizeDistribution } from "@/components/tournaments/PrizeDistributionEditor";
+import { ArrowLeft, Trophy, Calendar, DollarSign, Users, Loader2, FileText } from "lucide-react";
 
 const CreateTournament = () => {
   const { t } = useTranslation();
@@ -39,6 +40,7 @@ const CreateTournament = () => {
     is_team_based: false,
     team_size: 5,
     banner_url: "",
+    prize_distribution: { first: 50, second: 30, third: 20 } as PrizeDistribution,
   });
 
   if (authLoading) {
@@ -66,6 +68,7 @@ const CreateTournament = () => {
         registration_deadline: formData.registration_deadline || undefined,
         end_date: formData.end_date || undefined,
         banner_url: formData.banner_url || undefined,
+        prize_distribution: formData.prize_distribution,
       });
       navigate(`/tournaments/manage/${tournament.id}`);
     } catch (error) {
@@ -73,7 +76,7 @@ const CreateTournament = () => {
     }
   };
 
-  const handleChange = (field: string, value: string | number) => {
+  const handleChange = (field: string, value: string | number | PrizeDistribution) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -266,6 +269,13 @@ const CreateTournament = () => {
                       />
                     </div>
                   </div>
+                  
+                  {/* Prize Distribution */}
+                  <PrizeDistributionEditor
+                    value={formData.prize_distribution}
+                    onChange={(value) => handleChange("prize_distribution", value)}
+                    prizePool={Number(formData.prize_pool)}
+                  />
                 </RiftCardContent>
               </RiftCard>
             </motion.div>
