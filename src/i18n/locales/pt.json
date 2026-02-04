@@ -968,5 +968,18 @@
         "placeholder": "Ex: Primeira infração: Aviso. Segunda infração: Loss técnico..."
       }
     }
+  },
+  "tournamentBanner": {
+    "label": "Banner do Torneio",
+    "hint": "Recomendado: 1920x480px (proporção 4:1) para melhor visualização",
+    "dropzone": "Arrasta uma imagem ou clica para selecionar",
+    "formats": "PNG, JPG, WEBP (máx. 5MB)",
+    "uploading": "A carregar...",
+    "uploadSuccess": "Banner carregado com sucesso!",
+    "uploadError": "Erro ao carregar banner",
+    "invalidType": "Tipo de ficheiro inválido",
+    "invalidTypeDesc": "Por favor seleciona uma imagem (PNG, JPG, WEBP)",
+    "tooLarge": "Ficheiro demasiado grande",
+    "tooLargeDesc": "O tamanho máximo permitido é 5MB"
   }
 }

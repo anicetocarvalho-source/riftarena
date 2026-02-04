@@ -21,7 +21,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useUpdateTournament, useUpdateTournamentStatus } from "@/hooks/useTournaments";
 import { TournamentRulesBuilder } from "@/components/tournaments/rules";
-import { Settings, Calendar as CalendarIcon, DollarSign, Users, FileText, Save, X, Edit, Ban, AlertTriangle } from "lucide-react";
+import { TournamentBannerUpload } from "@/components/tournaments/TournamentBannerUpload";
+import { Settings, Calendar as CalendarIcon, DollarSign, Users, FileText, Save, X, Edit, Ban, AlertTriangle, Image } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -49,6 +50,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
   const [registrationFee, setRegistrationFee] = useState(tournament.registration_fee.toString());
   const [maxParticipants, setMaxParticipants] = useState(tournament.max_participants.toString());
   const [rules, setRules] = useState(tournament.rules || "");
+  const [bannerUrl, setBannerUrl] = useState(tournament.banner_url || "");
   
   // Validation errors
   const [dateErrors, setDateErrors] = useState<{
@@ -108,6 +110,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
       registration_fee: parseFloat(registrationFee) || 0,
       max_participants: parseInt(maxParticipants) || 64,
       rules: rules || null,
+      banner_url: bannerUrl || null,
     });
     setIsEditing(false);
   };
@@ -123,6 +126,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
     setRegistrationFee(tournament.registration_fee.toString());
     setMaxParticipants(tournament.max_participants.toString());
     setRules(tournament.rules || "");
+    setBannerUrl(tournament.banner_url || "");
     setIsEditing(false);
   };
 
@@ -181,6 +185,13 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                 rows={3}
               />
             </div>
+            
+            {/* Banner Upload */}
+            <TournamentBannerUpload
+              value={bannerUrl}
+              onChange={setBannerUrl}
+              tournamentId={tournament.id}
+            />
           </RiftCardContent>
         </RiftCard>
 

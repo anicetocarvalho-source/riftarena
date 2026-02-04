@@ -18,6 +18,7 @@ interface Tournament {
   date: string;
   sponsor?: string;
   isOwner?: boolean;
+  bannerUrl?: string;
 }
 
 interface TournamentCardProps {
@@ -38,17 +39,29 @@ export function TournamentCard({ tournament, index = 0, onManage }: TournamentCa
       transition={{ duration: 0.4, delay: index * 0.1 }}
     >
       <RiftCard className="group relative overflow-hidden">
+        {/* Banner Image */}
+        {tournament.bannerUrl && (
+          <div className="relative h-32 w-full overflow-hidden">
+            <img
+              src={tournament.bannerUrl}
+              alt={tournament.name}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+          </div>
+        )}
+        
         {/* Status Indicator */}
-        <div className="absolute right-4 top-4">
+        <div className={`absolute right-4 ${tournament.bannerUrl ? 'top-2' : 'top-4'}`}>
           <Badge variant={displayStatus as "live" | "upcoming" | "completed"}>
             {tournament.status === "live" && "● "}
             {t(`tournamentStatus.${tournament.status}`)}
           </Badge>
         </div>
 
-        <RiftCardHeader>
+        <RiftCardHeader className={tournament.bannerUrl ? '-mt-8 relative z-10' : ''}>
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-secondary text-2xl">
+            <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-secondary text-2xl border border-border">
               {tournament.gameIcon}
             </div>
             <div>
