@@ -14,7 +14,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useGames, useCreateTournament } from "@/hooks/useTournaments";
 import { TournamentRulesBuilder } from "@/components/tournaments/rules";
-import { ArrowLeft, Trophy, Calendar, DollarSign, Users, Loader2, FileText } from "lucide-react";
+import { TournamentBannerUpload } from "@/components/tournaments/TournamentBannerUpload";
+import { ArrowLeft, Trophy, Calendar, DollarSign, Users, Loader2, FileText, Image } from "lucide-react";
 
 const CreateTournament = () => {
   const { t } = useTranslation();
@@ -37,6 +38,7 @@ const CreateTournament = () => {
     bracket_type: "single_elimination",
     is_team_based: false,
     team_size: 5,
+    banner_url: "",
   });
 
   if (authLoading) {
@@ -63,6 +65,7 @@ const CreateTournament = () => {
         registration_fee: Number(formData.registration_fee),
         registration_deadline: formData.registration_deadline || undefined,
         end_date: formData.end_date || undefined,
+        banner_url: formData.banner_url || undefined,
       });
       navigate(`/tournaments/manage/${tournament.id}`);
     } catch (error) {
@@ -149,6 +152,12 @@ const CreateTournament = () => {
                       </Select>
                     </div>
                   </div>
+                  {/* Banner Upload */}
+                  <TournamentBannerUpload
+                    value={formData.banner_url}
+                    onChange={(url) => handleChange("banner_url", url)}
+                  />
+                  
                   <div className="space-y-2">
                     <Label htmlFor="description">{t('createTournament.description')}</Label>
                     <Textarea

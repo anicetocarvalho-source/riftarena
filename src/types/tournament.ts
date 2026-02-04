@@ -27,6 +27,7 @@ export interface Tournament {
   bracket_type: string;
   is_team_based: boolean;
   team_size: number | null;
+  banner_url: string | null;
   created_at: string;
   updated_at: string;
   game?: Game;
@@ -79,4 +80,5 @@ export interface CreateTournamentData {
   end_date?: string;
   rules?: string;
   bracket_type: string;
+  banner_url?: string;
 }

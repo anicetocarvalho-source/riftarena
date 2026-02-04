@@ -158,10 +158,26 @@ const TournamentDetail = () => {
             className="mb-6"
           />
 
+          {/* Banner */}
+          {tournament.banner_url && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 rounded-lg overflow-hidden border border-border"
+            >
+              <img
+                src={tournament.banner_url}
+                alt={tournament.name}
+                className="w-full h-48 md:h-64 lg:h-80 object-cover"
+              />
+            </motion.div>
+          )}
+
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: tournament.banner_url ? 0.1 : 0 }}
             className="mb-8"
           >
             

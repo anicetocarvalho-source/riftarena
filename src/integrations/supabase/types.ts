@@ -672,6 +672,7 @@ export type Database = {
       }
       tournaments: {
         Row: {
+          banner_url: string | null
           bracket_type: string
           created_at: string
           description: string | null
@@ -693,6 +694,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          banner_url?: string | null
           bracket_type?: string
           created_at?: string
           description?: string | null
@@ -714,6 +716,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          banner_url?: string | null
           bracket_type?: string
           created_at?: string
           description?: string | null

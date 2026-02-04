@@ -968,5 +968,18 @@
         "placeholder": "Ex: First offense: Warning. Second offense: Technical loss..."
       }
     }
+  },
+  "tournamentBanner": {
+    "label": "Tournament Banner",
+    "hint": "Recommended: 1920x480px (4:1 ratio) for best display",
+    "dropzone": "Drag an image or click to select",
+    "formats": "PNG, JPG, WEBP (max. 5MB)",
+    "uploading": "Uploading...",
+    "uploadSuccess": "Banner uploaded successfully!",
+    "uploadError": "Error uploading banner",
+    "invalidType": "Invalid file type",
+    "invalidTypeDesc": "Please select an image (PNG, JPG, WEBP)",
+    "tooLarge": "File too large",
+    "tooLargeDesc": "Maximum allowed size is 5MB"
   }
 }
