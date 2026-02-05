@@ -23,7 +23,7 @@ import { PrizeDistributionDisplay } from "@/components/tournaments/PrizeDistribu
  import { TournamentRulesDisplay } from "@/components/tournaments/rules";
 import { 
   Trophy, Users, Calendar, DollarSign, 
-  Loader2, Clock, CheckCircle, XCircle, GitBranch, FileText, UsersRound
+   Loader2, Clock, CheckCircle, XCircle, GitBranch, FileText, UsersRound, BarChart3
 } from "lucide-react";
 import { format } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -220,6 +220,17 @@ const TournamentDetail = () => {
                     </p>
                     <p className="text-sm text-muted-foreground">{t('tournamentDetail.prizePool')}</p>
                   </div>
+                     
+                     {/* Stats Link */}
+                     <Button 
+                       variant="ghost" 
+                       size="sm"
+                       className="w-full text-xs"
+                       onClick={() => navigate(`/tournaments/${tournament.id}/stats`)}
+                     >
+                       <BarChart3 className="mr-1 h-3 w-3" />
+                       {t('tournamentStats.viewStats')}
+                     </Button>
                   
                   <div className="flex justify-center gap-6 mb-6 text-sm">
                     <div className="text-center">
