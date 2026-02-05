@@ -17,6 +17,13 @@ import { TournamentRulesBuilder } from "@/components/tournaments/rules";
 import { TournamentBannerUpload } from "@/components/tournaments/TournamentBannerUpload";
 import { PrizeDistributionEditor, PrizeDistribution } from "@/components/tournaments/PrizeDistributionEditor";
 import { ArrowLeft, Trophy, Calendar, DollarSign, Users, Loader2, FileText } from "lucide-react";
+import { z } from "zod";
+
+const createTournamentSchema = z.object({
+  name: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
+  game_id: z.string().min(1, "Seleciona um jogo"),
+  start_date: z.string().min(1, "Data de início é obrigatória"),
+});
 
 const CreateTournament = () => {
   const { t } = useTranslation();
@@ -24,6 +31,7 @@ const CreateTournament = () => {
   const navigate = useNavigate();
   const { data: games, isLoading: gamesLoading } = useGames();
   const createTournament = useCreateTournament();
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState({
     name: "",
@@ -58,6 +66,38 @@ const CreateTournament = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormErrors({});
+
+    // Validate required fields
+    const validation = createTournamentSchema.safeParse({
+      name: formData.name,
+      game_id: formData.game_id,
+      start_date: formData.start_date,
+    });
+
+    if (!validation.success) {
+      const fieldErrors: Record<string, string> = {};
+      validation.error.errors.forEach((err) => {
+        if (err.path[0]) {
+          fieldErrors[err.path[0] as string] = err.message;
+        }
+      });
+      setFormErrors(fieldErrors);
+      return;
+    }
+
+    // Additional date validations
+    const dateErrors: Record<string, string> = {};
+    if (formData.end_date && formData.start_date && new Date(formData.end_date) <= new Date(formData.start_date)) {
+      dateErrors.end_date = "Data de fim deve ser posterior à data de início";
+    }
+    if (formData.registration_deadline && formData.start_date && new Date(formData.registration_deadline) >= new Date(formData.start_date)) {
+      dateErrors.registration_deadline = "Prazo de inscrição deve ser anterior à data de início";
+    }
+    if (Object.keys(dateErrors).length > 0) {
+      setFormErrors(dateErrors);
+      return;
+    }
     
     try {
       const tournament = await createTournament.mutateAsync({
@@ -132,15 +172,16 @@ const CreateTournament = () => {
                         placeholder={t('createTournament.tournamentNamePlaceholder')}
                         value={formData.name}
                         onChange={(e) => handleChange("name", e.target.value)}
-                        required
                       />
+                      {formErrors.name && (
+                        <p className="text-xs text-destructive">{formErrors.name}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="game">{t('createTournament.game')} *</Label>
                       <Select
                         value={formData.game_id}
                         onValueChange={(value) => handleChange("game_id", value)}
-                        required
                       >
                         <SelectTrigger>
                           <SelectValue placeholder={gamesLoading ? t('createTournament.loadingGames') : t('createTournament.selectGame')} />
@@ -153,6 +194,9 @@ const CreateTournament = () => {
                           ))}
                         </SelectContent>
                       </Select>
+                      {formErrors.game_id && (
+                        <p className="text-xs text-destructive">{formErrors.game_id}</p>
+                      )}
                     </div>
                   </div>
                   {/* Banner Upload */}
@@ -303,8 +347,10 @@ const CreateTournament = () => {
                         type="datetime-local"
                         value={formData.start_date}
                         onChange={(e) => handleChange("start_date", e.target.value)}
-                        required
                       />
+                      {formErrors.start_date && (
+                        <p className="text-xs text-destructive">{formErrors.start_date}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="end_date">{t('createTournament.endDate')}</Label>
@@ -314,6 +360,9 @@ const CreateTournament = () => {
                         value={formData.end_date}
                         onChange={(e) => handleChange("end_date", e.target.value)}
                       />
+                      {formErrors.end_date && (
+                        <p className="text-xs text-destructive">{formErrors.end_date}</p>
+                      )}
                     </div>
                     <div className="space-y-2 md:col-span-2">
                       <Label htmlFor="registration_deadline">{t('createTournament.registrationDeadline')}</Label>
@@ -323,6 +372,9 @@ const CreateTournament = () => {
                         value={formData.registration_deadline}
                         onChange={(e) => handleChange("registration_deadline", e.target.value)}
                       />
+                      {formErrors.registration_deadline && (
+                        <p className="text-xs text-destructive">{formErrors.registration_deadline}</p>
+                      )}
                     </div>
                   </div>
                 </RiftCardContent>
@@ -372,7 +424,7 @@ const CreateTournament = () => {
               <Button
                 type="submit"
                 variant="rift"
-                disabled={createTournament.isPending || !formData.name || !formData.game_id || !formData.start_date}
+                disabled={createTournament.isPending}
               >
                 {createTournament.isPending ? (
                   <>

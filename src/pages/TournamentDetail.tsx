@@ -23,7 +23,7 @@ import { PrizeDistributionDisplay } from "@/components/tournaments/PrizeDistribu
  import { TournamentRulesDisplay } from "@/components/tournaments/rules";
 import { 
   Trophy, Users, Calendar, DollarSign, 
-   Loader2, Clock, CheckCircle, XCircle, GitBranch, FileText, UsersRound, BarChart3
+   Loader2, Clock, CheckCircle, XCircle, GitBranch, FileText, UsersRound, BarChart3, AlertTriangle
 } from "lucide-react";
 import { format } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -159,6 +159,25 @@ const TournamentDetail = () => {
             ]}
             className="mb-6"
           />
+
+          {/* Draft Warning Banner */}
+          {tournament.status === "draft" && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 flex items-center gap-3 rounded-sm border border-warning/50 bg-warning/10 p-4"
+            >
+              <AlertTriangle className="h-5 w-5 text-warning shrink-0" />
+              <div>
+                <p className="font-display text-sm font-semibold text-warning uppercase tracking-wider">
+                  {t('tournamentDetail.draftWarningTitle', 'Rascunho — Não Publicado')}
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {t('tournamentDetail.draftWarningDescription', 'Este torneio ainda não está visível publicamente. Apenas tu (organizador) e administradores podem vê-lo.')}
+                </p>
+              </div>
+            </motion.div>
+          )}
 
           {/* Banner */}
           {tournament.banner_url && (
