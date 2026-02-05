@@ -355,11 +355,11 @@ const Auth = () => {
             </div>
           )}
 
-          {/* Quick Access - Test Accounts */}
-          {mode === "signin" && (
+          {/* Quick Access - Test Accounts (Development Only) */}
+          {mode === "signin" && import.meta.env.DEV && (
             <div className="mt-6 p-4 rounded-sm bg-secondary/50 border border-border">
               <p className="text-xs text-muted-foreground mb-3 font-display uppercase tracking-wider">
-                {t('auth.quickAccess')}
+                {t('auth.quickAccess')} <Badge variant="secondary" size="sm">DEV</Badge>
               </p>
               <div className="space-y-2">
                 <button
