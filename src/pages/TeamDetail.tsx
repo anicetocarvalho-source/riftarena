@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { z } from "zod";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
@@ -41,6 +42,14 @@ const TeamDetail = () => {
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [inviteUsername, setInviteUsername] = useState("");
+  const [inviteErrors, setInviteErrors] = useState<Record<string, string>>({});
+
+  const inviteSchema = z.object({
+    username: z.string().trim()
+      .min(1, t('teamDetail.validation.usernameRequired'))
+      .min(3, t('teamDetail.validation.usernameMin'))
+      .max(50, t('teamDetail.validation.usernameMax')),
+  });
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -87,13 +96,26 @@ const TeamDetail = () => {
   const canInvite = isCaptain && (members?.length || 0) < team.max_members;
 
   const handleInvite = () => {
-    if (!inviteUsername.trim()) return;
+    const result = inviteSchema.safeParse({ username: inviteUsername });
+
+    if (!result.success) {
+      const errors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        const field = err.path[0] as string;
+        if (!errors[field]) errors[field] = err.message;
+      });
+      setInviteErrors(errors);
+      return;
+    }
+
+    setInviteErrors({});
     inviteToTeam.mutate(
-      { teamId: team.id, username: inviteUsername.trim() },
+      { teamId: team.id, username: result.data.username },
       {
         onSuccess: () => {
           setShowInviteDialog(false);
           setInviteUsername("");
+          setInviteErrors({});
         }
       }
     );
@@ -337,7 +359,7 @@ const TeamDetail = () => {
       <Footer />
 
       {/* Invite Dialog */}
-      <Dialog open={showInviteDialog} onOpenChange={setShowInviteDialog}>
+      <Dialog open={showInviteDialog} onOpenChange={(open) => { setShowInviteDialog(open); if (!open) { setInviteUsername(""); setInviteErrors({}); } }}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{t('teamDetail.invitePlayer')}</DialogTitle>
@@ -348,8 +370,12 @@ const TeamDetail = () => {
               <Input
                 placeholder={t('teamDetail.usernamePlaceholder')}
                 value={inviteUsername}
-                onChange={(e) => setInviteUsername(e.target.value)}
+                onChange={(e) => { setInviteUsername(e.target.value); setInviteErrors(prev => ({ ...prev, username: '' })); }}
+                maxLength={50}
               />
+              {inviteErrors.username && (
+                <p className="text-xs text-destructive">{inviteErrors.username}</p>
+              )}
             </div>
           </div>
           <DialogFooter>
@@ -359,7 +385,7 @@ const TeamDetail = () => {
             <Button 
               variant="rift" 
               onClick={handleInvite}
-              disabled={inviteToTeam.isPending || !inviteUsername.trim()}
+              disabled={inviteToTeam.isPending}
             >
               {inviteToTeam.isPending ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
