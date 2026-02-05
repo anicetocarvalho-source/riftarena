@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -95,6 +96,26 @@ interface GlossaryTermProps {
   iconClassName?: string;
 }
 
+// Inner component that receives the forwarded ref
+const GlossaryTermInner = forwardRef<HTMLSpanElement, GlossaryTermProps & { definition: TermDefinition }>(
+  ({ children, showIcon = true, className, iconClassName, definition, ...props }, ref) => (
+    <span 
+      ref={ref}
+      className={cn(
+        "inline-flex items-center gap-1 cursor-help border-b border-dotted border-muted-foreground/50 hover:border-primary transition-colors",
+        className
+      )}
+      {...props}
+    >
+      {children || definition.title}
+      {showIcon && (
+        <HelpCircle className={cn("h-3 w-3 text-muted-foreground", iconClassName)} />
+      )}
+    </span>
+  )
+);
+GlossaryTermInner.displayName = "GlossaryTermInner";
+
 export function GlossaryTerm({ 
   term, 
   children, 
@@ -112,17 +133,15 @@ export function GlossaryTerm({
     <TooltipProvider delayDuration={200}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <span 
-            className={cn(
-              "inline-flex items-center gap-1 cursor-help border-b border-dotted border-muted-foreground/50 hover:border-primary transition-colors",
-              className
-            )}
+          <GlossaryTermInner
+            term={term}
+            definition={definition}
+            showIcon={showIcon}
+            className={className}
+            iconClassName={iconClassName}
           >
-            {children || definition.title}
-            {showIcon && (
-              <HelpCircle className={cn("h-3 w-3 text-muted-foreground", iconClassName)} />
-            )}
-          </span>
+            {children}
+          </GlossaryTermInner>
         </TooltipTrigger>
         <TooltipContent 
           side="top" 
