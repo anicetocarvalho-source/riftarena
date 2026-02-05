@@ -298,7 +298,19 @@
     "rulesPlaceholder": "Introduz as regras e diretrizes do torneio...",
     "cancel": "Cancelar",
     "creating": "A criar...",
-    "create": "Criar Torneio"
+    "create": "Criar Torneio",
+    "validation": {
+      "nameRequired": "O nome do torneio é obrigatório",
+      "nameMin": "O nome deve ter pelo menos 3 caracteres",
+      "nameMax": "O nome não pode exceder 100 caracteres",
+      "gameRequired": "Seleciona um jogo",
+      "descriptionMax": "A descrição não pode exceder 2000 caracteres",
+      "startDateRequired": "A data de início é obrigatória",
+      "endDateAfterStart": "A data de fim deve ser posterior à data de início",
+      "deadlineBeforeStart": "O prazo de inscrição deve ser anterior à data de início",
+      "prizePoolMin": "O prémio total não pode ser negativo",
+      "registrationFeeMin": "A taxa de inscrição não pode ser negativa"
+    }
   },
   "createTeam": {
     "title": "Criar a Tua Equipa",
