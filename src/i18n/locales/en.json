@@ -924,6 +924,7 @@
   },
   "rulesBuilder": {
     "title": "Tournament Rules",
+     "sectionsTotal": "regulation sections",
     "builderMode": "Builder",
     "rawMode": "Raw Text",
     "templateHint": "Use professional template based on tournament format",

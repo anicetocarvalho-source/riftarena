@@ -924,6 +924,7 @@
   },
   "rulesBuilder": {
     "title": "Regulamento do Torneio",
+     "sectionsTotal": "secções do regulamento",
     "builderMode": "Construtor",
     "rawMode": "Texto Livre",
     "templateHint": "Usar template profissional baseado no formato do torneio",
