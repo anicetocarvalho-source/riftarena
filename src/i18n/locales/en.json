@@ -587,7 +587,9 @@
     "selectTeamToRegister": "Select Team to Register",
     "yourTeams": "Your Teams",
     "selectTeam": "Select a team",
-    "captainOnly": "Only teams where you are the captain can be registered."
+    "captainOnly": "Only teams where you are the captain can be registered.",
+    "draftWarningTitle": "Draft — Not Published",
+    "draftWarningDescription": "This tournament is not publicly visible yet. Only you (organizer) and admins can see it."
   },
   "teamDetail": {
     "notFound": "Team not found",

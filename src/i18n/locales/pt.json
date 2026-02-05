@@ -587,7 +587,9 @@
     "selectTeamToRegister": "Selecionar Equipa para Inscrever",
     "yourTeams": "As Tuas Equipas",
     "selectTeam": "Seleciona uma equipa",
-    "captainOnly": "Apenas equipas onde és capitão podem ser inscritas."
+    "captainOnly": "Apenas equipas onde és capitão podem ser inscritas.",
+    "draftWarningTitle": "Rascunho — Não Publicado",
+    "draftWarningDescription": "Este torneio ainda não está visível publicamente. Apenas tu (organizador) e administradores podem vê-lo."
   },
   "teamDetail": {
     "notFound": "Equipa não encontrada",
