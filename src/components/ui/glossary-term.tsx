@@ -97,7 +97,13 @@ interface GlossaryTermProps {
 }
 
 // Inner component that receives the forwarded ref
-const GlossaryTermInner = forwardRef<HTMLSpanElement, GlossaryTermProps & { definition: TermDefinition }>(
+const GlossaryTermInner = forwardRef<HTMLSpanElement, {
+  children?: React.ReactNode;
+  showIcon?: boolean;
+  className?: string;
+  iconClassName?: string;
+  definition: TermDefinition;
+}>(
   ({ children, showIcon = true, className, iconClassName, definition, ...props }, ref) => (
     <span 
       ref={ref}
@@ -134,7 +140,6 @@ export function GlossaryTerm({
       <Tooltip>
         <TooltipTrigger asChild>
           <GlossaryTermInner
-            term={term}
             definition={definition}
             showIcon={showIcon}
             className={className}
