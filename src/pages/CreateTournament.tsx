@@ -19,11 +19,7 @@ import { PrizeDistributionEditor, PrizeDistribution } from "@/components/tournam
 import { ArrowLeft, Trophy, Calendar, DollarSign, Users, Loader2, FileText } from "lucide-react";
 import { z } from "zod";
 
-const createTournamentSchema = z.object({
-  name: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
-  game_id: z.string().min(1, "Seleciona um jogo"),
-  start_date: z.string().min(1, "Data de início é obrigatória"),
-});
+// Schema is defined inside the component to access translations
 
 const CreateTournament = () => {
   const { t } = useTranslation();
@@ -32,6 +28,20 @@ const CreateTournament = () => {
   const { data: games, isLoading: gamesLoading } = useGames();
   const createTournament = useCreateTournament();
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+  const createTournamentSchema = z.object({
+    name: z.string().trim()
+      .min(1, t('createTournament.validation.nameRequired'))
+      .min(3, t('createTournament.validation.nameMin'))
+      .max(100, t('createTournament.validation.nameMax')),
+    game_id: z.string().min(1, t('createTournament.validation.gameRequired')),
+    description: z.string().max(2000, t('createTournament.validation.descriptionMax')),
+    start_date: z.string().min(1, t('createTournament.validation.startDateRequired')),
+    end_date: z.string(),
+    registration_deadline: z.string(),
+    prize_pool: z.number().min(0, t('createTournament.validation.prizePoolMin')),
+    registration_fee: z.number().min(0, t('createTournament.validation.registrationFeeMin')),
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -72,30 +82,33 @@ const CreateTournament = () => {
     const validation = createTournamentSchema.safeParse({
       name: formData.name,
       game_id: formData.game_id,
+      description: formData.description,
       start_date: formData.start_date,
+      end_date: formData.end_date,
+      registration_deadline: formData.registration_deadline,
+      prize_pool: Number(formData.prize_pool),
+      registration_fee: Number(formData.registration_fee),
     });
 
+    const fieldErrors: Record<string, string> = {};
+
     if (!validation.success) {
-      const fieldErrors: Record<string, string> = {};
       validation.error.errors.forEach((err) => {
-        if (err.path[0]) {
-          fieldErrors[err.path[0] as string] = err.message;
-        }
+        const field = err.path[0] as string;
+        if (!fieldErrors[field]) fieldErrors[field] = err.message;
       });
-      setFormErrors(fieldErrors);
-      return;
     }
 
-    // Additional date validations
-    const dateErrors: Record<string, string> = {};
+    // Additional date cross-validations
     if (formData.end_date && formData.start_date && new Date(formData.end_date) <= new Date(formData.start_date)) {
-      dateErrors.end_date = "Data de fim deve ser posterior à data de início";
+      if (!fieldErrors.end_date) fieldErrors.end_date = t('createTournament.validation.endDateAfterStart');
     }
     if (formData.registration_deadline && formData.start_date && new Date(formData.registration_deadline) >= new Date(formData.start_date)) {
-      dateErrors.registration_deadline = "Prazo de inscrição deve ser anterior à data de início";
+      if (!fieldErrors.registration_deadline) fieldErrors.registration_deadline = t('createTournament.validation.deadlineBeforeStart');
     }
-    if (Object.keys(dateErrors).length > 0) {
-      setFormErrors(dateErrors);
+
+    if (Object.keys(fieldErrors).length > 0) {
+      setFormErrors(fieldErrors);
       return;
     }
     
@@ -118,6 +131,7 @@ const CreateTournament = () => {
 
   const handleChange = (field: string, value: string | number | PrizeDistribution) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    setFormErrors(prev => ({ ...prev, [field]: '' }));
   };
 
   return (
@@ -213,7 +227,11 @@ const CreateTournament = () => {
                       value={formData.description}
                       onChange={(e) => handleChange("description", e.target.value)}
                       rows={3}
+                      maxLength={2000}
                     />
+                    {formErrors.description && (
+                      <p className="text-xs text-destructive">{formErrors.description}</p>
+                    )}
                   </div>
                 </RiftCardContent>
               </RiftCard>
@@ -300,6 +318,9 @@ const CreateTournament = () => {
                         value={formData.prize_pool}
                         onChange={(e) => handleChange("prize_pool", e.target.value)}
                       />
+                      {formErrors.prize_pool && (
+                        <p className="text-xs text-destructive">{formErrors.prize_pool}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="registration_fee">{t('createTournament.registrationFee')}</Label>
@@ -311,6 +332,9 @@ const CreateTournament = () => {
                         value={formData.registration_fee}
                         onChange={(e) => handleChange("registration_fee", e.target.value)}
                       />
+                      {formErrors.registration_fee && (
+                        <p className="text-xs text-destructive">{formErrors.registration_fee}</p>
+                      )}
                     </div>
                   </div>
                   

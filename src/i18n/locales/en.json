@@ -298,7 +298,19 @@
     "rulesPlaceholder": "Enter tournament rules and guidelines...",
     "cancel": "Cancel",
     "creating": "Creating...",
-    "create": "Create Tournament"
+    "create": "Create Tournament",
+    "validation": {
+      "nameRequired": "Tournament name is required",
+      "nameMin": "Name must be at least 3 characters",
+      "nameMax": "Name cannot exceed 100 characters",
+      "gameRequired": "Please select a game",
+      "descriptionMax": "Description cannot exceed 2000 characters",
+      "startDateRequired": "Start date is required",
+      "endDateAfterStart": "End date must be after start date",
+      "deadlineBeforeStart": "Registration deadline must be before start date",
+      "prizePoolMin": "Prize pool cannot be negative",
+      "registrationFeeMin": "Registration fee cannot be negative"
+    }
   },
   "createTeam": {
     "title": "Create Your Team",
