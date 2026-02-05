@@ -22,7 +22,7 @@ import {
 import { TournamentStatus } from "@/types/tournament";
 import { 
   Trophy, Users, GitBranch, Settings, 
-  Loader2, Check, X, Play, Pause, CheckCircle, AlertCircle
+   Loader2, Check, X, Play, Pause, CheckCircle, AlertCircle, BarChart3
 } from "lucide-react";
 import { format } from "date-fns";
 import { RegistrationsTab } from "@/components/tournaments/RegistrationsTab";
@@ -162,6 +162,13 @@ const ManageTournament = () => {
                       {t('manageTournament.completeTournament')}
                   </Button>
                 )}
+                 <Button 
+                   variant="ghost" 
+                   onClick={() => navigate(`/tournaments/${tournament.id}/stats`)}
+                 >
+                   <BarChart3 className="mr-2 h-4 w-4" />
+                   {t('tournamentStats.viewStats')}
+                 </Button>
               </div>
             </div>
           </motion.div>

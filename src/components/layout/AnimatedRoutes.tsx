@@ -26,6 +26,7 @@ import PlayerProfile from "@/pages/PlayerProfile";
 import EditProfile from "@/pages/EditProfile";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
+ import TournamentStats from "@/pages/TournamentStats";
 
 export function AnimatedRoutes() {
   const location = useLocation();
@@ -55,6 +56,7 @@ export function AnimatedRoutes() {
         <Route path="/admin/setup" element={<PageTransition><SetupAdmin /></PageTransition>} />
         <Route path="/tournaments/create" element={<PageTransition><CreateTournament /></PageTransition>} />
         <Route path="/tournaments/manage/:id" element={<PageTransition><ManageTournament /></PageTransition>} />
+         <Route path="/tournaments/:id/stats" element={<PageTransition><TournamentStats /></PageTransition>} />
         <Route path="/player/:id" element={<PageTransition><PlayerProfile /></PageTransition>} />
         <Route path="/profile/edit" element={<PageTransition><EditProfile /></PageTransition>} />
         <Route path="/settings" element={<PageTransition><Settings /></PageTransition>} />
