@@ -629,7 +629,12 @@
     "teamNamePlaceholder": "Enter team name",
     "description": "Description",
     "descriptionPlaceholder": "Tell us about your team...",
-    "saveChanges": "Save Changes"
+    "saveChanges": "Save Changes",
+    "validation": {
+      "usernameRequired": "Username is required",
+      "usernameMin": "Username must be at least 3 characters",
+      "usernameMax": "Username cannot exceed 50 characters"
+    }
   },
   "manageTournament": {
     "openRegistration": "Open Registration",
