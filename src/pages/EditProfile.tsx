@@ -14,6 +14,17 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, Camera, Save, ArrowLeft, User } from "lucide-react";
 import { SiDiscord, SiX, SiTwitch } from "@icons-pack/react-simple-icons";
+import { z } from "zod";
+
+const editProfileSchema = z.object({
+  username: z.string().trim().min(3, "Nome de utilizador deve ter pelo menos 3 caracteres").max(50, "Nome de utilizador não pode exceder 50 caracteres"),
+  bio: z.string().max(500, "Bio não pode exceder 500 caracteres").optional(),
+  city: z.string().max(100, "Cidade não pode exceder 100 caracteres").optional(),
+  country: z.string().max(100, "País não pode exceder 100 caracteres").optional(),
+  discord_username: z.string().max(50, "Username do Discord não pode exceder 50 caracteres").optional(),
+  twitter_username: z.string().max(50, "Username do X não pode exceder 50 caracteres").optional(),
+  twitch_username: z.string().max(50, "Username do Twitch não pode exceder 50 caracteres").optional(),
+});
 
 const EditProfile = () => {
   const { t } = useTranslation();
@@ -30,6 +41,7 @@ const EditProfile = () => {
   const [twitchUsername, setTwitchUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   
   const { isLoading, isUploading, uploadAvatar, updateProfile } = useEditProfile(user?.id || "");
 
@@ -70,6 +82,28 @@ const EditProfile = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormErrors({});
+
+    const validation = editProfileSchema.safeParse({
+      username: username.trim(),
+      bio: bio.trim(),
+      city: city.trim(),
+      country: country.trim(),
+      discord_username: discordUsername.trim() || undefined,
+      twitter_username: twitterUsername.trim() || undefined,
+      twitch_username: twitchUsername.trim() || undefined,
+    });
+
+    if (!validation.success) {
+      const fieldErrors: Record<string, string> = {};
+      validation.error.errors.forEach((err) => {
+        if (err.path[0]) {
+          fieldErrors[err.path[0] as string] = err.message;
+        }
+      });
+      setFormErrors(fieldErrors);
+      return;
+    }
     
     const success = await updateProfile({
       username: username.trim(),
@@ -165,15 +199,17 @@ const EditProfile = () => {
 
                   {/* Username */}
                   <div className="space-y-2">
-                    <Label htmlFor="username">{t('editProfile.username')}</Label>
+                    <Label htmlFor="username">{t('editProfile.username')} *</Label>
                     <Input
                       id="username"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       placeholder={t('editProfile.usernamePlaceholder')}
-                      required
                       maxLength={50}
                     />
+                    {formErrors.username && (
+                      <p className="text-xs text-destructive">{formErrors.username}</p>
+                    )}
                   </div>
 
                   {/* Bio */}
@@ -187,9 +223,13 @@ const EditProfile = () => {
                       rows={4}
                       maxLength={500}
                     />
-                    <p className="text-xs text-muted-foreground text-right">
-                      {bio.length}/500
-                    </p>
+                    {formErrors.bio ? (
+                      <p className="text-xs text-destructive">{formErrors.bio}</p>
+                    ) : (
+                      <p className="text-xs text-muted-foreground text-right">
+                        {bio.length}/500
+                      </p>
+                    )}
                   </div>
 
                   {/* Location */}
@@ -203,6 +243,9 @@ const EditProfile = () => {
                         placeholder={t('editProfile.cityPlaceholder')}
                         maxLength={100}
                       />
+                      {formErrors.city && (
+                        <p className="text-xs text-destructive">{formErrors.city}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="country">{t('editProfile.country')}</Label>
@@ -213,6 +256,9 @@ const EditProfile = () => {
                         placeholder={t('editProfile.countryPlaceholder')}
                         maxLength={100}
                       />
+                      {formErrors.country && (
+                        <p className="text-xs text-destructive">{formErrors.country}</p>
+                      )}
                     </div>
                   </div>
 
@@ -271,7 +317,7 @@ const EditProfile = () => {
                     <Button
                       type="submit"
                       variant="rift"
-                      disabled={isLoading || isUploading || !username.trim()}
+                      disabled={isLoading || isUploading}
                     >
                       {isLoading ? (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
