@@ -1,4 +1,5 @@
 export { TournamentRulesBuilder } from "./TournamentRulesBuilder";
+ export { TournamentRulesDisplay } from "./TournamentRulesDisplay";
 export { 
   defaultRulesTemplate, 
   generateRulesMarkdown, 

@@ -20,6 +20,7 @@ import { useUserTeams } from "@/hooks/useTeams";
 import { useAuth } from "@/contexts/AuthContext";
 import { TournamentStatus } from "@/types/tournament";
 import { PrizeDistributionDisplay } from "@/components/tournaments/PrizeDistributionDisplay";
+ import { TournamentRulesDisplay } from "@/components/tournaments/rules";
 import { 
   Trophy, Users, Calendar, DollarSign, 
   Loader2, Clock, CheckCircle, XCircle, GitBranch, FileText, UsersRound
@@ -507,9 +508,7 @@ const TournamentDetail = () => {
                       </RiftCardTitle>
                     </RiftCardHeader>
                     <RiftCardContent>
-                      <p className="whitespace-pre-wrap text-muted-foreground">
-                        {tournament.rules}
-                      </p>
+                       <TournamentRulesDisplay rules={tournament.rules} />
                     </RiftCardContent>
                   </RiftCard>
                 </motion.div>
