@@ -317,7 +317,17 @@
     "descriptionPlaceholder": "Tell us about your team...",
     "cancel": "Cancel",
     "creating": "Creating...",
-    "create": "Create Team"
+    "create": "Create Team",
+    "validation": {
+      "nameRequired": "Team name is required",
+      "nameMin": "Name must be at least 2 characters",
+      "nameMax": "Name cannot exceed 50 characters",
+      "tagRequired": "Team tag is required",
+      "tagMin": "Tag must be at least 2 characters",
+      "tagMax": "Tag cannot exceed 5 characters",
+      "tagFormat": "Tag can only contain letters and numbers",
+      "descriptionMax": "Description cannot exceed 500 characters"
+    }
   },
   "admin": {
     "badge": "Admin Only",

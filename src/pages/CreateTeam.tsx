@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import { z } from "zod";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -27,6 +28,26 @@ const CreateTeam = () => {
     description: "",
     max_members: 5,
   });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+  const createTeamSchema = z.object({
+    name: z.string()
+      .trim()
+      .min(1, t('createTeam.validation.nameRequired'))
+      .min(2, t('createTeam.validation.nameMin'))
+      .max(50, t('createTeam.validation.nameMax')),
+    tag: z.string()
+      .trim()
+      .min(1, t('createTeam.validation.tagRequired'))
+      .min(2, t('createTeam.validation.tagMin'))
+      .max(5, t('createTeam.validation.tagMax'))
+      .regex(/^[A-Za-z0-9]+$/, t('createTeam.validation.tagFormat')),
+    description: z.string()
+      .max(500, t('createTeam.validation.descriptionMax'))
+      .optional()
+      .or(z.literal("")),
+    max_members: z.number(),
+  });
 
   if (authLoading) {
     return (
@@ -44,8 +65,20 @@ const CreateTeam = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    const result = createTeamSchema.safeParse(formData);
+    if (!result.success) {
+      const errors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        const field = err.path[0] as string;
+        if (!errors[field]) errors[field] = err.message;
+      });
+      setFormErrors(errors);
+      return;
+    }
+    setFormErrors({});
+    
     try {
-      const team = await createTeam.mutateAsync(formData);
+      const team = await createTeam.mutateAsync(result.data as { name: string; tag: string; description?: string; max_members?: number });
       navigate(`/teams/${team.id}`);
     } catch (error) {
       // Error handled by mutation
@@ -54,6 +87,13 @@ const CreateTeam = () => {
 
   const handleChange = (field: string, value: string | number) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    if (formErrors[field]) {
+      setFormErrors(prev => {
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      });
+    }
   };
 
   return (
@@ -108,8 +148,11 @@ const CreateTeam = () => {
                         value={formData.name}
                         onChange={(e) => handleChange("name", e.target.value)}
                         maxLength={50}
-                        required
+                        className={formErrors.name ? "border-destructive" : ""}
                       />
+                      {formErrors.name && (
+                        <p className="text-xs text-destructive">{formErrors.name}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="tag">{t('createTeam.teamTag')} *</Label>
@@ -119,11 +162,14 @@ const CreateTeam = () => {
                         value={formData.tag}
                         onChange={(e) => handleChange("tag", e.target.value.toUpperCase())}
                         maxLength={5}
-                        required
+                        className={formErrors.tag ? "border-destructive" : ""}
                       />
                       <p className="text-xs text-muted-foreground">
                         {t('createTeam.teamTagHint')}
                       </p>
+                      {formErrors.tag && (
+                        <p className="text-xs text-destructive">{formErrors.tag}</p>
+                      )}
                     </div>
                   </div>
                   
@@ -155,7 +201,11 @@ const CreateTeam = () => {
                       onChange={(e) => handleChange("description", e.target.value)}
                       rows={4}
                       maxLength={500}
+                      className={formErrors.description ? "border-destructive" : ""}
                     />
+                    {formErrors.description && (
+                      <p className="text-xs text-destructive">{formErrors.description}</p>
+                    )}
                   </div>
                 </RiftCardContent>
               </RiftCard>
@@ -178,7 +228,7 @@ const CreateTeam = () => {
               <Button
                 type="submit"
                 variant="rift"
-                disabled={createTeam.isPending || !formData.name || !formData.tag || formData.tag.length < 2}
+                disabled={createTeam.isPending}
               >
                 {createTeam.isPending ? (
                   <>
