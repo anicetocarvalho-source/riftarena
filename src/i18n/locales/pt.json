@@ -317,7 +317,17 @@
     "descriptionPlaceholder": "Fala-nos da tua equipa...",
     "cancel": "Cancelar",
     "creating": "A criar...",
-    "create": "Criar Equipa"
+    "create": "Criar Equipa",
+    "validation": {
+      "nameRequired": "O nome da equipa é obrigatório",
+      "nameMin": "O nome deve ter pelo menos 2 caracteres",
+      "nameMax": "O nome não pode exceder 50 caracteres",
+      "tagRequired": "A tag da equipa é obrigatória",
+      "tagMin": "A tag deve ter pelo menos 2 caracteres",
+      "tagMax": "A tag não pode exceder 5 caracteres",
+      "tagFormat": "A tag só pode conter letras e números",
+      "descriptionMax": "A descrição não pode exceder 500 caracteres"
+    }
   },
   "admin": {
     "badge": "Apenas Admin",
