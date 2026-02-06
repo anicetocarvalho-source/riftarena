@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import {
-  useNotifications,
+  useAllNotifications,
   useUnreadNotificationsCount,
   useMarkNotificationAsRead,
   useMarkAllNotificationsAsRead,
@@ -124,7 +124,7 @@ function NotificationItem({ notification, onMarkAsRead, onDelete, onClick }: Not
 export function NotificationDropdown() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data: notifications = [], isLoading } = useNotifications();
+  const { notifications, isLoading } = useAllNotifications();
   const { data: unreadCount = 0 } = useUnreadNotificationsCount();
   const markAsRead = useMarkNotificationAsRead();
   const markAllAsRead = useMarkAllNotificationsAsRead();

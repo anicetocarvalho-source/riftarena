@@ -1,30 +1,31 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
-import { formatDistanceToNow, format } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { pt, enUS } from "date-fns/locale";
 import {
   Bell, TrendingDown, Trophy, Users, Swords,
-  CheckCheck, Trash2, Check, Filter, ArrowLeft
+  CheckCheck, Trash2, Check, Filter, ArrowLeft, Loader2
 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
+import { RiftCard, RiftCardContent } from "@/components/ui/rift-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import {
-  useNotifications,
+  useAllNotifications,
   useUnreadNotificationsCount,
   useMarkNotificationAsRead,
   useMarkAllNotificationsAsRead,
   useDeleteNotification,
   Notification,
 } from "@/hooks/useNotifications";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { useAuth } from "@/contexts/AuthContext";
 import { EmptyState } from "@/components/ui/empty-state";
 
@@ -69,7 +70,7 @@ const NotificationsHistory = () => {
 
   const [activeFilter, setActiveFilter] = useState<NotificationType>("all");
 
-  const { data: notifications = [], isLoading } = useNotifications();
+  const { notifications, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useAllNotifications();
   const { data: unreadCount = 0 } = useUnreadNotificationsCount();
   const markAsRead = useMarkNotificationAsRead();
   const markAllAsRead = useMarkAllNotificationsAsRead();
@@ -87,6 +88,17 @@ const NotificationsHistory = () => {
     });
     return counts;
   }, [notifications]);
+
+  const loadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const sentinelRef = useIntersectionObserver({
+    enabled: !!hasNextPage && !isFetchingNextPage,
+    onIntersect: loadMore,
+  });
 
   const handleClick = (notification: Notification) => {
     if (!notification.read) {
@@ -316,6 +328,22 @@ const NotificationsHistory = () => {
                         </motion.div>
                       ))}
                     </AnimatePresence>
+
+                    {/* Infinite scroll sentinel */}
+                    <div ref={sentinelRef} className="h-1" />
+
+                    {isFetchingNextPage && (
+                      <div className="flex items-center justify-center py-6 gap-2 text-muted-foreground">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <span className="text-sm">{t("common.loading")}</span>
+                      </div>
+                    )}
+
+                    {!hasNextPage && notifications.length > 0 && (
+                      <p className="text-center text-xs text-muted-foreground/50 py-4">
+                        {t("notificationsPage.allLoaded")}
+                      </p>
+                    )}
                   </div>
                 )}
               </RiftCardContent>

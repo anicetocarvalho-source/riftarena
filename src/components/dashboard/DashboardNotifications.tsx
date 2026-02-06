@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import {
-  useNotifications,
+  useAllNotifications,
   useMarkNotificationAsRead,
   useMarkAllNotificationsAsRead,
   useUnreadNotificationsCount,
@@ -33,7 +33,7 @@ const getNotificationIcon = (type: string) => {
 export function DashboardNotifications() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { data: notifications = [], isLoading } = useNotifications();
+  const { notifications, isLoading } = useAllNotifications();
   const { data: unreadCount = 0 } = useUnreadNotificationsCount();
   const markAsRead = useMarkNotificationAsRead();
   const markAllAsRead = useMarkAllNotificationsAsRead();

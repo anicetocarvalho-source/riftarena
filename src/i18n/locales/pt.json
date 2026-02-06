@@ -980,7 +980,8 @@
       "match_result": "Partidas",
       "tournament_update": "Torneios",
       "rank_overtake": "Rankings"
-    }
+    },
+    "allLoaded": "Todas as notificações carregadas"
   },
   "rulesBuilder": {
    "tournamentStats": {
