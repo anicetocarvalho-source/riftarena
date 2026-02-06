@@ -25,8 +25,9 @@ import { PrizeDistributionDisplay } from "@/components/tournaments/PrizeDistribu
  import { TournamentRulesDisplay } from "@/components/tournaments/rules";
 import { 
   Trophy, Users, Calendar, DollarSign, 
-   Loader2, Clock, CheckCircle, XCircle, GitBranch, FileText, UsersRound, BarChart3, AlertTriangle
+  Loader2, Clock, CheckCircle, XCircle, GitBranch, FileText, UsersRound, BarChart3, AlertTriangle
 } from "lucide-react";
+import { TournamentDetailSkeleton } from "@/components/skeletons/TournamentDetailSkeleton";
 import { format } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -54,11 +55,7 @@ const TournamentDetail = () => {
   const [selectedTeamId, setSelectedTeamId] = useState("");
 
   if (tournamentLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <TournamentDetailSkeleton />;
   }
 
   if (!tournament) {
