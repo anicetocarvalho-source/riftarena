@@ -26,6 +26,7 @@ import PlayerProfile from "@/pages/PlayerProfile";
 import EditProfile from "@/pages/EditProfile";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
+import NotificationsHistory from "@/pages/NotificationsHistory";
  import TournamentStats from "@/pages/TournamentStats";
 
 export function AnimatedRoutes() {
@@ -60,6 +61,7 @@ export function AnimatedRoutes() {
         <Route path="/player/:id" element={<PageTransition><PlayerProfile /></PageTransition>} />
         <Route path="/profile/edit" element={<PageTransition><EditProfile /></PageTransition>} />
         <Route path="/settings" element={<PageTransition><Settings /></PageTransition>} />
+        <Route path="/notifications" element={<PageTransition><NotificationsHistory /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>
