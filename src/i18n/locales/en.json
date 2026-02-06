@@ -264,7 +264,8 @@
     "session": "Session",
     "endSession": "End Session",
     "endSessionDesc": "Sign out from your account on this device",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "preferenceUpdateError": "Error saving preference"
   },
   "createTournament": {
     "title": "Create Tournament",

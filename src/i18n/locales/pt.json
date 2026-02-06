@@ -264,7 +264,8 @@
     "session": "Sessão",
     "endSession": "Terminar Sessão",
     "endSessionDesc": "Sair da tua conta neste dispositivo",
-    "signOut": "Sair"
+    "signOut": "Sair",
+    "preferenceUpdateError": "Erro ao guardar preferência"
   },
   "createTournament": {
     "title": "Criar Torneio",

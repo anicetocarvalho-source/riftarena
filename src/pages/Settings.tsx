@@ -4,12 +4,14 @@ import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useUserPreferences } from "@/hooks/useUserPreferences";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle, RiftCardDescription } from "@/components/ui/rift-card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Loader2, ArrowLeft, Settings as SettingsIcon, 
   RefreshCw, User, Bell, Shield, Sparkles, LogOut
@@ -32,6 +34,7 @@ const Settings = () => {
   const { user, profile, isLoading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
   const [isResettingOnboarding, setIsResettingOnboarding] = useState(false);
+  const { preferences, isLoading: prefsLoading, updatePreference } = useUserPreferences(user?.id);
 
   const handleResetOnboarding = async () => {
     if (!user) return;
@@ -77,6 +80,27 @@ const Settings = () => {
     navigate("/auth");
     return null;
   }
+
+  const PreferenceToggle = ({ label, description, prefKey }: { 
+    label: string; 
+    description: string; 
+    prefKey: keyof typeof preferences;
+  }) => (
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="font-medium">{label}</p>
+        <p className="text-sm text-muted-foreground">{description}</p>
+      </div>
+      {prefsLoading ? (
+        <Skeleton className="h-6 w-11 rounded-full" />
+      ) : (
+        <Switch
+          checked={preferences[prefKey]}
+          onCheckedChange={(checked) => updatePreference(prefKey, checked)}
+        />
+      )}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -230,39 +254,23 @@ const Settings = () => {
                   </RiftCardDescription>
                 </RiftCardHeader>
                 <RiftCardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">{t('settings.emailNotifications')}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {t('settings.emailNotificationsDesc')}
-                      </p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                  
+                  <PreferenceToggle
+                    label={t('settings.emailNotifications')}
+                    description={t('settings.emailNotificationsDesc')}
+                    prefKey="email_notifications"
+                  />
                   <Separator />
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">{t('settings.matchReminders')}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {t('settings.matchRemindersDesc')}
-                      </p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                  
+                  <PreferenceToggle
+                    label={t('settings.matchReminders')}
+                    description={t('settings.matchRemindersDesc')}
+                    prefKey="match_reminders"
+                  />
                   <Separator />
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">{t('settings.teamInvites')}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {t('settings.teamInvitesDesc')}
-                      </p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
+                  <PreferenceToggle
+                    label={t('settings.teamInvites')}
+                    description={t('settings.teamInvitesDesc')}
+                    prefKey="team_invites_notifications"
+                  />
                 </RiftCardContent>
               </RiftCard>
 
@@ -278,27 +286,17 @@ const Settings = () => {
                   </RiftCardDescription>
                 </RiftCardHeader>
                 <RiftCardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">{t('settings.publicProfile')}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {t('settings.publicProfileDesc')}
-                      </p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                  
+                  <PreferenceToggle
+                    label={t('settings.publicProfile')}
+                    description={t('settings.publicProfileDesc')}
+                    prefKey="public_profile"
+                  />
                   <Separator />
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">{t('settings.showStats')}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {t('settings.showStatsDesc')}
-                      </p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
+                  <PreferenceToggle
+                    label={t('settings.showStats')}
+                    description={t('settings.showStatsDesc')}
+                    prefKey="show_stats"
+                  />
                 </RiftCardContent>
               </RiftCard>
 

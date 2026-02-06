@@ -258,9 +258,14 @@ export type Database = {
           country: string | null
           created_at: string
           discord_username: string | null
+          email_notifications: boolean
           id: string
+          match_reminders: boolean
           onboarding_completed: boolean | null
           onboarding_step: number | null
+          public_profile: boolean
+          show_stats: boolean
+          team_invites_notifications: boolean
           twitch_username: string | null
           twitter_username: string | null
           updated_at: string
@@ -273,9 +278,14 @@ export type Database = {
           country?: string | null
           created_at?: string
           discord_username?: string | null
+          email_notifications?: boolean
           id: string
+          match_reminders?: boolean
           onboarding_completed?: boolean | null
           onboarding_step?: number | null
+          public_profile?: boolean
+          show_stats?: boolean
+          team_invites_notifications?: boolean
           twitch_username?: string | null
           twitter_username?: string | null
           updated_at?: string
@@ -288,9 +298,14 @@ export type Database = {
           country?: string | null
           created_at?: string
           discord_username?: string | null
+          email_notifications?: boolean
           id?: string
+          match_reminders?: boolean
           onboarding_completed?: boolean | null
           onboarding_step?: number | null
+          public_profile?: boolean
+          show_stats?: boolean
+          team_invites_notifications?: boolean
           twitch_username?: string | null
           twitter_username?: string | null
           updated_at?: string
