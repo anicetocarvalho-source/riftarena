@@ -12,6 +12,7 @@ import { WelcomeCelebration } from "@/components/auth/WelcomeCelebration";
 import { Eye, EyeOff, Mail, Lock, User, Globe, ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { SEOHead } from "@/components/seo/SEOHead";
 import {
   Select,
   SelectContent,
@@ -149,6 +150,11 @@ const Auth = () => {
 
   return (
     <>
+      <SEOHead
+        title="Sign In"
+        description="Sign in or create an account on RIFT Arena to join tournaments, track rankings, and compete with the best esports players."
+        noIndex
+      />
       {/* Welcome Celebration Overlay */}
       <AnimatePresence>
         {showCelebration && (

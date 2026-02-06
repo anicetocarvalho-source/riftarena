@@ -6,6 +6,7 @@ import { z } from "zod";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -137,6 +138,12 @@ const TeamDetail = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title={`${team.name} [${team.tag}]`}
+        description={team.description || `View the ${team.name} esports team roster, stats, and history on RIFT Arena.`}
+        canonical={`https://riftarena.lovable.app/teams/${id}`}
+        ogImage={team.logo_url || undefined}
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">

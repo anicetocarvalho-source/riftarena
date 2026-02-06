@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { useTournaments, useGames } from "@/hooks/useTournaments";
 import { useAuth } from "@/contexts/AuthContext";
 import { Loader2 } from "lucide-react";
+import { SEOHead } from "@/components/seo/SEOHead";
 import {
   Select,
   SelectContent,
@@ -141,6 +142,11 @@ const Tournaments = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Tournaments"
+        description="Browse and join competitive esports tournaments. Single elimination, double elimination, and round robin brackets with real prize pools."
+        canonical="https://riftarena.lovable.app/tournaments"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">
