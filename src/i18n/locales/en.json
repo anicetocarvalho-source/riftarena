@@ -716,7 +716,18 @@
     "yesCancelTournament": "Yes, Cancel Tournament",
     "cancelling": "Cancelling...",
     "bracketType": "Bracket Type",
-    "status": "Status"
+    "status": "Status",
+    "validation": {
+      "nameMin": "Name must be at least 3 characters",
+      "nameMax": "Name must be at most 100 characters",
+      "descriptionMax": "Description must be at most 2000 characters",
+      "startDateRequired": "Start date is required",
+      "prizePoolMin": "Prize pool cannot be negative",
+      "registrationFeeMin": "Registration fee cannot be negative",
+      "maxParticipantsInt": "Number of participants must be a whole number",
+      "maxParticipantsMin": "Minimum of 2 participants",
+      "maxParticipantsMax": "Maximum of 256 participants"
+    }
   },
   "registrationsTab": {
     "title": "Registrations",

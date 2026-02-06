@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { z } from "zod";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Tournament, TournamentStatus } from "@/types/tournament";
 import { Button } from "@/components/ui/button";
@@ -57,43 +58,34 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
   );
   
   // Validation errors
-  const [dateErrors, setDateErrors] = useState<{
-    endDate?: string;
-    registrationDeadline?: string;
-  }>({});
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
-  // Validate dates whenever they change
-  const validateDates = (start?: Date, end?: Date, regDeadline?: Date) => {
-    const errors: { endDate?: string; registrationDeadline?: string } = {};
-    
-    if (start && end && end <= start) {
-      errors.endDate = t('tournamentSettings.endDateError');
-    }
-    
-    if (start && regDeadline && regDeadline >= start) {
-      errors.registrationDeadline = t('tournamentSettings.regDeadlineError');
-    }
-    
-    setDateErrors(errors);
-    return Object.keys(errors).length === 0;
+  const clearFieldError = (field: string) => {
+    setFormErrors(prev => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
   };
 
   const handleStartDateChange = (date: Date | undefined) => {
     setStartDate(date);
-    validateDates(date, endDate, registrationDeadline);
+    clearFieldError("startDate");
+    clearFieldError("endDate");
+    clearFieldError("registrationDeadline");
   };
 
   const handleEndDateChange = (date: Date | undefined) => {
     setEndDate(date);
-    validateDates(startDate, date, registrationDeadline);
+    clearFieldError("endDate");
   };
 
   const handleRegistrationDeadlineChange = (date: Date | undefined) => {
     setRegistrationDeadline(date);
-    validateDates(startDate, endDate, date);
+    clearFieldError("registrationDeadline");
   };
 
-  const hasValidationErrors = Object.keys(dateErrors).length > 0;
+  const hasValidationErrors = Object.keys(formErrors).length > 0;
 
   const canEdit = tournament.status === "draft" || tournament.status === "registration";
   const canCancel = tournament.status !== "cancelled" && tournament.status !== "completed";
@@ -103,6 +95,52 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
   };
 
   const handleSave = async () => {
+    const settingsSchema = z.object({
+      name: z.string().trim()
+        .min(3, t('tournamentSettings.validation.nameMin'))
+        .max(100, t('tournamentSettings.validation.nameMax')),
+      description: z.string().max(2000, t('tournamentSettings.validation.descriptionMax')).optional(),
+      startDate: z.date({ required_error: t('tournamentSettings.validation.startDateRequired') }),
+      prizePool: z.number().min(0, t('tournamentSettings.validation.prizePoolMin')),
+      registrationFee: z.number().min(0, t('tournamentSettings.validation.registrationFeeMin')),
+      maxParticipants: z.number()
+        .int(t('tournamentSettings.validation.maxParticipantsInt'))
+        .min(2, t('tournamentSettings.validation.maxParticipantsMin'))
+        .max(256, t('tournamentSettings.validation.maxParticipantsMax')),
+    });
+
+    const parsed = settingsSchema.safeParse({
+      name,
+      description: description || undefined,
+      startDate,
+      prizePool: parseFloat(prizePool) || 0,
+      registrationFee: parseFloat(registrationFee) || 0,
+      maxParticipants: parseInt(maxParticipants) || 0,
+    });
+
+    const errors: Record<string, string> = {};
+
+    if (!parsed.success) {
+      parsed.error.errors.forEach(err => {
+        const field = err.path[0] as string;
+        if (!errors[field]) errors[field] = err.message;
+      });
+    }
+
+    // Cross-field date validations
+    if (startDate && endDate && endDate <= startDate) {
+      errors.endDate = t('tournamentSettings.endDateError');
+    }
+    if (startDate && registrationDeadline && registrationDeadline >= startDate) {
+      errors.registrationDeadline = t('tournamentSettings.regDeadlineError');
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    setFormErrors({});
     await updateTournament.mutateAsync({
       id: tournament.id,
       name,
@@ -133,6 +171,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
     setRules(tournament.rules || "");
     setBannerUrl(tournament.banner_url || "");
     setPrizeDistribution(tournament.prize_distribution || { first: 50, second: 30, third: 20 });
+    setFormErrors({});
     setIsEditing(false);
   };
 
@@ -149,7 +188,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
             <Button 
               variant="rift" 
               onClick={handleSave}
-              disabled={updateTournament.isPending || hasValidationErrors || !name.trim()}
+              disabled={updateTournament.isPending}
             >
               <Save className="h-4 w-4 mr-2" />
               {updateTournament.isPending ? t('tournamentSettings.saving') : t('tournamentSettings.saveChanges')}
@@ -171,9 +210,10 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                 <Input
                   id="name"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => { setName(e.target.value); clearFieldError("name"); }}
                   placeholder={t('tournamentSettings.tournamentName')}
                 />
+                {formErrors.name && <p className="text-xs text-destructive">{formErrors.name}</p>}
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-2">{t('tournamentSettings.game')}</p>
@@ -186,10 +226,11 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
               <Textarea
                 id="description"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => { setDescription(e.target.value); clearFieldError("description"); }}
                 placeholder={t('tournamentSettings.tournamentDescription')}
                 rows={3}
               />
+              {formErrors.description && <p className="text-xs text-destructive">{formErrors.description}</p>}
             </div>
             
             {/* Banner Upload */}
@@ -218,7 +259,8 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                       variant="outline"
                       className={cn(
                         "w-full justify-start text-left font-normal",
-                        !startDate && "text-muted-foreground"
+                        !startDate && "text-muted-foreground",
+                        formErrors.startDate && "border-destructive"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -235,6 +277,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                     />
                   </PopoverContent>
                 </Popover>
+                {formErrors.startDate && <p className="text-xs text-destructive">{formErrors.startDate}</p>}
               </div>
               <div className="space-y-2">
                 <Label>{t('tournamentSettings.endDate')}</Label>
@@ -245,7 +288,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                       className={cn(
                         "w-full justify-start text-left font-normal",
                         !endDate && "text-muted-foreground",
-                        dateErrors.endDate && "border-destructive"
+                        formErrors.endDate && "border-destructive"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -263,8 +306,8 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                     />
                   </PopoverContent>
                 </Popover>
-                {dateErrors.endDate && (
-                  <p className="text-xs text-destructive">{dateErrors.endDate}</p>
+                {formErrors.endDate && (
+                  <p className="text-xs text-destructive">{formErrors.endDate}</p>
                 )}
               </div>
               <div className="space-y-2">
@@ -276,7 +319,7 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                       className={cn(
                         "w-full justify-start text-left font-normal",
                         !registrationDeadline && "text-muted-foreground",
-                        dateErrors.registrationDeadline && "border-destructive"
+                        formErrors.registrationDeadline && "border-destructive"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -294,8 +337,8 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                     />
                   </PopoverContent>
                 </Popover>
-                {dateErrors.registrationDeadline && (
-                  <p className="text-xs text-destructive">{dateErrors.registrationDeadline}</p>
+                {formErrors.registrationDeadline && (
+                  <p className="text-xs text-destructive">{formErrors.registrationDeadline}</p>
                 )}
               </div>
             </div>
@@ -317,10 +360,11 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                   id="prizePool"
                   type="number"
                   value={prizePool}
-                  onChange={(e) => setPrizePool(e.target.value)}
+                  onChange={(e) => { setPrizePool(e.target.value); clearFieldError("prizePool"); }}
                   min="0"
                   step="100"
                 />
+                {formErrors.prizePool && <p className="text-xs text-destructive">{formErrors.prizePool}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="registrationFee">{t('tournamentSettings.registrationFee')}</Label>
@@ -328,10 +372,11 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                   id="registrationFee"
                   type="number"
                   value={registrationFee}
-                  onChange={(e) => setRegistrationFee(e.target.value)}
+                  onChange={(e) => { setRegistrationFee(e.target.value); clearFieldError("registrationFee"); }}
                   min="0"
                   step="1"
-                      />
+                />
+                {formErrors.registrationFee && <p className="text-xs text-destructive">{formErrors.registrationFee}</p>}
                     </div>
                   </div>
                   
@@ -358,10 +403,11 @@ export const TournamentSettingsTab = ({ tournament }: TournamentSettingsTabProps
                 id="maxParticipants"
                 type="number"
                 value={maxParticipants}
-                onChange={(e) => setMaxParticipants(e.target.value)}
+                onChange={(e) => { setMaxParticipants(e.target.value); clearFieldError("maxParticipants"); }}
                 min="2"
                 max="256"
               />
+              {formErrors.maxParticipants && <p className="text-xs text-destructive">{formErrors.maxParticipants}</p>}
               <p className="text-xs text-muted-foreground">
                 {t('tournamentSettings.capacityRecommendation')}
               </p>

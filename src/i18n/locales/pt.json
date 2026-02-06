@@ -716,7 +716,18 @@
     "yesCancelTournament": "Sim, Cancelar Torneio",
     "cancelling": "A cancelar...",
     "bracketType": "Tipo de Bracket",
-    "status": "Estado"
+    "status": "Estado",
+    "validation": {
+      "nameMin": "O nome deve ter pelo menos 3 caracteres",
+      "nameMax": "O nome deve ter no máximo 100 caracteres",
+      "descriptionMax": "A descrição deve ter no máximo 2000 caracteres",
+      "startDateRequired": "A data de início é obrigatória",
+      "prizePoolMin": "O prémio total não pode ser negativo",
+      "registrationFeeMin": "A taxa de inscrição não pode ser negativa",
+      "maxParticipantsInt": "O número de participantes deve ser inteiro",
+      "maxParticipantsMin": "Mínimo de 2 participantes",
+      "maxParticipantsMax": "Máximo de 256 participantes"
+    }
   },
   "registrationsTab": {
     "title": "Inscrições",
