@@ -96,31 +96,29 @@ interface GlossaryTermProps {
   iconClassName?: string;
 }
 
-// Inner component that receives the forwarded ref
-const GlossaryTermInner = forwardRef<HTMLSpanElement, {
-  children?: React.ReactNode;
-  showIcon?: boolean;
-  className?: string;
-  iconClassName?: string;
-  definition: TermDefinition;
-}>(
-  ({ children, showIcon = true, className, iconClassName, definition, ...props }, ref) => (
-    <span 
-      ref={ref}
-      className={cn(
-        "inline-flex items-center gap-1 cursor-help border-b border-dotted border-muted-foreground/50 hover:border-primary transition-colors",
-        className
-      )}
-      {...props}
-    >
-      {children || definition.title}
-      {showIcon && (
-        <HelpCircle className={cn("h-3 w-3 text-muted-foreground", iconClassName)} />
-      )}
-    </span>
-  )
-);
-GlossaryTermInner.displayName = "GlossaryTermInner";
+const GlossaryTermTrigger = forwardRef<
+  HTMLSpanElement,
+  React.HTMLAttributes<HTMLSpanElement> & {
+    showIcon?: boolean;
+    iconClassName?: string;
+    termTitle: string;
+  }
+>(({ children, showIcon = true, iconClassName, termTitle, className, ...props }, ref) => (
+  <span
+    ref={ref}
+    className={cn(
+      "inline-flex items-center gap-1 cursor-help border-b border-dotted border-muted-foreground/50 hover:border-primary transition-colors",
+      className
+    )}
+    {...props}
+  >
+    {children || termTitle}
+    {showIcon && (
+      <HelpCircle className={cn("h-3 w-3 text-muted-foreground", iconClassName)} />
+    )}
+  </span>
+));
+GlossaryTermTrigger.displayName = "GlossaryTermTrigger";
 
 export function GlossaryTerm({ 
   term, 
@@ -139,14 +137,14 @@ export function GlossaryTerm({
     <TooltipProvider delayDuration={200}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <GlossaryTermInner
-            definition={definition}
+          <GlossaryTermTrigger
             showIcon={showIcon}
             className={className}
             iconClassName={iconClassName}
+            termTitle={definition.title}
           >
             {children}
-          </GlossaryTermInner>
+          </GlossaryTermTrigger>
         </TooltipTrigger>
         <TooltipContent 
           side="top" 
