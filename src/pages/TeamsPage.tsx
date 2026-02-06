@@ -13,6 +13,7 @@ import { useTeams, useUserTeams, useUserInvites, useRespondToInvite } from "@/ho
 import { useAuth } from "@/contexts/AuthContext";
 import { Users, Search, Plus, Loader2, Check, X, Crown, UserPlus, UsersRound } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 const TeamsPage = () => {
   const { t } = useTranslation();
@@ -31,6 +32,11 @@ const TeamsPage = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Teams"
+        description="Create or join competitive esports teams. Build your roster, invite players, and compete together in team-based tournaments."
+        canonical="https://riftarena.lovable.app/teams"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">

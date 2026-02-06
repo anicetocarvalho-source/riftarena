@@ -11,6 +11,7 @@ import { useGames } from "@/hooks/useTournaments";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, TrendingUp, Trophy } from "lucide-react";
 import { GlossaryTerm } from "@/components/ui/glossary-term";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 const Rankings = () => {
   const { t } = useTranslation();
@@ -22,6 +23,11 @@ const Rankings = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Rankings"
+        description="Climb the global esports rankings. Track ELO ratings, win streaks, and compete for the top spots across multiple games."
+        canonical="https://riftarena.lovable.app/rankings"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">

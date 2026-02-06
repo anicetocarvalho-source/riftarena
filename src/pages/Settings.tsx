@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useUserPreferences } from "@/hooks/useUserPreferences";
@@ -104,6 +105,7 @@ const Settings = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead title="Settings" noIndex />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container max-w-2xl">

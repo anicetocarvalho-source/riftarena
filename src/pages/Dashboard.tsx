@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -58,6 +59,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead title="Dashboard" noIndex />
       {/* Onboarding Wizard */}
       <AnimatePresence>
         {showOnboarding && (

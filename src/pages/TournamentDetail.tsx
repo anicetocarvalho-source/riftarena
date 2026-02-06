@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { buildTournamentJsonLd } from "@/components/seo/tournamentJsonLd";
 import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Badge } from "@/components/ui/badge";
@@ -148,6 +150,14 @@ const TournamentDetail = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title={tournament.name}
+        description={tournament.description || `Join the ${tournament.name} tournament on RIFT Arena. Prize pool: $${tournament.prize_pool.toLocaleString()}.`}
+        canonical={`https://riftarena.lovable.app/tournaments/${id}`}
+        ogType="article"
+        ogImage={tournament.banner_url || undefined}
+        jsonLd={buildTournamentJsonLd(tournament, id || "")}
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">

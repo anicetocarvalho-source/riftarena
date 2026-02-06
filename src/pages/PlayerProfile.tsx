@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -96,6 +97,13 @@ const PlayerProfile = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title={`${profile.username} — Player Profile`}
+        description={profile.bio || `View ${profile.username}'s competitive stats, ELO ratings, and match history on RIFT Arena.`}
+        canonical={`https://riftarena.lovable.app/player/${id}`}
+        ogType="profile"
+        ogImage={profile.avatar_url || undefined}
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">

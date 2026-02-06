@@ -9,6 +9,7 @@ import { ChevronRight, Loader2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 const Games = () => {
   const { t } = useTranslation();
@@ -80,6 +81,11 @@ const Games = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title="Games"
+        description="Explore competitive games on RIFT Arena. Find tournaments, rankings, and communities for Free Fire, PUBG Mobile, Call of Duty Mobile, and more."
+        canonical="https://riftarena.lovable.app/games"
+      />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container">
