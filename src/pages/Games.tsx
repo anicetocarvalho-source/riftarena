@@ -182,12 +182,20 @@ const Games = () => {
                               </div>
                             </div>
 
-                            <Link to={`/tournaments?game=${game.id}`}>
-                              <Button variant="rift-outline" size="sm">
-                                {t('games.viewTournaments')}
-                                <ChevronRight className="ml-2 h-4 w-4" />
-                              </Button>
-                            </Link>
+                            <div className="flex gap-2">
+                              <Link to={`/tournaments?game=${game.id}`}>
+                                <Button variant="rift-outline" size="sm">
+                                  {t('games.viewTournaments')}
+                                  <ChevronRight className="ml-2 h-4 w-4" />
+                                </Button>
+                              </Link>
+                              <Link to={`/rankings?game=${game.id}`}>
+                                <Button variant="ghost" size="sm">
+                                  {t('games.viewRankings', 'Rankings')}
+                                  <ChevronRight className="ml-2 h-4 w-4" />
+                                </Button>
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       </RiftCardContent>

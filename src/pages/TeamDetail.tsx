@@ -270,7 +270,10 @@ const TeamDetail = () => {
                         key={member.id}
                         className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg"
                       >
-                        <div className="flex items-center gap-3">
+                        <div 
+                          className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+                          onClick={() => navigate(`/player/${member.user_id}`)}
+                        >
                           <Avatar className="h-10 w-10">
                             <AvatarImage src={member.user?.avatar_url || undefined} />
                             <AvatarFallback>
@@ -279,7 +282,7 @@ const TeamDetail = () => {
                           </Avatar>
                           <div>
                             <div className="flex items-center gap-2">
-                              <p className="font-medium">{member.user?.username}</p>
+                              <p className="font-medium hover:text-primary transition-colors">{member.user?.username}</p>
                               {member.role === "captain" && (
                                 <Crown className="h-4 w-4 text-warning" />
                               )}
@@ -293,7 +296,7 @@ const TeamDetail = () => {
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => handleRemoveMember(member.id)}
+                            onClick={(e) => { e.stopPropagation(); handleRemoveMember(member.id); }}
                             disabled={removeMember.isPending}
                           >
                             <X className="h-4 w-4" />

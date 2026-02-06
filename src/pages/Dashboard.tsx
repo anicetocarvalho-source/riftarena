@@ -18,10 +18,11 @@ import { RivalOvertakeCelebration } from "@/components/rankings/RivalOvertakeCel
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { useRivalOvertakeCelebration } from "@/hooks/useRivalOvertakeCelebration";
 import { 
-  Trophy, Users, Gamepad2, TrendingUp, Settings, 
-  Shield, BarChart3, DollarSign, Bell, Loader2, Search
+  Trophy, Users, Gamepad2, Settings, 
+  Shield, BarChart3, Bell, Loader2
 } from "lucide-react";
-import { EmptyState } from "@/components/ui/empty-state";
+import { DashboardQuickStats } from "@/components/dashboard/DashboardQuickStats";
+import { DashboardMyTournaments } from "@/components/dashboard/DashboardMyTournaments";
 
 const Dashboard = () => {
   const { t } = useTranslation();
@@ -136,61 +137,8 @@ const Dashboard = () => {
             <ActivityUrgencyCard />
           </motion.div>
 
-          {/* Quick Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12"
-          >
-            <RiftCard>
-              <RiftCardContent className="flex items-center gap-4 py-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-primary/10 text-primary">
-                  <Trophy className="h-6 w-6" />
-                </div>
-                <div>
-                  <p className="text-2xl font-display font-bold">0</p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">{t('dashboard.tournaments')}</p>
-                </div>
-              </RiftCardContent>
-            </RiftCard>
-
-            <RiftCard>
-              <RiftCardContent className="flex items-center gap-4 py-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-success/10 text-success">
-                  <TrendingUp className="h-6 w-6" />
-                </div>
-                <div>
-                  <p className="text-2xl font-display font-bold">—</p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">{t('dashboard.currentRank')}</p>
-                </div>
-              </RiftCardContent>
-            </RiftCard>
-
-            <RiftCard>
-              <RiftCardContent className="flex items-center gap-4 py-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-warning/10 text-warning">
-                  <Gamepad2 className="h-6 w-6" />
-                </div>
-                <div>
-                  <p className="text-2xl font-display font-bold">0</p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">{t('dashboard.matchesPlayed')}</p>
-                </div>
-              </RiftCardContent>
-            </RiftCard>
-
-            <RiftCard>
-              <RiftCardContent className="flex items-center gap-4 py-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-primary/10 text-primary">
-                  <DollarSign className="h-6 w-6" />
-                </div>
-                <div>
-                  <p className="text-2xl font-display font-bold">$0</p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">{t('dashboard.winnings')}</p>
-                </div>
-              </RiftCardContent>
-            </RiftCard>
-          </motion.div>
+          {/* Quick Stats — real data */}
+          <DashboardQuickStats />
 
           {/* Role-specific Sections */}
           <div className="grid gap-8 lg:grid-cols-3">
@@ -209,20 +157,7 @@ const Dashboard = () => {
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
-                  <EmptyState
-                    icon={Trophy}
-                    title={t('dashboard.noTournamentsYet')}
-                    description={t('dashboard.noTournamentsDesc')}
-                    tip={t('dashboard.noTournamentsTip')}
-                    actions={[
-                      {
-                        label: t('dashboard.exploreTournaments'),
-                        onClick: () => navigate("/tournaments"),
-                        icon: Search,
-                      },
-                    ]}
-                    compact
-                  />
+                  <DashboardMyTournaments />
                 </RiftCardContent>
               </RiftCard>
             </motion.div>

@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/layout/Navbar";
@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Loader2, Trophy, Target, TrendingUp, Gamepad2, 
-  MapPin, Calendar, Award, Lock, ChevronRight, ExternalLink, User
+  MapPin, Calendar, Award, Lock, ChevronRight, ExternalLink, User, Users, Crown
 } from "lucide-react";
 import { SiDiscord, SiX, SiTwitch } from "@icons-pack/react-simple-icons";
 import { cn } from "@/lib/utils";
@@ -27,14 +27,17 @@ import {
 import { useEloHistory, getRankTier, getWinRate } from "@/hooks/useRankings";
 import { EloProgressionChart } from "@/components/profile/EloProgressionChart";
 import { GlossaryTerm } from "@/components/ui/glossary-term";
+import { usePlayerTeams } from "@/hooks/usePlayerTeams";
 
 const PlayerProfile = () => {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { data: profile, isLoading: profileLoading } = usePlayerProfile(id || "");
   const { data: matches, isLoading: matchesLoading } = usePlayerMatches(id || "", 20);
   const { data: rankings, isLoading: rankingsLoading } = usePlayerAllRankings(id || "");
   const { data: eloHistory, isLoading: historyLoading } = useEloHistory(id || "", 50);
+  const { data: playerTeams } = usePlayerTeams(id || "");
 
   const isLoading = profileLoading || matchesLoading || rankingsLoading || historyLoading;
 
@@ -283,6 +286,7 @@ const PlayerProfile = () => {
               <TabsList className="mb-6">
                 <TabsTrigger value="overview">{t('playerProfile.overview')}</TabsTrigger>
                 <TabsTrigger value="matches">{t('playerProfile.matchHistory')}</TabsTrigger>
+                <TabsTrigger value="teams">{t('playerProfile.teams', 'Teams')}</TabsTrigger>
                 <TabsTrigger value="achievements">{t('playerProfile.achievements')}</TabsTrigger>
               </TabsList>
 
@@ -515,6 +519,53 @@ const PlayerProfile = () => {
                     </RiftCardContent>
                   </RiftCard>
                 </div>
+              </TabsContent>
+
+              {/* Teams Tab */}
+              <TabsContent value="teams">
+                <RiftCard>
+                  <RiftCardHeader>
+                    <RiftCardTitle className="flex items-center gap-2">
+                      <Users className="h-5 w-5 text-primary" />
+                      {t('playerProfile.teams', 'Teams')}
+                    </RiftCardTitle>
+                  </RiftCardHeader>
+                  <RiftCardContent>
+                    {playerTeams && playerTeams.length > 0 ? (
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {playerTeams.map((team) => (
+                          <div
+                            key={team.id}
+                            className="flex items-center gap-3 p-4 rounded-sm bg-secondary/50 border border-border hover:border-primary/30 transition-colors cursor-pointer"
+                            onClick={() => navigate(`/teams/${team.id}`)}
+                          >
+                            <Avatar className="h-12 w-12 rounded-sm">
+                              <AvatarImage src={team.logo_url || undefined} className="object-cover" />
+                              <AvatarFallback className="rounded-sm bg-primary/20 text-lg font-bold font-display">
+                                {team.tag.substring(0, 2).toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className="font-display font-medium truncate">{team.name}</p>
+                                {team.role === "captain" && (
+                                  <Crown className="h-3.5 w-3.5 text-warning shrink-0" />
+                                )}
+                              </div>
+                              <p className="text-xs text-muted-foreground">[{team.tag}] • {team.role}</p>
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 text-muted-foreground">
+                        <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                        <p>{t('playerProfile.noTeams', 'Not a member of any team yet.')}</p>
+                      </div>
+                    )}
+                  </RiftCardContent>
+                </RiftCard>
               </TabsContent>
             </Tabs>
           </motion.div>
