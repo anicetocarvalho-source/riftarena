@@ -222,7 +222,10 @@
     "sponsorManagement": "Gestão de Parceiros",
     "sponsorManagementDesc": "Gerir parcerias de marca",
     "platformAnalytics": "Analíticas da Plataforma",
-    "platformAnalyticsDesc": "Visão geral de todas as métricas"
+    "platformAnalyticsDesc": "Visão geral de todas as métricas",
+    "confirmed": "Confirmado",
+    "pending": "Pendente",
+    "viewAllTournaments": "Ver todos os torneios"
   },
   "settings": {
     "title": "Configurações",

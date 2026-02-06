@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -15,7 +15,10 @@ import { SEOHead } from "@/components/seo/SEOHead";
 
 const Rankings = () => {
   const { t } = useTranslation();
-  const [activeGameId, setActiveGameId] = useState<string | undefined>(undefined);
+  const [searchParams] = useSearchParams();
+  const [activeGameId, setActiveGameId] = useState<string | undefined>(
+    searchParams.get("game") || undefined
+  );
   const { data: games, isLoading: gamesLoading } = useGames();
   const { data: rankings, isLoading: rankingsLoading } = useRankings(activeGameId, 100);
 

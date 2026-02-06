@@ -222,7 +222,10 @@
     "sponsorManagement": "Sponsor Management",
     "sponsorManagementDesc": "Manage brand partnerships",
     "platformAnalytics": "Platform Analytics",
-    "platformAnalyticsDesc": "Overview of all metrics"
+    "platformAnalyticsDesc": "Overview of all metrics",
+    "confirmed": "Confirmed",
+    "pending": "Pending",
+    "viewAllTournaments": "View all tournaments"
   },
   "settings": {
     "title": "Settings",
