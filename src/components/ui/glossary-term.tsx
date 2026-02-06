@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, type ReactNode, type HTMLAttributes } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -90,79 +90,59 @@ const glossary: Record<GlossaryTermKey, TermDefinition> = {
 
 interface GlossaryTermProps {
   term: GlossaryTermKey;
-  children?: React.ReactNode;
+  children?: ReactNode;
   showIcon?: boolean;
   className?: string;
   iconClassName?: string;
 }
 
-const GlossaryTermTrigger = forwardRef<
-  HTMLSpanElement,
-  React.HTMLAttributes<HTMLSpanElement> & {
-    showIcon?: boolean;
-    iconClassName?: string;
-    termTitle: string;
-  }
->(({ children, showIcon = true, iconClassName, termTitle, className, ...props }, ref) => (
-  <span
-    ref={ref}
-    className={cn(
-      "inline-flex items-center gap-1 cursor-help border-b border-dotted border-muted-foreground/50 hover:border-primary transition-colors",
-      className
-    )}
-    {...props}
-  >
-    {children || termTitle}
-    {showIcon && (
-      <HelpCircle className={cn("h-3 w-3 text-muted-foreground", iconClassName)} />
-    )}
-  </span>
-));
-GlossaryTermTrigger.displayName = "GlossaryTermTrigger";
+const GlossaryTerm = forwardRef<HTMLSpanElement, GlossaryTermProps>(
+  ({ term, children, showIcon = true, className, iconClassName }, ref) => {
+    const definition = glossary[term];
 
-export function GlossaryTerm({ 
-  term, 
-  children, 
-  showIcon = true,
-  className,
-  iconClassName,
-}: GlossaryTermProps) {
-  const definition = glossary[term];
-  
-  if (!definition) {
-    return <span className={className}>{children}</span>;
-  }
+    if (!definition) {
+      return <span ref={ref} className={className}>{children}</span>;
+    }
 
-  return (
-    <TooltipProvider delayDuration={200}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <GlossaryTermTrigger
-            showIcon={showIcon}
-            className={className}
-            iconClassName={iconClassName}
-            termTitle={definition.title}
+    return (
+      <TooltipProvider delayDuration={200}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span
+              ref={ref}
+              className={cn(
+                "inline-flex items-center gap-1 cursor-help border-b border-dotted border-muted-foreground/50 hover:border-primary transition-colors",
+                className
+              )}
+            >
+              {children || definition.title}
+              {showIcon && (
+                <HelpCircle className={cn("h-3 w-3 text-muted-foreground", iconClassName)} />
+              )}
+            </span>
+          </TooltipTrigger>
+          <TooltipContent
+            side="top"
+            className="max-w-xs bg-popover border-border"
           >
-            {children}
-          </GlossaryTermTrigger>
-        </TooltipTrigger>
-        <TooltipContent 
-          side="top" 
-          className="max-w-xs bg-popover border-border"
-        >
-          <div className="space-y-1">
-            <p className="font-display text-sm font-semibold text-foreground">
-              {definition.title}
-            </p>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              {definition.description}
-            </p>
-          </div>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
-}
+            <div className="space-y-1">
+              <p className="font-display text-sm font-semibold text-foreground">
+                {definition.title}
+              </p>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {definition.description}
+              </p>
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+);
+GlossaryTerm.displayName = "GlossaryTerm";
+
+// Named export for the component
+export { GlossaryTerm };
 
 // Helper to get just the definition text
 export function getGlossaryDefinition(term: GlossaryTermKey): TermDefinition | undefined {
