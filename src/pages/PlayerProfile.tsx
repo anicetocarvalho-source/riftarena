@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
-  Loader2, Trophy, Target, TrendingUp, Gamepad2, 
+  Trophy, Target, TrendingUp, Gamepad2, 
   MapPin, Calendar, Award, Lock, ChevronRight, ExternalLink, User, Users, Crown
 } from "lucide-react";
 import { SiDiscord, SiX, SiTwitch } from "@icons-pack/react-simple-icons";
@@ -28,6 +28,7 @@ import { useEloHistory, getRankTier, getWinRate } from "@/hooks/useRankings";
 import { EloProgressionChart } from "@/components/profile/EloProgressionChart";
 import { GlossaryTerm } from "@/components/ui/glossary-term";
 import { usePlayerTeams } from "@/hooks/usePlayerTeams";
+import { PlayerProfileSkeleton } from "@/components/skeletons/PlayerProfileSkeleton";
 
 const PlayerProfile = () => {
   const navigate = useNavigate();
@@ -42,11 +43,7 @@ const PlayerProfile = () => {
   const isLoading = profileLoading || matchesLoading || rankingsLoading || historyLoading;
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <PlayerProfileSkeleton />;
   }
 
   if (!profile) {

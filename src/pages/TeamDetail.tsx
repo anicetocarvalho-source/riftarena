@@ -18,6 +18,7 @@ import {
   Users, Crown, Loader2, UserPlus, 
   X, Mail, LogOut, Camera, Pencil
 } from "lucide-react";
+import { TeamDetailSkeleton } from "@/components/skeletons/TeamDetailSkeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -68,11 +69,7 @@ const TeamDetail = () => {
   };
 
   if (teamLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <TeamDetailSkeleton />;
   }
 
   if (!team) {
