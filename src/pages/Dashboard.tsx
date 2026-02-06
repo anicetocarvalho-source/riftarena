@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { SEOHead } from "@/components/seo/SEOHead";
@@ -15,6 +16,7 @@ import { NextRivalCard } from "@/components/dashboard/NextRivalCard";
 import { ActivityUrgencyCard } from "@/components/dashboard/ActivityUrgencyCard";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import { RivalOvertakeCelebration } from "@/components/rankings/RivalOvertakeCelebration";
+import { DashboardNotifications } from "@/components/dashboard/DashboardNotifications";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { useRivalOvertakeCelebration } from "@/hooks/useRivalOvertakeCelebration";
 import { 
@@ -36,6 +38,7 @@ const Dashboard = () => {
   const { user, profile, roles, isLoading, isAdmin, isOrganizer, isSponsor, signOut } = useAuth();
   const { showOnboarding, isLoading: onboardingLoading, completeOnboarding, skipOnboarding } = useOnboarding();
   const { celebrationData, dismissCelebration } = useRivalOvertakeCelebration();
+  useRealtimeNotifications();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -193,12 +196,7 @@ const Dashboard = () => {
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
-                  <div className="flex flex-col items-center justify-center py-8 text-center">
-                    <Bell className="h-8 w-8 text-muted-foreground/50 mb-3" />
-                    <p className="text-sm text-muted-foreground">
-                      {t('dashboard.noNotifications')}
-                    </p>
-                  </div>
+                  <DashboardNotifications />
                 </RiftCardContent>
               </RiftCard>
             </motion.div>

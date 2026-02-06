@@ -1,4 +1,4 @@
-import { Bell, Check, CheckCheck, Trash2, TrendingDown, Trophy, Users, X } from "lucide-react";
+import { Bell, Check, CheckCheck, Trash2, TrendingDown, Trophy, Users, X, Swords } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
@@ -28,10 +28,12 @@ const getNotificationIcon = (type: string) => {
   switch (type) {
     case "rank_overtake":
       return <TrendingDown className="h-4 w-4 text-destructive" />;
-    case "tournament":
+    case "tournament_update":
       return <Trophy className="h-4 w-4 text-primary" />;
-    case "team":
+    case "team_invite":
       return <Users className="h-4 w-4 text-success" />;
+    case "match_result":
+      return <Swords className="h-4 w-4 text-warning" />;
     default:
       return <Bell className="h-4 w-4 text-muted-foreground" />;
   }
@@ -129,14 +131,22 @@ export function NotificationDropdown() {
   const deleteNotification = useDeleteNotification();
 
   const handleNotificationClick = (notification: Notification) => {
-    // Mark as read
     if (!notification.read) {
       markAsRead.mutate(notification.id);
     }
 
-    // Navigate based on notification type
-    if (notification.type === "rank_overtake" && notification.data?.overtaker_id) {
-      navigate(`/player/${notification.data.overtaker_id}`);
+    const data = notification.data as Record<string, unknown>;
+    switch (notification.type) {
+      case "rank_overtake":
+        if (data?.overtaker_id) navigate(`/player/${data.overtaker_id}`);
+        break;
+      case "team_invite":
+        if (data?.team_id) navigate(`/teams/${data.team_id}`);
+        break;
+      case "match_result":
+      case "tournament_update":
+        if (data?.tournament_id) navigate(`/tournaments/${data.tournament_id}`);
+        break;
     }
   };
 

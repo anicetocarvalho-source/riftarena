@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { NotificationDropdown } from "@/components/notifications/NotificationDropdown";
+import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { PercentileBadge } from "@/components/rankings/PercentileBadge";
 import {
   DropdownMenu,
@@ -25,6 +26,7 @@ export function Navbar() {
   const { t } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, profile, isLoading, isAdmin } = useAuth();
+  useRealtimeNotifications();
 
   const navLinks = [
     { href: "/tournaments", label: t("nav.tournaments") },
