@@ -966,6 +966,22 @@
       "message": "{{username}} passou-te no ranking de {{game}}"
     }
   },
+  "notificationsPage": {
+    "title": "Notificações",
+    "subtitle": "Histórico completo de todas as tuas notificações",
+    "empty": "Sem notificações",
+    "emptyDesc": "Quando receberes notificações de partidas, convites de equipa ou atualizações de torneios, elas aparecerão aqui.",
+    "emptyFiltered": "Sem notificações deste tipo. Tenta outro filtro.",
+    "markAsRead": "Marcar como lida",
+    "viewAll": "Ver todas",
+    "filter": {
+      "all": "Todas",
+      "team_invite": "Convites",
+      "match_result": "Partidas",
+      "tournament_update": "Torneios",
+      "rank_overtake": "Rankings"
+    }
+  },
   "rulesBuilder": {
    "tournamentStats": {
      "title": "Estatísticas do Torneio",

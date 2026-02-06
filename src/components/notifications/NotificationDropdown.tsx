@@ -217,6 +217,19 @@ export function NotificationDropdown() {
             </div>
           )}
         </ScrollArea>
+        {notifications.length > 0 && (
+          <>
+            <DropdownMenuSeparator />
+            <div className="p-1">
+              <DropdownMenuItem
+                className="justify-center text-xs text-muted-foreground cursor-pointer"
+                onClick={() => navigate("/notifications")}
+              >
+                {t("notificationsPage.viewAll")}
+              </DropdownMenuItem>
+            </div>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

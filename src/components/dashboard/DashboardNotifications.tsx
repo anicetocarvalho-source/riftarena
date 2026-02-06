@@ -148,6 +148,16 @@ export function DashboardNotifications() {
           ))}
         </AnimatePresence>
       </ScrollArea>
+      {notifications.length > 0 && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full mt-2 text-xs text-muted-foreground"
+          onClick={() => navigate("/notifications")}
+        >
+          {t("notificationsPage.viewAll")}
+        </Button>
+      )}
     </div>
   );
 }

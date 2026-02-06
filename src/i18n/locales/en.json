@@ -966,6 +966,22 @@
       "message": "{{username}} passed you in the {{game}} rankings"
     }
   },
+  "notificationsPage": {
+    "title": "Notifications",
+    "subtitle": "Complete history of all your notifications",
+    "empty": "No notifications",
+    "emptyDesc": "When you receive notifications about matches, team invites, or tournament updates, they will appear here.",
+    "emptyFiltered": "No notifications of this type. Try another filter.",
+    "markAsRead": "Mark as read",
+    "viewAll": "View all",
+    "filter": {
+      "all": "All",
+      "team_invite": "Invites",
+      "match_result": "Matches",
+      "tournament_update": "Tournaments",
+      "rank_overtake": "Rankings"
+    }
+  },
   "rulesBuilder": {
    "tournamentStats": {
      "title": "Tournament Statistics",
