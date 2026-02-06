@@ -19,10 +19,17 @@ import { useOnboarding } from "@/hooks/useOnboarding";
 import { useRivalOvertakeCelebration } from "@/hooks/useRivalOvertakeCelebration";
 import { 
   Trophy, Users, Gamepad2, Settings, 
-  Shield, BarChart3, Bell, Loader2
+  Shield, BarChart3, Bell
 } from "lucide-react";
 import { DashboardQuickStats } from "@/components/dashboard/DashboardQuickStats";
 import { DashboardMyTournaments } from "@/components/dashboard/DashboardMyTournaments";
+import {
+  DashboardHeaderSkeleton,
+  DashboardCardsSkeleton,
+  DashboardQuickStatsSkeleton,
+  DashboardContentSkeleton,
+  DashboardTeamsSkeleton,
+} from "@/components/skeletons/DashboardSkeleton";
 
 const Dashboard = () => {
   const { t } = useTranslation();
@@ -39,8 +46,18 @@ const Dashboard = () => {
 
   if (isLoading || onboardingLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen bg-background text-foreground">
+        <Navbar />
+        <main className="pt-24 pb-16">
+          <div className="container">
+            <DashboardHeaderSkeleton />
+            <DashboardCardsSkeleton />
+            <DashboardQuickStatsSkeleton />
+            <DashboardContentSkeleton />
+            <DashboardTeamsSkeleton />
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }
