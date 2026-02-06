@@ -12,8 +12,8 @@ import { Calendar, Search, Plus, X, ArrowUpDown, Trophy, Gamepad2 } from "lucide
 import { Input } from "@/components/ui/input";
 import { useTournaments, useGames } from "@/hooks/useTournaments";
 import { useAuth } from "@/contexts/AuthContext";
-import { Loader2 } from "lucide-react";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { TournamentGridSkeleton } from "@/components/skeletons/TournamentCardSkeleton";
 import {
   Select,
   SelectContent,
@@ -247,9 +247,7 @@ const Tournaments = () => {
 
           {/* Tournament Grid */}
           {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
+            <TournamentGridSkeleton />
           ) : transformedTournaments.length === 0 ? (
             hasActiveFilters ? (
               <EmptyState

@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { Users, UserPlus, LogOut, Eye, Crown, Loader2, UsersRound, Trophy } from "lucide-react";
+import { Users, UserPlus, LogOut, Eye, Crown, UsersRound, Trophy } from "lucide-react";
 import { useUserTeams, useUserInvites, useRespondToInvite, useLeaveTeam } from "@/hooks/useTeams";
 import { useAuth } from "@/contexts/AuthContext";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
@@ -66,8 +67,19 @@ export const MyTeamsSection = () => {
         </RiftCardHeader>
         <RiftCardContent>
           {isLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            <div className="grid gap-3 md:grid-cols-2">
+              {[1, 2].map((i) => (
+                <div key={i} className="flex items-center justify-between p-4 rounded-sm bg-secondary/30 border border-border">
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="h-12 w-12 rounded-full" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-28" />
+                      <Skeleton className="h-3 w-20" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-8 w-8 rounded" />
+                </div>
+              ))}
             </div>
           ) : (
             <div className="space-y-6">
