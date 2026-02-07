@@ -2,3 +2,9 @@ project_id = "hukjbusmnrzhwiizhodt"
 
 [functions.create-platform-managers]
 verify_jwt = false
+
+[functions.setup-push]
+verify_jwt = false
+
+[functions.send-push-notification]
+verify_jwt = false

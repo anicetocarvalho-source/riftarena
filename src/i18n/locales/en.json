@@ -268,7 +268,15 @@
     "endSession": "End Session",
     "endSessionDesc": "Sign out from your account on this device",
     "signOut": "Sign Out",
-    "preferenceUpdateError": "Error saving preference"
+    "preferenceUpdateError": "Error saving preference",
+    "pushNotifications": "Push Notifications",
+    "pushNotificationsDesc": "Receive alerts even when you're not in the app",
+    "pushEnabled": "Push notifications enabled",
+    "pushDisabled": "Push notifications disabled",
+    "pushNotSupported": "Your browser does not support push notifications",
+    "pushDenied": "Permission denied. Change in browser settings.",
+    "pushEnableError": "Error enabling push notifications",
+    "pushDisableError": "Error disabling push notifications"
   },
   "createTournament": {
     "title": "Create Tournament",
