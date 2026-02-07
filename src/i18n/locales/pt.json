@@ -584,7 +584,15 @@
     "win": "VITÓRIA",
     "loss": "DERROTA",
     "unlocked": "Desbloqueadas",
-    "locked": "Bloqueadas"
+    "locked": "Bloqueadas",
+    "bestStreak": "Melhor Streak",
+    "currentStreak": "Atual",
+    "avgPerMatch": "Média / Partida",
+    "gamesActive": "Jogos Ativos",
+    "completion": "Progresso",
+    "achievementsUnlocked": "Conquistas Desbloqueadas",
+    "teams": "Equipas",
+    "noTeams": "Ainda não faz parte de nenhuma equipa."
   },
   "tournamentDetail": {
     "notFound": "Torneio não encontrado",
