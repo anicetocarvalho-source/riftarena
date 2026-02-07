@@ -584,7 +584,15 @@
     "win": "WIN",
     "loss": "LOSS",
     "unlocked": "Unlocked",
-    "locked": "Locked"
+    "locked": "Locked",
+    "bestStreak": "Best Streak",
+    "currentStreak": "Current",
+    "avgPerMatch": "Avg / Match",
+    "gamesActive": "Games Active",
+    "completion": "Completion",
+    "achievementsUnlocked": "Achievements Unlocked",
+    "teams": "Teams",
+    "noTeams": "Not a member of any team yet."
   },
   "tournamentDetail": {
     "notFound": "Tournament not found",
