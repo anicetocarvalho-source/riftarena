@@ -6,6 +6,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useUserPreferences } from "@/hooks/useUserPreferences";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle, RiftCardDescription } from "@/components/ui/rift-card";
@@ -15,7 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Loader2, ArrowLeft, Settings as SettingsIcon, 
-  RefreshCw, User, Bell, Shield, Sparkles, LogOut
+  RefreshCw, User, Bell, BellRing, Shield, Sparkles, LogOut
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -36,6 +37,14 @@ const Settings = () => {
   const navigate = useNavigate();
   const [isResettingOnboarding, setIsResettingOnboarding] = useState(false);
   const { preferences, isLoading: prefsLoading, updatePreference } = useUserPreferences(user?.id);
+  const {
+    isSupported: pushSupported,
+    isSubscribed: pushSubscribed,
+    isLoading: pushLoading,
+    permission: pushPermission,
+    subscribe: subscribePush,
+    unsubscribe: unsubscribePush,
+  } = usePushNotifications();
 
   const handleResetOnboarding = async () => {
     if (!user) return;
@@ -273,6 +282,33 @@ const Settings = () => {
                     description={t('settings.teamInvitesDesc')}
                     prefKey="team_invites_notifications"
                   />
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <BellRing className="h-4 w-4 text-primary" />
+                        <p className="font-medium">{t('settings.pushNotifications')}</p>
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {t('settings.pushNotificationsDesc')}
+                      </p>
+                      {!pushSupported && (
+                        <p className="text-xs text-warning mt-1">{t('settings.pushNotSupported')}</p>
+                      )}
+                      {pushPermission === 'denied' && (
+                        <p className="text-xs text-destructive mt-1">{t('settings.pushDenied')}</p>
+                      )}
+                    </div>
+                    {pushLoading ? (
+                      <Skeleton className="h-6 w-11 rounded-full" />
+                    ) : (
+                      <Switch
+                        checked={pushSubscribed}
+                        onCheckedChange={(checked) => checked ? subscribePush() : unsubscribePush()}
+                        disabled={!pushSupported || pushPermission === 'denied'}
+                      />
+                    )}
+                  </div>
                 </RiftCardContent>
               </RiftCard>
 

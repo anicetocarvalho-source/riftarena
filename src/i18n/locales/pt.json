@@ -268,7 +268,15 @@
     "endSession": "Terminar Sessão",
     "endSessionDesc": "Sair da tua conta neste dispositivo",
     "signOut": "Sair",
-    "preferenceUpdateError": "Erro ao guardar preferência"
+    "preferenceUpdateError": "Erro ao guardar preferência",
+    "pushNotifications": "Notificações Push",
+    "pushNotificationsDesc": "Receber alertas mesmo quando não estás na aplicação",
+    "pushEnabled": "Notificações push ativadas",
+    "pushDisabled": "Notificações push desativadas",
+    "pushNotSupported": "O teu browser não suporta notificações push",
+    "pushDenied": "Permissão negada. Altera nas definições do browser.",
+    "pushEnableError": "Erro ao ativar notificações push",
+    "pushDisableError": "Erro ao desativar notificações push"
   },
   "createTournament": {
     "title": "Criar Torneio",
