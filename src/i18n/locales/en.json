@@ -235,6 +235,8 @@
     "createTournamentDesc": "Set up a new competition",
     "manageTournaments": "Manage Tournaments",
     "manageTournamentsDesc": "Edit existing events",
+    "viewStatistics": "View Statistics",
+    "viewStatisticsDesc": "Tournament metrics and performance",
     "matchResults": "Match Results",
     "matchResultsDesc": "Validate and submit scores",
     "sponsorDashboard": "Sponsor Dashboard",

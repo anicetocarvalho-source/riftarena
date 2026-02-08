@@ -221,7 +221,7 @@ const Dashboard = () => {
                   </RiftCardTitle>
                 </RiftCardHeader>
                 <RiftCardContent>
-                  <div className="grid gap-4 md:grid-cols-2">
+                  <div className="grid gap-4 md:grid-cols-3">
                     <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/tournaments/create")}>
                       <div className="text-left">
                         <p className="font-display uppercase tracking-wider">{t('dashboard.createTournament')}</p>
@@ -235,6 +235,14 @@ const Dashboard = () => {
                         <p className="font-display uppercase tracking-wider">{t('dashboard.manageTournaments')}</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
                           {t('dashboard.manageTournamentsDesc')}
+                        </p>
+                      </div>
+                    </Button>
+                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/admin/analytics")}>
+                      <div className="text-left">
+                        <p className="font-display uppercase tracking-wider">{t('dashboard.viewStatistics')}</p>
+                        <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
+                          {t('dashboard.viewStatisticsDesc')}
                         </p>
                       </div>
                     </Button>

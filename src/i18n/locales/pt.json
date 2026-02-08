@@ -235,6 +235,8 @@
     "createTournamentDesc": "Configurar uma nova competição",
     "manageTournaments": "Gerir Torneios",
     "manageTournamentsDesc": "Editar eventos existentes",
+    "viewStatistics": "Ver Estatísticas",
+    "viewStatisticsDesc": "Métricas e desempenho dos torneios",
     "matchResults": "Resultados de Partidas",
     "matchResultsDesc": "Validar e submeter pontuações",
     "sponsorDashboard": "Dashboard de Sponsor",
