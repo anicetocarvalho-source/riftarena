@@ -113,7 +113,7 @@ export function Navbar() {
                 <Link to="/dashboard">
                   <Button variant="rift" className="gap-2">
                     <User className="h-4 w-4" />
-                    {profile?.username || "Dashboard"}
+                    {profile?.username || t('dashboard.title')}
                   </Button>
                 </Link>
               ) : (
@@ -195,7 +195,7 @@ export function Navbar() {
                     <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
                       <Button variant="rift" className="w-full gap-2">
                         <User className="h-4 w-4" />
-                        {profile?.username || "Dashboard"}
+                        {profile?.username || t('dashboard.title')}
                       </Button>
                     </Link>
                   </>

@@ -80,7 +80,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <SEOHead title="Dashboard" noIndex />
+      <SEOHead title={t('dashboard.title')} noIndex />
       {/* Onboarding Wizard */}
       <AnimatePresence>
         {showOnboarding && (

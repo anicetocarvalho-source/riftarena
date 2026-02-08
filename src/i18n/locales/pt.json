@@ -404,7 +404,11 @@
     "addFirstGame": "Adicionar Primeiro Jogo",
     "noDescription": "Sem descrição",
     "added": "Adicionado",
-    "gamesRegistered": "jogo(s) registado(s) na plataforma"
+    "gamesRegistered": "jogo(s) registado(s) na plataforma",
+    "userManagementTitle": "Gestão de Utilizadores",
+    "userManagementSubtitle": "Gerir utilizadores da plataforma e atribuir funções. Apenas admins podem aceder a esta página.",
+    "adminRevokeWarning": "Aviso: Isto irá revogar os seus privilégios de administrador.",
+    "loadError": "Falha ao carregar utilizadores"
   },
   "common": {
     "loading": "A carregar...",
@@ -894,7 +898,17 @@
     "twitchPlaceholder": "Nome de utilizador Twitch",
     "cancel": "Cancelar",
     "saveChanges": "Guardar Alterações",
-    "saving": "A guardar..."
+    "saving": "A guardar...",
+    "validation": {
+      "usernameMin": "O nome de utilizador deve ter pelo menos 3 caracteres",
+      "usernameMax": "O nome de utilizador não pode exceder 50 caracteres",
+      "bioMax": "A bio não pode exceder 500 caracteres",
+      "cityMax": "A cidade não pode exceder 100 caracteres",
+      "countryMax": "O país não pode exceder 100 caracteres",
+      "discordMax": "O username do Discord não pode exceder 50 caracteres",
+      "twitterMax": "O username do X não pode exceder 50 caracteres",
+      "twitchMax": "O username do Twitch não pode exceder 50 caracteres"
+    }
   },
   "sponsorDashboard": {
     "title": "Sponsor Dashboard",
@@ -1106,5 +1120,22 @@
     "positions": "posições",
     "standard": "Padrão",
     "even": "Igual"
+  },
+  "setupAdmin": {
+    "title": "Configuração Admin",
+    "adminExists": "Já existe um administrador nesta plataforma.",
+    "contactAdmin": "Contacta um administrador existente para obteres privilégios de admin.",
+    "goToDashboard": "Ir para o Dashboard",
+    "noAdminYet": "Ainda não existe admin!",
+    "claimAdmin": "Como primeiro utilizador, podes reclamar o papel de admin para gerir a plataforma.",
+    "abilities": "Poderás:",
+    "manageUsers": "Gerir todos os utilizadores da plataforma",
+    "assignRoles": "Atribuir funções (Organizador, Sponsor, Admin)",
+    "overseeTournaments": "Supervisionar todos os torneios",
+    "accessAnalytics": "Aceder às analíticas da plataforma",
+    "promoting": "A promover...",
+    "becomeAdmin": "Tornar-me Admin",
+    "promotedSuccess": "Agora és administrador!",
+    "promotedError": "Falha ao promover a admin"
   }
 }

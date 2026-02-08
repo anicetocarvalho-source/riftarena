@@ -404,7 +404,11 @@
     "addFirstGame": "Add First Game",
     "noDescription": "No description",
     "added": "Added",
-    "gamesRegistered": "game(s) registered on the platform"
+    "gamesRegistered": "game(s) registered on the platform",
+    "userManagementTitle": "User Management",
+    "userManagementSubtitle": "Manage platform users and assign roles. Only admins can access this page.",
+    "adminRevokeWarning": "Warning: This will revoke their admin privileges.",
+    "loadError": "Failed to load users"
   },
   "common": {
     "loading": "Loading...",
@@ -894,7 +898,17 @@
     "twitchPlaceholder": "Twitch username",
     "cancel": "Cancel",
     "saveChanges": "Save Changes",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "validation": {
+      "usernameMin": "Username must be at least 3 characters",
+      "usernameMax": "Username cannot exceed 50 characters",
+      "bioMax": "Bio cannot exceed 500 characters",
+      "cityMax": "City cannot exceed 100 characters",
+      "countryMax": "Country cannot exceed 100 characters",
+      "discordMax": "Discord username cannot exceed 50 characters",
+      "twitterMax": "X username cannot exceed 50 characters",
+      "twitchMax": "Twitch username cannot exceed 50 characters"
+    }
   },
   "sponsorDashboard": {
     "title": "Sponsor Dashboard",
@@ -1106,5 +1120,22 @@
     "positions": "positions",
     "standard": "Standard",
     "even": "Even"
+  },
+  "setupAdmin": {
+    "title": "Admin Setup",
+    "adminExists": "An admin already exists on this platform.",
+    "contactAdmin": "Contact an existing admin to be granted admin privileges.",
+    "goToDashboard": "Go to Dashboard",
+    "noAdminYet": "No admin exists yet!",
+    "claimAdmin": "As the first user, you can claim the admin role to manage the platform.",
+    "abilities": "You will be able to:",
+    "manageUsers": "Manage all platform users",
+    "assignRoles": "Assign roles (Organizer, Sponsor, Admin)",
+    "overseeTournaments": "Oversee all tournaments",
+    "accessAnalytics": "Access platform analytics",
+    "promoting": "Promoting...",
+    "becomeAdmin": "Become Admin",
+    "promotedSuccess": "You are now an admin!",
+    "promotedError": "Failed to promote to admin"
   }
 }
