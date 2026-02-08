@@ -8,6 +8,7 @@ import Rankings from "@/pages/Rankings";
 import Games from "@/pages/Games";
 import Sponsors from "@/pages/Sponsors";
 import Auth from "@/pages/Auth";
+import ResetPassword from "@/pages/ResetPassword";
 import Dashboard from "@/pages/Dashboard";
 import SponsorDashboard from "@/pages/SponsorDashboard";
 import TournamentDetail from "@/pages/TournamentDetail";
@@ -47,6 +48,7 @@ export function AnimatedRoutes() {
         <Route path="/teams/:id" element={<PageTransition><TeamDetail /></PageTransition>} />
         <Route path="/sponsors" element={<PageTransition><Sponsors /></PageTransition>} />
         <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
+        <Route path="/auth/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
         <Route path="/dashboard" element={<PageTransition><Dashboard /></PageTransition>} />
         <Route path="/sponsor/dashboard" element={<PageTransition><SponsorDashboard /></PageTransition>} />
         <Route path="/admin/users" element={<PageTransition><AdminUsers /></PageTransition>} />

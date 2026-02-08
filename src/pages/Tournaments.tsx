@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
@@ -23,7 +25,7 @@ import {
 } from "@/components/ui/select";
 
 const Tournaments = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { isOrganizer, isAdmin, user } = useAuth();
@@ -121,6 +123,25 @@ const Tournaments = () => {
   const hasActiveFilters = selectedGame !== "all" || selectedStatus !== "all" || searchTerm !== "" || sortBy !== "date_desc";
 
   // Transform database tournaments to match TournamentCard format
+  // Fetch registration counts for all tournaments
+  const { data: registrationCounts } = useQuery({
+    queryKey: ["tournament-registration-counts"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("tournament_registrations")
+        .select("tournament_id")
+        .in("status", ["confirmed", "pending"]);
+      
+      if (error) throw error;
+      
+      const counts: Record<string, number> = {};
+      data?.forEach(reg => {
+        counts[reg.tournament_id] = (counts[reg.tournament_id] || 0) + 1;
+      });
+      return counts;
+    },
+  });
+
   const transformedTournaments = filteredTournaments.map(t => ({
     id: t.id,
     name: t.name,
@@ -128,15 +149,14 @@ const Tournaments = () => {
     gameIcon: t.game?.icon || "🎮",
     status: t.status as "live" | "upcoming" | "completed",
     prizePool: `$${t.prize_pool.toLocaleString()}`,
-    participants: 0, // Will be fetched separately if needed
+    participants: registrationCounts?.[t.id] || 0,
     maxParticipants: t.max_participants,
-    date: new Date(t.start_date).toLocaleDateString("en-US", { 
+    date: new Date(t.start_date).toLocaleDateString(i18n.language === "pt" ? "pt-PT" : "en-US", { 
       month: "short", 
       day: "numeric", 
       year: "numeric" 
     }),
     sponsor: undefined,
-    // Admin can manage all tournaments, organizer can manage their own
     canManage: isAdmin || t.organizer_id === user?.id,
   }));
 
@@ -232,10 +252,6 @@ const Tournaments = () => {
                   <SelectItem value="participants_asc">👥 {t('tournaments.sizeSmall')}</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="rift-outline" size="default">
-                <Calendar className="mr-2 h-4 w-4" />
-                {t('tournaments.date')}
-              </Button>
               {hasActiveFilters && (
                 <Button variant="ghost" size="default" onClick={clearFilters}>
                   <X className="mr-2 h-4 w-4" />
