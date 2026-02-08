@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -49,6 +50,7 @@ interface UserWithRoles {
 const AVAILABLE_ROLES: AppRole[] = ["player", "organizer", "sponsor", "admin"];
 
 const AdminUsers = () => {
+  const { t } = useTranslation();
   const { user, isLoading: authLoading, isAdmin } = useAuth();
   const navigate = useNavigate();
   
@@ -68,16 +70,15 @@ const AdminUsers = () => {
   // Check admin access
   useEffect(() => {
     if (!authLoading && (!user || !isAdmin)) {
-      toast.error("Access denied. Admin privileges required.");
+      toast.error(t('admin.accessDenied'));
       navigate("/dashboard");
     }
-  }, [user, authLoading, isAdmin, navigate]);
+  }, [user, authLoading, isAdmin, navigate, t]);
 
   // Fetch all users
   const fetchUsers = async () => {
     setIsLoading(true);
     
-    // First get all profiles
     const { data: profiles, error: profilesError } = await supabase
       .from("profiles")
       .select("*")
@@ -85,12 +86,11 @@ const AdminUsers = () => {
 
     if (profilesError) {
       console.error("Error fetching profiles:", profilesError);
-      toast.error("Failed to load users");
+      toast.error(t('admin.loadError'));
       setIsLoading(false);
       return;
     }
 
-    // Then get all roles for each user
     const usersWithRoles: UserWithRoles[] = await Promise.all(
       (profiles || []).map(async (profile) => {
         const { data: roles } = await supabase
@@ -120,7 +120,6 @@ const AdminUsers = () => {
   useEffect(() => {
     let filtered = users;
 
-    // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
@@ -131,7 +130,6 @@ const AdminUsers = () => {
       );
     }
 
-    // Role filter
     if (roleFilter !== "all") {
       filtered = filtered.filter((u) => u.roles.includes(roleFilter));
     }
@@ -149,13 +147,13 @@ const AdminUsers = () => {
 
     if (error) {
       if (error.code === "23505") {
-        toast.error("User already has this role");
+        toast.error(t('admin.roleExists'));
       } else {
         console.error("Error adding role:", error);
-        toast.error("Failed to add role");
+        toast.error(t('admin.roleAddError'));
       }
     } else {
-      toast.success(`Role "${role}" added successfully`);
+      toast.success(t('admin.roleAdded', { role }));
       fetchUsers();
     }
 
@@ -175,9 +173,9 @@ const AdminUsers = () => {
 
     if (error) {
       console.error("Error removing role:", error);
-      toast.error("Failed to remove role");
+      toast.error(t('admin.roleRemoveError'));
     } else {
-      toast.success(`Role "${role}" removed successfully`);
+      toast.success(t('admin.roleRemoved', { role }));
       fetchUsers();
     }
 
@@ -217,11 +215,11 @@ const AdminUsers = () => {
             <div className="flex items-center gap-3 mb-2">
               <Shield className="h-8 w-8 text-destructive" />
               <h1 className="font-display text-3xl font-bold uppercase tracking-wide">
-                User Management
+                {t('admin.userManagementTitle')}
               </h1>
             </div>
             <p className="text-muted-foreground">
-              Manage platform users and assign roles. Only admins can access this page.
+              {t('admin.userManagementSubtitle')}
             </p>
           </motion.div>
 
@@ -237,7 +235,7 @@ const AdminUsers = () => {
                 <Users className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-2xl font-display font-bold">{users.length}</p>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider">Total Users</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider">{t('admin.totalUsers')}</p>
                 </div>
               </RiftCardContent>
             </RiftCard>
@@ -265,7 +263,7 @@ const AdminUsers = () => {
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by username, country, or ID..."
+                placeholder={t('admin.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 bg-secondary border-border"
@@ -277,7 +275,7 @@ const AdminUsers = () => {
                 size="sm"
                 onClick={() => setRoleFilter("all")}
               >
-                All
+                {t('admin.all')}
               </Button>
               {AVAILABLE_ROLES.map((role) => (
                 <Button
@@ -301,7 +299,7 @@ const AdminUsers = () => {
             <RiftCard>
               <RiftCardHeader>
                 <RiftCardTitle>
-                  Users ({filteredUsers.length})
+                  {t('admin.users')} ({filteredUsers.length})
                 </RiftCardTitle>
               </RiftCardHeader>
               <RiftCardContent className="p-0">
@@ -312,7 +310,7 @@ const AdminUsers = () => {
                 ) : filteredUsers.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-12 text-center">
                     <Users className="h-12 w-12 text-muted-foreground/50 mb-4" />
-                    <p className="text-muted-foreground">No users found</p>
+                    <p className="text-muted-foreground">{t('admin.noUsersFound')}</p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
@@ -320,19 +318,19 @@ const AdminUsers = () => {
                       <thead>
                         <tr className="border-b border-border bg-secondary/50">
                           <th className="px-4 py-3 text-left text-xs font-display uppercase tracking-wider text-muted-foreground">
-                            User
+                            {t('admin.user')}
                           </th>
                           <th className="px-4 py-3 text-left text-xs font-display uppercase tracking-wider text-muted-foreground">
-                            Location
+                            {t('admin.location')}
                           </th>
                           <th className="px-4 py-3 text-left text-xs font-display uppercase tracking-wider text-muted-foreground">
-                            Roles
+                            {t('admin.roles')}
                           </th>
                           <th className="px-4 py-3 text-left text-xs font-display uppercase tracking-wider text-muted-foreground">
-                            Joined
+                            {t('admin.joined')}
                           </th>
                           <th className="px-4 py-3 text-right text-xs font-display uppercase tracking-wider text-muted-foreground">
-                            Actions
+                            {t('admin.actions')}
                           </th>
                         </tr>
                       </thead>
@@ -380,7 +378,7 @@ const AdminUsers = () => {
                                     </Badge>
                                   ))
                                 ) : (
-                                  <span className="text-xs text-muted-foreground">No roles</span>
+                                  <span className="text-xs text-muted-foreground">{t('admin.noRoles')}</span>
                                 )}
                               </div>
                             </td>
@@ -393,13 +391,13 @@ const AdminUsers = () => {
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                   <Button variant="rift-outline" size="sm">
-                                    Manage Roles
+                                    {t('admin.manageRoles')}
                                     <ChevronDown className="ml-2 h-3 w-3" />
                                   </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-48">
                                   <div className="px-2 py-1.5 text-xs font-display uppercase tracking-wider text-muted-foreground">
-                                    Add Role
+                                    {t('admin.addRole')}
                                   </div>
                                   {AVAILABLE_ROLES.filter((role) => !u.roles.includes(role)).map((role) => (
                                     <DropdownMenuItem
@@ -415,14 +413,14 @@ const AdminUsers = () => {
                                       className="cursor-pointer"
                                     >
                                       <UserPlus className="mr-2 h-4 w-4 text-success" />
-                                      Add {role}
+                                      {t('admin.add')} {role}
                                     </DropdownMenuItem>
                                   ))}
                                   {u.roles.length > 0 && (
                                     <>
                                       <DropdownMenuSeparator />
                                       <div className="px-2 py-1.5 text-xs font-display uppercase tracking-wider text-muted-foreground">
-                                        Remove Role
+                                        {t('admin.removeRole')}
                                       </div>
                                       {u.roles.map((role) => (
                                         <DropdownMenuItem
@@ -438,7 +436,7 @@ const AdminUsers = () => {
                                           className="cursor-pointer text-destructive focus:text-destructive"
                                         >
                                           <UserMinus className="mr-2 h-4 w-4" />
-                                          Remove {role}
+                                          {t('admin.remove')} {role}
                                         </DropdownMenuItem>
                                       ))}
                                     </>
@@ -469,19 +467,19 @@ const AdminUsers = () => {
               ) : (
                 <AlertTriangle className="h-5 w-5 text-destructive" />
               )}
-              {pendingAction?.type === "add" ? "Add Role" : "Remove Role"}
+              {pendingAction?.type === "add" ? t('admin.addRole') : t('admin.removeRole')}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {pendingAction?.type === "add" ? (
                 <>
-                  Are you sure you want to add the <Badge variant={getRoleBadgeVariant(pendingAction.role)}>{pendingAction.role}</Badge> role to <strong>{pendingAction.username}</strong>?
+                  {t('admin.confirmAddRoleDesc', { role: pendingAction.role, username: pendingAction.username })}
                 </>
               ) : (
                 <>
-                  Are you sure you want to remove the <Badge variant={getRoleBadgeVariant(pendingAction?.role || "player")}>{pendingAction?.role}</Badge> role from <strong>{pendingAction?.username}</strong>?
+                  {t('admin.confirmRemoveRoleDesc', { role: pendingAction?.role, username: pendingAction?.username })}
                   {pendingAction?.role === "admin" && (
                     <span className="block mt-2 text-destructive">
-                      Warning: This will revoke their admin privileges.
+                      {t('admin.adminRevokeWarning')}
                     </span>
                   )}
                 </>
@@ -489,7 +487,7 @@ const AdminUsers = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={actionLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={actionLoading}>{t('common.cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 if (pendingAction) {
@@ -508,12 +506,12 @@ const AdminUsers = () => {
               ) : pendingAction?.type === "add" ? (
                 <>
                   <Check className="mr-2 h-4 w-4" />
-                  Add Role
+                  {t('admin.addRole')}
                 </>
               ) : (
                 <>
                   <X className="mr-2 h-4 w-4" />
-                  Remove Role
+                  {t('admin.removeRole')}
                 </>
               )}
             </AlertDialogAction>

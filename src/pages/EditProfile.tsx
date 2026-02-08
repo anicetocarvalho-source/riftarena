@@ -16,14 +16,15 @@ import { Loader2, Camera, Save, ArrowLeft, User } from "lucide-react";
 import { SiDiscord, SiX, SiTwitch } from "@icons-pack/react-simple-icons";
 import { z } from "zod";
 
-const editProfileSchema = z.object({
-  username: z.string().trim().min(3, "Nome de utilizador deve ter pelo menos 3 caracteres").max(50, "Nome de utilizador não pode exceder 50 caracteres"),
-  bio: z.string().max(500, "Bio não pode exceder 500 caracteres").optional(),
-  city: z.string().max(100, "Cidade não pode exceder 100 caracteres").optional(),
-  country: z.string().max(100, "País não pode exceder 100 caracteres").optional(),
-  discord_username: z.string().max(50, "Username do Discord não pode exceder 50 caracteres").optional(),
-  twitter_username: z.string().max(50, "Username do X não pode exceder 50 caracteres").optional(),
-  twitch_username: z.string().max(50, "Username do Twitch não pode exceder 50 caracteres").optional(),
+// Validation schema factory using i18n
+const getEditProfileSchema = (t: (key: string) => string) => z.object({
+  username: z.string().trim().min(3, t('editProfile.validation.usernameMin')).max(50, t('editProfile.validation.usernameMax')),
+  bio: z.string().max(500, t('editProfile.validation.bioMax')).optional(),
+  city: z.string().max(100, t('editProfile.validation.cityMax')).optional(),
+  country: z.string().max(100, t('editProfile.validation.countryMax')).optional(),
+  discord_username: z.string().max(50, t('editProfile.validation.discordMax')).optional(),
+  twitter_username: z.string().max(50, t('editProfile.validation.twitterMax')).optional(),
+  twitch_username: z.string().max(50, t('editProfile.validation.twitchMax')).optional(),
 });
 
 const EditProfile = () => {
@@ -83,7 +84,7 @@ const EditProfile = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormErrors({});
-
+    const editProfileSchema = getEditProfileSchema(t);
     const validation = editProfileSchema.safeParse({
       username: username.trim(),
       bio: bio.trim(),

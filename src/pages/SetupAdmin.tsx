@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,6 +10,7 @@ import { Shield, Loader2, CheckCircle, XCircle, ArrowRight } from "lucide-react"
 import { toast } from "sonner";
 
 const SetupAdmin = () => {
+  const { t } = useTranslation();
   const { user, isLoading, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [isChecking, setIsChecking] = useState(true);
@@ -31,12 +33,10 @@ const SetupAdmin = () => {
   const checkAdminExists = async () => {
     setIsChecking(true);
     
-    // Check if any admin exists by calling the RPC
     const { data, error } = await supabase.rpc("get_user_roles", {
-      _user_id: "00000000-0000-0000-0000-000000000000", // Dummy ID to trigger function
+      _user_id: "00000000-0000-0000-0000-000000000000",
     });
     
-    // Actually, let's check via a different approach - count admins via profiles
     const { count } = await supabase
       .from("user_roles")
       .select("*", { count: "exact", head: true })
@@ -57,10 +57,9 @@ const SetupAdmin = () => {
 
     if (error) {
       console.error("Error promoting to admin:", error);
-      toast.error(error.message || "Failed to promote to admin");
+      toast.error(error.message || t('setupAdmin.promotedError'));
     } else {
-      toast.success("You are now an admin!");
-      // Refresh auth state
+      toast.success(t('setupAdmin.promotedSuccess'));
       window.location.href = "/admin/users";
     }
 
@@ -92,7 +91,7 @@ const SetupAdmin = () => {
           <div className="mt-8 mb-6">
             <Shield className="h-16 w-16 mx-auto text-primary mb-4" />
             <h1 className="font-display text-2xl font-bold uppercase tracking-wide">
-              Admin Setup
+              {t('setupAdmin.title')}
             </h1>
           </div>
 
@@ -100,13 +99,13 @@ const SetupAdmin = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-center gap-2 text-muted-foreground">
                 <XCircle className="h-5 w-5 text-destructive" />
-                <p>An admin already exists on this platform.</p>
+                <p>{t('setupAdmin.adminExists')}</p>
               </div>
               <p className="text-sm text-muted-foreground">
-                Contact an existing admin to be granted admin privileges.
+                {t('setupAdmin.contactAdmin')}
               </p>
               <Button variant="rift-outline" onClick={() => navigate("/dashboard")}>
-                Go to Dashboard
+                {t('setupAdmin.goToDashboard')}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
@@ -114,18 +113,18 @@ const SetupAdmin = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-center gap-2 text-success">
                 <CheckCircle className="h-5 w-5" />
-                <p>No admin exists yet!</p>
+                <p>{t('setupAdmin.noAdminYet')}</p>
               </div>
               <p className="text-sm text-muted-foreground">
-                As the first user, you can claim the admin role to manage the platform.
+                {t('setupAdmin.claimAdmin')}
               </p>
               <div className="p-4 rounded-sm bg-secondary/50 border border-border text-left">
-                <p className="text-xs text-muted-foreground mb-2">You will be able to:</p>
+                <p className="text-xs text-muted-foreground mb-2">{t('setupAdmin.abilities')}</p>
                 <ul className="text-xs text-muted-foreground space-y-1">
-                  <li>• Manage all platform users</li>
-                  <li>• Assign roles (Organizer, Sponsor, Admin)</li>
-                  <li>• Oversee all tournaments</li>
-                  <li>• Access platform analytics</li>
+                  <li>• {t('setupAdmin.manageUsers')}</li>
+                  <li>• {t('setupAdmin.assignRoles')}</li>
+                  <li>• {t('setupAdmin.overseeTournaments')}</li>
+                  <li>• {t('setupAdmin.accessAnalytics')}</li>
                 </ul>
               </div>
               <Button
@@ -138,12 +137,12 @@ const SetupAdmin = () => {
                 {isPromoting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Promoting...
+                    {t('setupAdmin.promoting')}
                   </>
                 ) : (
                   <>
                     <Shield className="mr-2 h-4 w-4" />
-                    Become Admin
+                    {t('setupAdmin.becomeAdmin')}
                   </>
                 )}
               </Button>
