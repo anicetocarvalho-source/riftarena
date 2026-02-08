@@ -307,7 +307,7 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </Button>
-                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/tournaments")}>
+                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/admin/games")}>
                       <div className="text-left">
                         <p className="font-display uppercase tracking-wider">{t('dashboard.allTournaments')}</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
@@ -315,7 +315,7 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </Button>
-                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/sponsors")}>
+                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/admin/sponsors")}>
                       <div className="text-left">
                         <p className="font-display uppercase tracking-wider">{t('dashboard.sponsorManagement')}</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
@@ -323,7 +323,7 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </Button>
-                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/rankings")}>
+                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/admin/analytics")}>
                       <div className="text-left">
                         <p className="font-display uppercase tracking-wider">{t('dashboard.platformAnalytics')}</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">

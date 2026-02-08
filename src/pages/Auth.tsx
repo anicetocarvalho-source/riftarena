@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RiftLogo } from "@/components/brand/RiftLogo";
@@ -40,25 +41,25 @@ const COUNTRIES = [
   "Vietnam", "Zambia", "Zimbabwe"
 ];
 
-const signUpSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string().min(1, "Please confirm your password"),
-  username: z.string().min(3, "Username must be at least 3 characters").max(20, "Username must be at most 20 characters"),
-  country: z.string().min(2, "Please select your country"),
+const getSignUpSchema = (t: (key: string) => string) => z.object({
+  email: z.string().email(t('auth.validation.emailInvalid')),
+  password: z.string().min(8, t('auth.validation.passwordMin')),
+  confirmPassword: z.string().min(1, t('auth.validation.confirmRequired')),
+  username: z.string().min(3, t('auth.validation.usernameMin')).max(20, t('auth.validation.usernameMax')),
+  country: z.string().min(2, t('auth.validation.countryRequired')),
 }).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
+  message: t('auth.validation.passwordsMismatch'),
   path: ["confirmPassword"],
 });
 
-const signInSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(1, "Please enter your password"),
+const getSignInSchema = (t: (key: string) => string) => z.object({
+  email: z.string().email(t('auth.validation.emailInvalid')),
+  password: z.string().min(1, t('auth.validation.passwordRequired')),
 });
 
 const Auth = () => {
   const { t } = useTranslation();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -70,9 +71,35 @@ const Auth = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showCelebration, setShowCelebration] = useState(false);
   const [registeredUsername, setRegisteredUsername] = useState("");
+  const [resetSent, setResetSent] = useState(false);
 
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+    
+    if (!email || !z.string().email().safeParse(email).success) {
+      setErrors({ email: t('auth.validation.emailInvalid') });
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/reset-password`,
+    });
+    
+    if (error) {
+      toast.error(error.message);
+    } else {
+      setResetSent(true);
+      toast.success(t('auth.resetEmailSent'));
+    }
+    
+    setIsLoading(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +108,7 @@ const Auth = () => {
 
     try {
       if (mode === "signup") {
-        const validation = signUpSchema.safeParse({ email, password, confirmPassword, username, country });
+        const validation = getSignUpSchema(t).safeParse({ email, password, confirmPassword, username, country });
         if (!validation.success) {
           const fieldErrors: Record<string, string> = {};
           validation.error.errors.forEach((err) => {
@@ -110,7 +137,7 @@ const Auth = () => {
         setShowCelebration(true);
         setIsLoading(false);
       } else {
-        const validation = signInSchema.safeParse({ email, password });
+        const validation = getSignInSchema(t).safeParse({ email, password });
         if (!validation.success) {
           const fieldErrors: Record<string, string> = {};
           validation.error.errors.forEach((err) => {
@@ -192,162 +219,262 @@ const Auth = () => {
           </div>
 
           {/* Mode Toggle */}
-          <div className="flex gap-2 mb-8">
-            <button
-              onClick={() => setMode("signin")}
-              className={`flex-1 py-3 font-display text-sm uppercase tracking-wider rounded-sm border transition-all ${
-                mode === "signin"
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-transparent text-muted-foreground border-border hover:border-primary/50"
-              }`}
-            >
-              {t('auth.signIn')}
-            </button>
-            <button
-              onClick={() => setMode("signup")}
-              className={`flex-1 py-3 font-display text-sm uppercase tracking-wider rounded-sm border transition-all ${
-                mode === "signup"
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-transparent text-muted-foreground border-border hover:border-primary/50"
-              }`}
-            >
-              {t('auth.signUp')}
-            </button>
-          </div>
+          {mode !== "forgot" && (
+            <div className="flex gap-2 mb-8">
+              <button
+                onClick={() => setMode("signin")}
+                className={`flex-1 py-3 font-display text-sm uppercase tracking-wider rounded-sm border transition-all ${
+                  mode === "signin"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-transparent text-muted-foreground border-border hover:border-primary/50"
+                }`}
+              >
+                {t('auth.signIn')}
+              </button>
+              <button
+                onClick={() => setMode("signup")}
+                className={`flex-1 py-3 font-display text-sm uppercase tracking-wider rounded-sm border transition-all ${
+                  mode === "signup"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-transparent text-muted-foreground border-border hover:border-primary/50"
+                }`}
+              >
+                {t('auth.signUp')}
+              </button>
+            </div>
+          )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {mode === "signup" && (
-              <>
+          {/* Forgot Password Mode */}
+          {mode === "forgot" ? (
+            <div className="space-y-4">
+              <div className="text-center mb-4">
+                <h2 className="font-display text-lg font-bold uppercase tracking-wide">
+                  {t('auth.resetPassword')}
+                </h2>
+                <p className="text-sm text-muted-foreground mt-2">
+                  {t('auth.resetPasswordDesc')}
+                </p>
+              </div>
+
+              {resetSent ? (
+                <div className="text-center space-y-4">
+                  <div className="p-4 rounded-sm bg-success/10 border border-success/20">
+                    <Mail className="h-8 w-8 text-success mx-auto mb-2" />
+                    <p className="text-sm text-foreground font-medium">{t('auth.resetEmailSent')}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t('auth.checkInbox')}</p>
+                  </div>
+                  <Button
+                    variant="rift-outline"
+                    className="w-full"
+                    onClick={() => { setMode("signin"); setResetSent(false); }}
+                  >
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    {t('auth.backToSignIn')}
+                  </Button>
+                </div>
+              ) : (
+                <form onSubmit={handleForgotPassword} className="space-y-4">
+                  <div>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="email"
+                        placeholder={t('auth.email')}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="pl-10 bg-secondary border-border"
+                      />
+                    </div>
+                    {errors.email && (
+                      <p className="mt-1 text-xs text-destructive">{errors.email}</p>
+                    )}
+                  </div>
+
+                  <Button
+                    type="submit"
+                    variant="rift"
+                    className="w-full"
+                    size="lg"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        {t('auth.sending')}
+                      </>
+                    ) : (
+                      t('auth.sendResetLink')
+                    )}
+                  </Button>
+
+                  <button
+                    type="button"
+                    onClick={() => setMode("signin")}
+                    className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <ArrowLeft className="inline mr-1 h-3 w-3" />
+                    {t('auth.backToSignIn')}
+                  </button>
+                </form>
+              )}
+            </div>
+          ) : (
+            <>
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {mode === "signup" && (
+                  <>
+                    <div>
+                      <div className="relative">
+                        <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          type="text"
+                          placeholder={t('auth.usernamePlaceholder')}
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          className="pl-10 bg-secondary border-border"
+                        />
+                      </div>
+                      {errors.username && (
+                        <p className="mt-1 text-xs text-destructive">{errors.username}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <div className="relative">
+                        <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
+                        <Select value={country} onValueChange={setCountry}>
+                          <SelectTrigger className="pl-10 bg-secondary border-border [&>span]:truncate">
+                            <SelectValue placeholder={t('auth.selectCountry')} />
+                          </SelectTrigger>
+                          <SelectContent 
+                            className="max-h-[300px] bg-card border-border z-50"
+                            position="popper"
+                            sideOffset={4}
+                          >
+                            {COUNTRIES.map((c) => (
+                              <SelectItem key={c} value={c}>
+                                {c}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      {errors.country && (
+                        <p className="mt-1 text-xs text-destructive">{errors.country}</p>
+                      )}
+                    </div>
+                  </>
+                )}
+
                 <div>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
-                      type="text"
-                      placeholder={t('auth.usernamePlaceholder')}
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
+                      type="email"
+                      placeholder={t('auth.email')}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="pl-10 bg-secondary border-border"
                     />
                   </div>
-                  {errors.username && (
-                    <p className="mt-1 text-xs text-destructive">{errors.username}</p>
+                  {errors.email && (
+                    <p className="mt-1 text-xs text-destructive">{errors.email}</p>
                   )}
                 </div>
 
                 <div>
                   <div className="relative">
-                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
-                    <Select value={country} onValueChange={setCountry}>
-                      <SelectTrigger className="pl-10 bg-secondary border-border [&>span]:truncate">
-                        <SelectValue placeholder={t('auth.selectCountry')} />
-                      </SelectTrigger>
-                      <SelectContent 
-                        className="max-h-[300px] bg-card border-border z-50"
-                        position="popper"
-                        sideOffset={4}
-                      >
-                        {COUNTRIES.map((c) => (
-                          <SelectItem key={c} value={c}>
-                            {c}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder={t('auth.password')}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="pl-10 pr-10 bg-secondary border-border"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
-                  {errors.country && (
-                    <p className="mt-1 text-xs text-destructive">{errors.country}</p>
+                  {errors.password && (
+                    <p className="mt-1 text-xs text-destructive">{errors.password}</p>
+                  )}
+                  {mode === "signup" && (
+                    <PasswordStrengthIndicator password={password} />
                   )}
                 </div>
-              </>
-            )}
 
-            <div>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="email"
-                  placeholder={t('auth.email')}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 bg-secondary border-border"
-                />
-              </div>
-              {errors.email && (
-                <p className="mt-1 text-xs text-destructive">{errors.email}</p>
-              )}
-            </div>
-
-            <div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  placeholder={t('auth.password')}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 bg-secondary border-border"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="mt-1 text-xs text-destructive">{errors.password}</p>
-              )}
-              {mode === "signup" && (
-                <PasswordStrengthIndicator password={password} />
-              )}
-            </div>
-
-            {mode === "signup" && (
-              <div>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder={t('auth.confirmPassword')}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pl-10 pr-10 bg-secondary border-border"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  >
-                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
-                </div>
-                {errors.confirmPassword && (
-                  <p className="mt-1 text-xs text-destructive">{errors.confirmPassword}</p>
+                {mode === "signup" && (
+                  <div>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder={t('auth.confirmPassword')}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="pl-10 pr-10 bg-secondary border-border"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      >
+                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                    {errors.confirmPassword && (
+                      <p className="mt-1 text-xs text-destructive">{errors.confirmPassword}</p>
+                    )}
+                  </div>
                 )}
-              </div>
-            )}
 
-            <Button
-              type="submit"
-              variant="rift"
-              className="w-full"
-              size="lg"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {mode === "signup" ? t('auth.creatingAccount') : t('auth.signingIn')}
-                </>
-              ) : mode === "signup" ? (
-                t('auth.createAccount')
-              ) : (
-                t('auth.signIn')
-              )}
-            </Button>
-          </form>
+                {/* Forgot password link */}
+                {mode === "signin" && (
+                  <div className="text-right">
+                    <button
+                      type="button"
+                      onClick={() => { setMode("forgot"); setErrors({}); }}
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {t('auth.forgotPassword')}
+                    </button>
+                  </div>
+                )}
+
+                {/* Password requirements hint */}
+                {mode === "signup" && (
+                  <p className="text-xs text-muted-foreground">
+                    {t('auth.passwordRequirements')}
+                  </p>
+                )}
+
+                <Button
+                  type="submit"
+                  variant="rift"
+                  className="w-full"
+                  size="lg"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      {mode === "signup" ? t('auth.creatingAccount') : t('auth.signingIn')}
+                    </>
+                  ) : mode === "signup" ? (
+                    t('auth.createAccount')
+                  ) : (
+                    t('auth.signIn')
+                  )}
+                </Button>
+              </form>
+            </>
+          )}
 
           {/* Role Info */}
           {mode === "signup" && (
