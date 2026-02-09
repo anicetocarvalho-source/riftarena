@@ -1195,6 +1195,15 @@
       "live": "Em Direto",
       "completed": "Concluído",
       "cancelled": "Cancelado"
+    },
+    "filters": {
+      "allGames": "Todos os Jogos",
+      "allTime": "Todo o Período",
+      "last7Days": "Últimos 7 dias",
+      "last30Days": "Últimos 30 dias",
+      "last90Days": "Últimos 90 dias",
+      "lastYear": "Último ano",
+      "clear": "Limpar filtros"
     }
   }
 }
