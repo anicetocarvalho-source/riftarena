@@ -1165,5 +1165,36 @@
     "becomeAdmin": "Become Admin",
     "promotedSuccess": "You are now an admin!",
     "promotedError": "Failed to promote to admin"
+  },
+  "organizerStats": {
+    "title": "Organizer Statistics",
+    "subtitle": "Metrics and performance of your tournaments",
+    "backToDashboard": "Back to Dashboard",
+    "totalTournaments": "Total Tournaments",
+    "totalRegistrations": "Total Registrations",
+    "totalPrizePool": "Total Prize Pool",
+    "matchesCompleted": "Matches Completed",
+    "statusDistribution": "Status Distribution",
+    "registrationsPerTournament": "Registrations per Tournament",
+    "registrations": "Registrations",
+    "allTournaments": "All Tournaments",
+    "tournament": "Tournament",
+    "game": "Game",
+    "statusLabel": "Status",
+    "players": "Players",
+    "matches": "Matches",
+    "prize": "Prize",
+    "date": "Date",
+    "viewDetails": "View details",
+    "noData": "No data available",
+    "noTournaments": "You haven't created any tournaments yet.",
+    "createFirst": "Create First Tournament",
+    "status": {
+      "draft": "Draft",
+      "registration": "Registration",
+      "live": "Live",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    }
   }
 }
