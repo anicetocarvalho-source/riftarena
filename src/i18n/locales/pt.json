@@ -1165,5 +1165,36 @@
     "becomeAdmin": "Tornar-me Admin",
     "promotedSuccess": "Agora és administrador!",
     "promotedError": "Falha ao promover a admin"
+  },
+  "organizerStats": {
+    "title": "Estatísticas do Organizador",
+    "subtitle": "Métricas e desempenho dos teus torneios",
+    "backToDashboard": "Voltar ao Dashboard",
+    "totalTournaments": "Total de Torneios",
+    "totalRegistrations": "Total de Inscrições",
+    "totalPrizePool": "Prize Pool Total",
+    "matchesCompleted": "Partidas Concluídas",
+    "statusDistribution": "Distribuição por Estado",
+    "registrationsPerTournament": "Inscrições por Torneio",
+    "registrations": "Inscrições",
+    "allTournaments": "Todos os Torneios",
+    "tournament": "Torneio",
+    "game": "Jogo",
+    "statusLabel": "Estado",
+    "players": "Jogadores",
+    "matches": "Partidas",
+    "prize": "Prémio",
+    "date": "Data",
+    "viewDetails": "Ver detalhes",
+    "noData": "Sem dados disponíveis",
+    "noTournaments": "Ainda não criaste nenhum torneio.",
+    "createFirst": "Criar Primeiro Torneio",
+    "status": {
+      "draft": "Rascunho",
+      "registration": "Inscrições",
+      "live": "Em Direto",
+      "completed": "Concluído",
+      "cancelled": "Cancelado"
+    }
   }
 }

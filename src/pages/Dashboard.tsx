@@ -238,7 +238,7 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </Button>
-                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/admin/analytics")}>
+                    <Button variant="rift-outline" className="justify-start h-auto py-4" onClick={() => navigate("/organizer/stats")}>
                       <div className="text-left">
                         <p className="font-display uppercase tracking-wider">{t('dashboard.viewStatistics')}</p>
                         <p className="text-xs text-muted-foreground font-body normal-case tracking-normal">
