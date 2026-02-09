@@ -1,6 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { subDays } from "date-fns";
+
+export type TimePeriod = "all" | "7d" | "30d" | "90d" | "365d";
+
+export interface OrganizerFilters {
+  gameId: string; // "all" or a specific game id
+  period: TimePeriod;
+}
 
 export interface OrganizerTournamentStat {
   id: string;
@@ -12,6 +20,7 @@ export interface OrganizerTournamentStat {
   end_date: string | null;
   created_at: string;
   game: { name: string; icon: string } | null;
+  game_id: string;
   registrations_count: number;
   matches_total: number;
   matches_completed: number;
@@ -25,26 +34,57 @@ export interface OrganizerStats {
   totalPrizePool: number;
   totalMatches: number;
   completedMatches: number;
+  availableGames: { id: string; name: string; icon: string }[];
 }
 
-export const useOrganizerStats = () => {
+function getPeriodDate(period: TimePeriod): Date | null {
+  const daysMap: Record<string, number> = { "7d": 7, "30d": 30, "90d": 90, "365d": 365 };
+  return daysMap[period] ? subDays(new Date(), daysMap[period]) : null;
+}
+
+export const useOrganizerStats = (filters: OrganizerFilters = { gameId: "all", period: "all" }) => {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ["organizer-stats", user?.id],
+    queryKey: ["organizer-stats", user?.id, filters.gameId, filters.period],
     queryFn: async (): Promise<OrganizerStats> => {
       if (!user) throw new Error("Not authenticated");
 
       // Fetch organizer's tournaments with game info
-      const { data: tournaments, error: tErr } = await supabase
+      let query = supabase
         .from("tournaments")
-        .select("id, name, status, prize_pool, max_participants, start_date, end_date, created_at, game:games(name, icon)")
+        .select("id, name, status, prize_pool, max_participants, start_date, end_date, created_at, game_id, game:games(name, icon)")
         .eq("organizer_id", user.id)
         .order("created_at", { ascending: false });
+
+      if (filters.gameId !== "all") {
+        query = query.eq("game_id", filters.gameId);
+      }
+
+      const periodDate = getPeriodDate(filters.period);
+      if (periodDate) {
+        query = query.gte("created_at", periodDate.toISOString());
+      }
+
+      const { data: tournaments, error: tErr } = await query;
 
       if (tErr) throw tErr;
       const tournamentList = tournaments || [];
       const tournamentIds = tournamentList.map((t) => t.id);
+
+      // Extract unique games for the filter dropdown (from ALL organizer tournaments, not filtered)
+      const { data: allTournaments } = await supabase
+        .from("tournaments")
+        .select("game_id, game:games(id, name, icon)")
+        .eq("organizer_id", user.id);
+
+      const gameMap = new Map<string, { id: string; name: string; icon: string }>();
+      (allTournaments || []).forEach((t) => {
+        if (t.game && !gameMap.has(t.game_id)) {
+          gameMap.set(t.game_id, { id: t.game_id, name: (t.game as any).name, icon: (t.game as any).icon });
+        }
+      });
+      const availableGames = Array.from(gameMap.values());
 
       // Fetch registrations and matches counts in parallel
       let registrations: { tournament_id: string }[] = [];
@@ -91,6 +131,7 @@ export const useOrganizerStats = () => {
         end_date: t.end_date,
         created_at: t.created_at,
         game: t.game,
+        game_id: t.game_id,
         registrations_count: regCountMap[t.id] || 0,
         matches_total: matchCountMap[t.id]?.total || 0,
         matches_completed: matchCountMap[t.id]?.completed || 0,
@@ -112,6 +153,7 @@ export const useOrganizerStats = () => {
         totalPrizePool: tournamentList.reduce((sum, t) => sum + t.prize_pool, 0),
         totalMatches: matches.length,
         completedMatches: matches.filter((m) => m.status === "completed").length,
+        availableGames,
       };
     },
     enabled: !!user,

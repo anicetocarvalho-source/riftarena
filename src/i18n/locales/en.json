@@ -1195,6 +1195,15 @@
       "live": "Live",
       "completed": "Completed",
       "cancelled": "Cancelled"
+    },
+    "filters": {
+      "allGames": "All Games",
+      "allTime": "All Time",
+      "last7Days": "Last 7 days",
+      "last30Days": "Last 30 days",
+      "last90Days": "Last 90 days",
+      "lastYear": "Last year",
+      "clear": "Clear filters"
     }
   }
 }

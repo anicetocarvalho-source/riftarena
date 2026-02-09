@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
@@ -10,7 +10,8 @@ import { PageBreadcrumbs } from "@/components/layout/PageBreadcrumbs";
 import { RiftCard, RiftCardContent, RiftCardHeader, RiftCardTitle } from "@/components/ui/rift-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useOrganizerStats } from "@/hooks/useOrganizerStats";
+import { useOrganizerStats, type OrganizerFilters } from "@/hooks/useOrganizerStats";
+import { OrganizerStatsFilters, type TimePeriod } from "@/components/organizer/OrganizerStatsFilters";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -44,7 +45,11 @@ const OrganizerStats = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, isLoading: authLoading, isOrganizer } = useAuth();
-  const { data: stats, isLoading } = useOrganizerStats();
+
+  const [filters, setFilters] = useState<OrganizerFilters>({ gameId: "all", period: "all" });
+  const { data: stats, isLoading } = useOrganizerStats(filters);
+
+  const hasActiveFilters = filters.gameId !== "all" || filters.period !== "all";
 
   useEffect(() => {
     if (!authLoading && (!user || !isOrganizer)) {
@@ -108,6 +113,17 @@ const OrganizerStats = () => {
                 {t("organizerStats.backToDashboard")}
               </Button>
             </div>
+
+            {/* Filters */}
+            <OrganizerStatsFilters
+              games={stats?.availableGames || []}
+              selectedGameId={filters.gameId}
+              selectedPeriod={filters.period}
+              onGameChange={(gameId) => setFilters((f) => ({ ...f, gameId }))}
+              onPeriodChange={(period) => setFilters((f) => ({ ...f, period }))}
+              onClearFilters={() => setFilters({ gameId: "all", period: "all" })}
+              hasActiveFilters={hasActiveFilters}
+            />
           </motion.div>
 
           {/* Key Metrics */}
